@@ -7,9 +7,9 @@ A simple Javascript framework.
 - `git clone https://github.com/giosil/wux.git` 
 - `tsc --declaration --project ./ts/wux/tsconfig.json`
 
-## Tutorial
+## Documentation
 
-- [a relative link](wux_tutorial.pdf)
+- [Tutorial](wux_tutorial.pdf)
 
 ## Contributors
 
