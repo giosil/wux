@@ -8132,6 +8132,20 @@ var WUX;
             this.root.select2('val', val);
             return this;
         };
+        WSelect2.prototype.selectVal = function (av, ad, r) {
+            if (!av || !av.length) {
+                this.root.val([]).trigger('change');
+                return;
+            }
+            if (r) {
+                this.root.empty();
+                for (var i = 0; i < av.length; i++) {
+                    var d = ad ? ad[i] : '' + av[i];
+                    this.root.append('<option value="' + av[i] + '">' + d + '</option>');
+                }
+            }
+            this.root.select2('val', av);
+        };
         WSelect2.prototype.setOptions = function (items) {
             this.options = items;
             if (!this.root)

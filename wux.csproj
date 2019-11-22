@@ -84,6 +84,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ts\types\app\jrpc.d.ts" />
     <TypeScriptCompile Include="ts\types\app\main.d.ts" />
     <TypeScriptCompile Include="ts\types\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="ts\types\jquery\jquery.d.ts" />

@@ -96,6 +96,21 @@
             return this;
         }
 
+        selectVal(av: any[], ad?: any[], r?: boolean): this {
+            if (!av || !av.length) {
+                this.root.val([]).trigger('change');
+                return;
+            }
+            if (r) {
+                this.root.empty();
+                for (let i = 0; i < av.length; i++) {
+                    let d = ad ? ad[i] : '' + av[i];
+                    this.root.append('<option value="' + av[i] + '">' + d + '</option>');
+                }
+            }
+            this.root.select2('val', av);
+        }
+
         setOptions(items: Array<string | WEntity>): this {
             this.options = items;
             if (!this.root) return this;
@@ -253,10 +268,10 @@
 
     export class WLookupDialog extends WDialog<any, any[]> {
         fp: WUX.WFormPanel;
-        table: WUX.WITable;
+        table: WUX.WTable;
         keys: any[];
         selected: any;
-        lookup: (params: any[], rh: (result: any) => void, eh?: (error: any) => void) => void;
+        lookup: (params: any[], rh: (result: any) => void, eh?: (error: JRPCError) => void) => void;
         startup: boolean;
 
         constructor(id: string, title: string, keys?: any[], onlyTable?: boolean) {

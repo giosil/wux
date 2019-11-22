@@ -1381,6 +1381,7 @@ declare namespace WUX {
         getState(): any;
         getValue(): WEntity;
         select(i: number): this;
+        selectVal(av: any[], ad?: any[], r?: boolean): this;
         setOptions(items: Array<string | WEntity>): this;
         reload(clear?: boolean): this;
         protected render(): string;
@@ -1391,10 +1392,10 @@ declare namespace WUX {
     }
     class WLookupDialog extends WDialog<any, any[]> {
         fp: WUX.WFormPanel;
-        table: WUX.WITable;
+        table: WUX.WTable;
         keys: any[];
         selected: any;
-        lookup: (params: any[], rh: (result: any) => void, eh?: (error: any) => void) => void;
+        lookup: (params: any[], rh: (result: any) => void, eh?: (error: JRPCError) => void) => void;
         startup: boolean;
         constructor(id: string, title: string, keys?: any[], onlyTable?: boolean);
         protected updateState(nextState: any[]): void;
