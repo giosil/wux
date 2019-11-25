@@ -473,11 +473,6 @@ declare namespace WUX {
         ACT_OUTLINE_INFO = "btn btn-sm btn-info btn-outline",
         ACT_OUTLINE_DANGER = "btn btn-sm btn-danger btn-outline"
     }
-    class ATT {
-        static readonly STICKY_CONTAINER = "data-b2x-sticky-container";
-        static readonly STICKY_ELEMENT = "data-b2x-sticky-element data-b2x-sticky-element-z-index=\"3\"";
-        static readonly BOX_FILTER = "data-b2x-sticky-element data-b2x-sticky-element-ignore-margin-bottom=\"true\" data-b2x-sticky-element-z-index=\"3\"";
-    }
     class CSS {
         static readonly NORMAL: WStyle;
         static readonly ERROR: WStyle;
@@ -497,75 +492,6 @@ declare namespace WUX {
         static readonly FIELD_INTERNAL: WStyle;
         static readonly LABEL_NOTICE: WStyle;
         static readonly LABEL_INFO: WStyle;
-    }
-    class TXT {
-        static readonly OK = "OK";
-        static readonly CLOSE = "Chiudi";
-        static readonly NEW = "Nuovo";
-        static readonly OPEN = "Modifica";
-        static readonly DELETE = "Elimina";
-        static readonly SAVE = "Salva";
-        static readonly SEND = "Invia";
-        static readonly SEND_EMAIL = "Email";
-        static readonly FIND = "Cerca";
-        static readonly FORCE = "Forza";
-        static readonly SEARCH = "Cerca";
-        static readonly CANCEL = "Annulla";
-        static readonly RESET = "Annulla";
-        static readonly PRINT = "Stampa";
-        static readonly PRINT_ALL = "Stampa Tutto";
-        static readonly PREVIEW = "Anteprima";
-        static readonly EXPORT = "Esporta";
-        static readonly IMPORT = "Importa";
-        static readonly HELP = "Guida";
-        static readonly VIEW = "Vedi";
-        static readonly ENABLE = "Abilita";
-        static readonly DISABLE = "Disabilita";
-        static readonly ADD = "Aggiungi";
-        static readonly APPLY = "Applica";
-        static readonly REMOVE = "Rimuovi";
-        static readonly REMOVE_ALL = "Rim.Tutto";
-        static readonly REFRESH = "Aggiorna";
-        static readonly UNDO = "Annulla";
-        static readonly SETTINGS = "Impostazioni";
-        static readonly COPY = "Copia";
-        static readonly CUT = "Taglia";
-        static readonly PASTE = "Incolla";
-        static readonly CONFIRM = "Conferma";
-        static readonly FORWARD = "Avanti";
-        static readonly BACKWARD = "Indietro";
-        static readonly NEXT = "Prossimo";
-        static readonly PREVIOUS = "Precedente";
-        static readonly SELECT = "Seleziona";
-        static readonly SELECT_ALL = "Sel.Tutto";
-        static readonly WORK = "Lavora";
-        static readonly AGGREGATE = "Aggrega";
-        static readonly SET = "Imposta";
-        static readonly DEFAULT = "Predefinito";
-        static readonly REWORK = "Rielabora";
-        static readonly PUSH = "Spedisci";
-        static readonly SUSPEND = "Sospendi";
-        static readonly RESUME = "Riattiva";
-        static readonly CODE = "Codice";
-        static readonly DESCRIPTION = "Descrizione";
-        static readonly GROUP = "Gruppo";
-        static readonly ROLE = "Ruolo";
-        static readonly TYPE = "Tipo";
-        static readonly NAME = "Nome";
-        static readonly SIZE = "Dim.";
-        static readonly LAST_MOD = "Agg.";
-    }
-    class MSG {
-        static readonly CONF_DELETE = "Eliminare l'elemento selezionato?";
-        static readonly CONF_DISABLE = "Disabilitare l'elemento selezionato?";
-        static readonly CONF_ENABLE = "Abilitare l'elemento selezionato?";
-        static readonly CONF_CANCEL = "Si vogliono annullare le modifiche apportate?";
-        static readonly CONF_PROCEED = "Si vuole procedere con l'operazione?";
-        static readonly CONF_OVERWRITE = "Si vuole procedere con la sovrascrittura?";
-        static readonly INVALID_DATE = "Data selezionata non ammessa.";
-        static readonly INVALID_VALUE = "Valore non ammesso.";
-        static readonly MSG_COMPLETED = "Operazione completata con successo.";
-        static readonly MSG_ERRORS = "Si sono verificati degli errori durante l'elaborazione.";
     }
     enum WIcon {
         LARGE = "fa-lg ",
@@ -670,79 +596,74 @@ declare namespace WUX {
         WIFI = "fa-wifi",
         WRENCH = "fa-wrench"
     }
-    class ICO {
-        static readonly TRUE = WIcon.CHECK_SQUARE_O;
-        static readonly FALSE = WIcon.SQUARE_O;
-        static readonly CLOSE = WIcon.TIMES;
-        static readonly OK = WIcon.CHECK;
-        static readonly CALENDAR = WIcon.CALENDAR;
-        static readonly AGGREGATE = WIcon.CHAIN;
-        static readonly NEW = WIcon.PLUS_SQUARE_O;
-        static readonly EDIT = WIcon.EDIT;
-        static readonly OPEN = WIcon.EDIT;
-        static readonly DELETE = WIcon.TRASH;
-        static readonly DETAIL = WIcon.FILE_TEXT_O;
-        static readonly SAVE = WIcon.CHECK;
-        static readonly FIND = WIcon.SEARCH;
-        static readonly FIND_DIFF = WIcon.SEARCH_MINUS;
-        static readonly FIND_PLUS = WIcon.SEARCH_PLUS;
-        static readonly FORCE = WIcon.CHECK_CIRCLE;
-        static readonly FORCE_ALL = WIcon.CHECK_CIRCLE_O;
-        static readonly SEARCH = WIcon.SEARCH;
-        static readonly CANCEL = WIcon.UNDO;
-        static readonly RESET = WIcon.TIMES_CIRCLE;
-        static readonly PRINT = WIcon.PRINT;
-        static readonly PREVIEW = WIcon.SEARCH_PLUS;
-        static readonly EXPORT = WIcon.SHARE_SQUARE_O;
-        static readonly IMPORT = WIcon.SIGN_IN;
-        static readonly FILE = WIcon.FILE_O;
-        static readonly HELP = WIcon.QUESTION_CIRCLE;
-        static readonly VIEW = WIcon.FILE_TEXT_O;
-        static readonly ENABLE = WIcon.THUMBS_O_UP;
-        static readonly DISABLE = WIcon.THUMBS_O_DOWN;
-        static readonly ADD = WIcon.PLUS;
-        static readonly APPLY = WIcon.CHECK;
-        static readonly REMOVE = WIcon.MINUS;
-        static readonly REFRESH = WIcon.REFRESH;
-        static readonly UNDO = WIcon.UNDO;
-        static readonly SETTINGS = WIcon.COG;
-        static readonly OPTIONS = WIcon.CHECK_SQUARE;
-        static readonly PASSWORD = WIcon.UNDO;
-        static readonly COPY = WIcon.COPY;
-        static readonly CUT = WIcon.CUT;
-        static readonly PASTE = WIcon.PASTE;
-        static readonly FORWARD = WIcon.ANGLE_DOUBLE_RIGHT;
-        static readonly BACKWARD = WIcon.ANGLE_DOUBLE_LEFT;
-        static readonly NEXT = WIcon.FORWARD;
-        static readonly PREVIOUS = WIcon.BACKWARD;
-        static readonly CONFIRM = WIcon.CHECK;
-        static readonly FILTER = WIcon.FILTER;
-        static readonly SEND = WIcon.SEND;
-        static readonly SEND_EMAIL = WIcon.ENVELOPE_O;
-        static readonly WAIT = WIcon.COG;
-        static readonly WORK = WIcon.COG;
-        static readonly CONFIG = WIcon.COG;
-        static readonly LEFT = WIcon.ARROW_CIRCLE_LEFT;
-        static readonly RIGHT = WIcon.ARROW_CIRCLE_RIGHT;
-        static readonly SELECT_ALL = WIcon.TH_LIST;
-        static readonly REWORK = WIcon.REFRESH;
-        static readonly PUSH = WIcon.TRUCK;
-        static readonly AHEAD = WIcon.ANGLE_DOUBLE_RIGHT;
-        static readonly SUSPEND = WIcon.TOGGLE_OFF;
-        static readonly RESUME = WIcon.RECYCLE;
-        static readonly PAIRING = WIcon.RANDOM;
-        static readonly CHECK = WIcon.CHECK_SQUARE_O;
-        static readonly EVENT = WIcon.BOLT;
-        static readonly MESSAGE = WIcon.ENVELOPE_O;
-        static readonly USER = WIcon.USER_O;
-        static readonly GROUP = WIcon.USERS;
-        static readonly TOOL = WIcon.WRENCH;
-        static readonly DEMOGRAPHIC = WIcon.ADDRESS_CARD;
-        static readonly DOCUMENT = WIcon.FILE_TEXT_O;
-        static readonly LINKS = WIcon.CHAIN;
-        static readonly WARNING = WIcon.WARNING;
-        static readonly INFO = WIcon.INFO_CIRCLE;
-        static readonly CRITICAL = WIcon.TIMES_CIRCLE;
+    class TXT {
+        static readonly OK = "OK";
+        static readonly CLOSE = "Chiudi";
+        static readonly NEW = "Nuovo";
+        static readonly OPEN = "Modifica";
+        static readonly DELETE = "Elimina";
+        static readonly SAVE = "Salva";
+        static readonly SEND = "Invia";
+        static readonly SEND_EMAIL = "Email";
+        static readonly FIND = "Cerca";
+        static readonly FORCE = "Forza";
+        static readonly SEARCH = "Cerca";
+        static readonly CANCEL = "Annulla";
+        static readonly RESET = "Annulla";
+        static readonly PRINT = "Stampa";
+        static readonly PRINT_ALL = "Stampa Tutto";
+        static readonly PREVIEW = "Anteprima";
+        static readonly EXPORT = "Esporta";
+        static readonly IMPORT = "Importa";
+        static readonly HELP = "Guida";
+        static readonly VIEW = "Vedi";
+        static readonly ENABLE = "Abilita";
+        static readonly DISABLE = "Disabilita";
+        static readonly ADD = "Aggiungi";
+        static readonly APPLY = "Applica";
+        static readonly REMOVE = "Rimuovi";
+        static readonly REMOVE_ALL = "Rim.Tutto";
+        static readonly REFRESH = "Aggiorna";
+        static readonly UNDO = "Annulla";
+        static readonly SETTINGS = "Impostazioni";
+        static readonly COPY = "Copia";
+        static readonly CUT = "Taglia";
+        static readonly PASTE = "Incolla";
+        static readonly CONFIRM = "Conferma";
+        static readonly FORWARD = "Avanti";
+        static readonly BACKWARD = "Indietro";
+        static readonly NEXT = "Prossimo";
+        static readonly PREVIOUS = "Precedente";
+        static readonly SELECT = "Seleziona";
+        static readonly SELECT_ALL = "Sel.Tutto";
+        static readonly WORK = "Lavora";
+        static readonly AGGREGATE = "Aggrega";
+        static readonly SET = "Imposta";
+        static readonly DEFAULT = "Predefinito";
+        static readonly REWORK = "Rielabora";
+        static readonly PUSH = "Spedisci";
+        static readonly SUSPEND = "Sospendi";
+        static readonly RESUME = "Riattiva";
+        static readonly CODE = "Codice";
+        static readonly DESCRIPTION = "Descrizione";
+        static readonly GROUP = "Gruppo";
+        static readonly ROLE = "Ruolo";
+        static readonly TYPE = "Tipo";
+        static readonly NAME = "Nome";
+        static readonly SIZE = "Dim.";
+        static readonly LAST_MOD = "Agg.";
+    }
+    class MSG {
+        static readonly CONF_DELETE = "Eliminare l'elemento selezionato?";
+        static readonly CONF_DISABLE = "Disabilitare l'elemento selezionato?";
+        static readonly CONF_ENABLE = "Abilitare l'elemento selezionato?";
+        static readonly CONF_CANCEL = "Si vogliono annullare le modifiche apportate?";
+        static readonly CONF_PROCEED = "Si vuole procedere con l'operazione?";
+        static readonly CONF_OVERWRITE = "Si vuole procedere con la sovrascrittura?";
+        static readonly INVALID_DATE = "Data selezionata non ammessa.";
+        static readonly INVALID_VALUE = "Valore non ammesso.";
+        static readonly MSG_COMPLETED = "Operazione completata con successo.";
+        static readonly MSG_ERRORS = "Si sono verificati degli errori durante l'elaborazione.";
     }
 }
 declare namespace WUX {
@@ -881,52 +802,6 @@ declare namespace WUX {
         componentWillUnmount(): void;
         protected buildTitle(title: string): string;
     }
-    class WFullDialog<P = any, S = any> extends WComponent<P, S> {
-        cntRoot: WContainer;
-        cntMain: WContainer;
-        cntContent: WContainer;
-        cntHeader: WContainer;
-        cntBody: WContainer;
-        cntFooter: WContainer;
-        protected _title: string;
-        protected tagTitle: string;
-        btnCloseHeader: WButton;
-        btnOK: WButton;
-        btnCancel: WButton;
-        txtCancel: string;
-        buttons: WButton[];
-        ok: boolean;
-        cancel: boolean;
-        isShown: boolean;
-        parentHandler: (e?: JQueryEventObject) => any;
-        protected phHidden: boolean;
-        static fullDialogsShown: WFullDialog[];
-        constructor(id: string, name?: string, btnOk?: boolean, btnClose?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        onShownModal(handler: (e?: JQueryEventObject) => any): void;
-        onHiddenModal(handler: (e?: JQueryEventObject) => any): void;
-        readonly header: WContainer;
-        readonly body: WContainer;
-        readonly footer: WContainer;
-        title: string;
-        protected onClickOk(): boolean;
-        protected onClickCancel(): boolean;
-        protected buildBtnOK(): WButton;
-        protected buildBtnCancel(): WButton;
-        buttonOk(): WButton;
-        buttonCancel(): WButton;
-        show(parent: WComponent, handler?: (e?: JQueryEventObject) => any): void;
-        hide(e?: JQueryEventObject): void;
-        protected showView(): void;
-        protected hideView(): void;
-        close(): void;
-        selection(table: WITable, warn?: string): boolean;
-        protected beforeShow(): boolean;
-        protected onShown(): void;
-        protected onHidden(): void;
-        protected render(): WContainer;
-        componentWillUnmount(): void;
-        protected buildTitle(title: string): string;
-    }
     class WLabel extends WComponent<string, string> {
         forId: string;
         protected blinks: number;
@@ -982,13 +857,6 @@ declare namespace WUX {
         protected componentDidMount(): void;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
-    class WButtonSelect extends WComponent<string, string> {
-        options: Array<string | WEntity>;
-        btnClass: string;
-        constructor(id: string, text?: string, options?: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        protected componentDidMount(): void;
-        protected componentWillUpdate(nextProps: any, nextState: any): void;
-    }
     class WLink extends WComponent<string, string> {
         protected _href: string;
         protected _target: string;
@@ -1009,21 +877,16 @@ declare namespace WUX {
         protected componentDidMount(): void;
         componentWillUnmount(): void;
     }
-    class WTags extends WComponent<WComponent, any> {
-        hideZeroValues: boolean;
-        constructor(id: string, comp?: WComponent, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string);
-        protected updateState(nextState: any): void;
-        protected componentDidMount(): void;
-        protected buildView(): void;
-    }
     interface WISelectable extends WComponent {
         options: Array<string | WEntity>;
+        select(i: number): this;
     }
     class WSelect extends WComponent implements WISelectable {
         options: Array<string | WEntity>;
         multiple: boolean;
         constructor(id: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object);
         getProps(): any;
+        select(i: number): this;
         addOption(e: string | WEntity, sel?: boolean): this;
         remOption(e: string | WEntity): this;
         setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
@@ -1037,15 +900,10 @@ declare namespace WUX {
         label: string;
         constructor(id: string, options: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any);
         tooltip: string;
+        select(i: number): this;
         protected render(): string;
         protected componentDidMount(): void;
         protected componentDidUpdate(prevProps: any, prevState: any): void;
-    }
-    class WLinkOptions extends WComponent implements WISelectable {
-        options: Array<string | WEntity>;
-        constructor(id: string, options: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any);
-        tooltip: string;
-        protected componentDidMount(): void;
     }
     interface WITable extends WComponent {
         header: string[];
@@ -1053,6 +911,7 @@ declare namespace WUX {
         types: string[];
         widths: number[];
         widthsPerc: boolean;
+        filter: boolean;
         templates: ((cnt: JQuery, opt: {
             data: any;
             text: string;
@@ -1085,6 +944,7 @@ declare namespace WUX {
         types: string[];
         widths: number[];
         widthsPerc: boolean;
+        filter: boolean;
         templates: ((cnt: JQuery, opt: {
             data: any;
             text: string;
@@ -1239,90 +1099,6 @@ declare namespace WUX {
         protected updateView(): void;
         validate(): any;
     }
-    interface WGridElement {
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        ylayout?: boolean;
-        components?: Array<WElement>;
-        css(s: string | WStyle): this;
-        removeClass(className: string): this;
-    }
-    class WGridCol implements WGridElement {
-        grid: WGrid;
-        row: WGridRow;
-        index: number;
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        components: Array<WElement>;
-        ylayout: boolean;
-        titles: string[];
-        constructor(grid: WGrid, row: WGridRow, index: number, width?: number, height?: number, classStyle?: string, style?: string | WStyle, ...components: (WElement)[]);
-        css(s: string | WStyle): this;
-        removeClass(className: string): this;
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol;
-        addRow(width?: number, height?: number, classStyle?: string, style?: string): WGridRow;
-        add(component?: WElement): this;
-        cell(...components: (WElement)[]): this;
-        y(): this;
-        tip(...titles: string[]): this;
-        title(k?: number): string;
-    }
-    class WGridRow implements WGridElement {
-        grid: WGrid;
-        index: number;
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        cols: WGridCol[];
-        ref: string;
-        attributes: string;
-        constructor(grid: WGrid, index: number, width?: number, height?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        css(s: string | WStyle): this;
-        removeClass(className: string): this;
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol;
-        addRow(width?: number, height?: number, classStyle?: string, style?: string | WStyle): WGridRow;
-    }
-    class WGrid extends WComponent<any, any> {
-        rows: WGridRow[];
-        rowsStyle: string | WStyle;
-        colsStyle: string | WStyle;
-        headStyle: string | WStyle;
-        footStyle: string | WStyle;
-        ydivStyle: string | WStyle;
-        textStyle: string | WStyle;
-        overflow: 'visible' | 'hidden' | 'scroll' | 'auto' | 'initial' | 'inherit';
-        constructor(id?: string, classStyle?: string, style?: string, attributes?: string | object, props?: any);
-        getWidth(): number;
-        getHeight(): number;
-        getRowIndex(ref: string): number;
-        removeAll(): this;
-        addRow(width?: number, height?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object): WGridRow;
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol;
-        add(component?: WElement): WGridCol;
-        y(): WGridCol;
-        tip(...titles: string[]): WGridCol;
-        row(r?: number): WGridRow;
-        col(r?: number, c?: number): WGridCol;
-        find(component?: WElement): [number, number, number];
-        element(row: number): JQuery;
-        element(row: number, col: number): JQuery;
-        element(row: number, col: number, idx: number): WElement;
-        html(row: number, col: number, k: number, h: string): boolean;
-        cell(row: number, col: number, ...ac: (WElement)[]): boolean;
-        protected make(): string;
-        protected componentDidMount(): void;
-        componentWillUnmount(): void;
-        protected buildRowStyle(e: WGridElement, fistRow: boolean, lastRow: boolean): string;
-        protected buildColStyle(e: WGridElement, fistRow: boolean, lastRow: boolean, fill?: boolean, h?: number): string;
-        protected buildClass(e: WGridElement): string;
-        protected isAllText(ae: WElement[]): boolean;
-        protected isText(e: WElement): boolean;
-    }
     class WWindow<P = any, S = any> extends WComponent<P, S> {
         cntRoot: WContainer;
         cntHeader: WContainer;
@@ -1360,63 +1136,5 @@ declare namespace WUX {
         protected render(): WContainer;
         componentWillUnmount(): void;
         protected buildTitle(title: string): string;
-    }
-}
-declare namespace WUX {
-    class WSelect2 extends WUX.WComponent implements WISelectable {
-        options: Array<string | WEntity>;
-        multiple: boolean;
-        openOnFocus: boolean;
-        prefix: string;
-        suffix: string;
-        lastChange: number;
-        count: number;
-        _init: boolean;
-        protected dontOpen: boolean;
-        protected $cb: JQuery;
-        constructor(id: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any);
-        visible: boolean;
-        focus(): this;
-        getProps(): any;
-        getState(): any;
-        getValue(): WEntity;
-        select(i: number): this;
-        selectVal(av: any[], ad?: any[], r?: boolean): this;
-        setOptions(items: Array<string | WEntity>): this;
-        reload(clear?: boolean): this;
-        protected render(): string;
-        protected updateState(nextState: any): void;
-        protected componentDidMount(): void;
-        protected init(options: Select2Options): void;
-        transferTo(dest: WComponent, force?: boolean, callback?: () => any): boolean;
-    }
-    class WLookupDialog extends WDialog<any, any[]> {
-        fp: WUX.WFormPanel;
-        table: WUX.WTable;
-        keys: any[];
-        selected: any;
-        lookup: (params: any[], rh: (result: any) => void, eh?: (error: JRPCError) => void) => void;
-        startup: boolean;
-        constructor(id: string, title: string, keys?: any[], onlyTable?: boolean);
-        protected updateState(nextState: any[]): void;
-        setFilter(params: any[]): void;
-        getFilter(): any[];
-        onSelected(handler: (e: WEvent) => any): void;
-        protected onShown(): void;
-        protected onClickOk(): boolean;
-    }
-    class WMenu extends WUX.WComponent {
-        handler: (e: JQueryEventObject) => any;
-        data: any;
-        items: WUX.WEntity[];
-        title: string;
-        constructor(id?: string, classStyle?: string);
-        addItem(item: WUX.WEntity): this;
-        addItem(id: string, icon: WUX.WIcon | string, text: string, bdef?: boolean): this;
-        addSep(): this;
-        addSection(name: string): this;
-        onClick(handler?: (e: JQueryEventObject) => any): void;
-        protected buildItem(node: JQuery, code: string, icon: string, text: string, bdef?: boolean): void;
-        protected componentDidMount(): void;
     }
 }

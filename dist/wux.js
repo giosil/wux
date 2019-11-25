@@ -3035,15 +3035,6 @@ var WUX;
         BTN["ACT_OUTLINE_INFO"] = "btn btn-sm btn-info btn-outline";
         BTN["ACT_OUTLINE_DANGER"] = "btn btn-sm btn-danger btn-outline";
     })(BTN = WUX.BTN || (WUX.BTN = {}));
-    var ATT = (function () {
-        function ATT() {
-        }
-        ATT.STICKY_CONTAINER = 'data-b2x-sticky-container';
-        ATT.STICKY_ELEMENT = 'data-b2x-sticky-element data-b2x-sticky-element-z-index="3"';
-        ATT.BOX_FILTER = 'data-b2x-sticky-element data-b2x-sticky-element-ignore-margin-bottom="true" data-b2x-sticky-element-z-index="3"';
-        return ATT;
-    }());
-    WUX.ATT = ATT;
     var CSS = (function () {
         function CSS() {
         }
@@ -3068,83 +3059,6 @@ var WUX;
         return CSS;
     }());
     WUX.CSS = CSS;
-    var TXT = (function () {
-        function TXT() {
-        }
-        TXT.OK = 'OK';
-        TXT.CLOSE = 'Chiudi';
-        TXT.NEW = 'Nuovo';
-        TXT.OPEN = 'Modifica';
-        TXT.DELETE = 'Elimina';
-        TXT.SAVE = 'Salva';
-        TXT.SEND = 'Invia';
-        TXT.SEND_EMAIL = 'Email';
-        TXT.FIND = 'Cerca';
-        TXT.FORCE = 'Forza';
-        TXT.SEARCH = 'Cerca';
-        TXT.CANCEL = 'Annulla';
-        TXT.RESET = 'Annulla';
-        TXT.PRINT = 'Stampa';
-        TXT.PRINT_ALL = 'Stampa Tutto';
-        TXT.PREVIEW = 'Anteprima';
-        TXT.EXPORT = 'Esporta';
-        TXT.IMPORT = 'Importa';
-        TXT.HELP = 'Guida';
-        TXT.VIEW = 'Vedi';
-        TXT.ENABLE = 'Abilita';
-        TXT.DISABLE = 'Disabilita';
-        TXT.ADD = 'Aggiungi';
-        TXT.APPLY = 'Applica';
-        TXT.REMOVE = 'Rimuovi';
-        TXT.REMOVE_ALL = 'Rim.Tutto';
-        TXT.REFRESH = 'Aggiorna';
-        TXT.UNDO = 'Annulla';
-        TXT.SETTINGS = 'Impostazioni';
-        TXT.COPY = 'Copia';
-        TXT.CUT = 'Taglia';
-        TXT.PASTE = 'Incolla';
-        TXT.CONFIRM = 'Conferma';
-        TXT.FORWARD = 'Avanti';
-        TXT.BACKWARD = 'Indietro';
-        TXT.NEXT = 'Prossimo';
-        TXT.PREVIOUS = 'Precedente';
-        TXT.SELECT = 'Seleziona';
-        TXT.SELECT_ALL = 'Sel.Tutto';
-        TXT.WORK = 'Lavora';
-        TXT.AGGREGATE = 'Aggrega';
-        TXT.SET = 'Imposta';
-        TXT.DEFAULT = 'Predefinito';
-        TXT.REWORK = 'Rielabora';
-        TXT.PUSH = 'Spedisci';
-        TXT.SUSPEND = 'Sospendi';
-        TXT.RESUME = 'Riattiva';
-        TXT.CODE = 'Codice';
-        TXT.DESCRIPTION = 'Descrizione';
-        TXT.GROUP = 'Gruppo';
-        TXT.ROLE = 'Ruolo';
-        TXT.TYPE = 'Tipo';
-        TXT.NAME = 'Nome';
-        TXT.SIZE = 'Dim.';
-        TXT.LAST_MOD = 'Agg.';
-        return TXT;
-    }());
-    WUX.TXT = TXT;
-    var MSG = (function () {
-        function MSG() {
-        }
-        MSG.CONF_DELETE = 'Eliminare l\'elemento selezionato?';
-        MSG.CONF_DISABLE = 'Disabilitare l\'elemento selezionato?';
-        MSG.CONF_ENABLE = 'Abilitare l\'elemento selezionato?';
-        MSG.CONF_CANCEL = 'Si vogliono annullare le modifiche apportate?';
-        MSG.CONF_PROCEED = 'Si vuole procedere con l\'operazione?';
-        MSG.CONF_OVERWRITE = 'Si vuole procedere con la sovrascrittura?';
-        MSG.INVALID_DATE = 'Data selezionata non ammessa.';
-        MSG.INVALID_VALUE = 'Valore non ammesso.';
-        MSG.MSG_COMPLETED = 'Operazione completata con successo.';
-        MSG.MSG_ERRORS = 'Si sono verificati degli errori durante l\'elaborazione.';
-        return MSG;
-    }());
-    WUX.MSG = MSG;
     var WIcon;
     (function (WIcon) {
         WIcon["LARGE"] = "fa-lg ";
@@ -3249,84 +3163,83 @@ var WUX;
         WIcon["WIFI"] = "fa-wifi";
         WIcon["WRENCH"] = "fa-wrench";
     })(WIcon = WUX.WIcon || (WUX.WIcon = {}));
-    var ICO = (function () {
-        function ICO() {
+    var TXT = (function () {
+        function TXT() {
         }
-        ICO.TRUE = WIcon.CHECK_SQUARE_O;
-        ICO.FALSE = WIcon.SQUARE_O;
-        ICO.CLOSE = WIcon.TIMES;
-        ICO.OK = WIcon.CHECK;
-        ICO.CALENDAR = WIcon.CALENDAR;
-        ICO.AGGREGATE = WIcon.CHAIN;
-        ICO.NEW = WIcon.PLUS_SQUARE_O;
-        ICO.EDIT = WIcon.EDIT;
-        ICO.OPEN = WIcon.EDIT;
-        ICO.DELETE = WIcon.TRASH;
-        ICO.DETAIL = WIcon.FILE_TEXT_O;
-        ICO.SAVE = WIcon.CHECK;
-        ICO.FIND = WIcon.SEARCH;
-        ICO.FIND_DIFF = WIcon.SEARCH_MINUS;
-        ICO.FIND_PLUS = WIcon.SEARCH_PLUS;
-        ICO.FORCE = WIcon.CHECK_CIRCLE;
-        ICO.FORCE_ALL = WIcon.CHECK_CIRCLE_O;
-        ICO.SEARCH = WIcon.SEARCH;
-        ICO.CANCEL = WIcon.UNDO;
-        ICO.RESET = WIcon.TIMES_CIRCLE;
-        ICO.PRINT = WIcon.PRINT;
-        ICO.PREVIEW = WIcon.SEARCH_PLUS;
-        ICO.EXPORT = WIcon.SHARE_SQUARE_O;
-        ICO.IMPORT = WIcon.SIGN_IN;
-        ICO.FILE = WIcon.FILE_O;
-        ICO.HELP = WIcon.QUESTION_CIRCLE;
-        ICO.VIEW = WIcon.FILE_TEXT_O;
-        ICO.ENABLE = WIcon.THUMBS_O_UP;
-        ICO.DISABLE = WIcon.THUMBS_O_DOWN;
-        ICO.ADD = WIcon.PLUS;
-        ICO.APPLY = WIcon.CHECK;
-        ICO.REMOVE = WIcon.MINUS;
-        ICO.REFRESH = WIcon.REFRESH;
-        ICO.UNDO = WIcon.UNDO;
-        ICO.SETTINGS = WIcon.COG;
-        ICO.OPTIONS = WIcon.CHECK_SQUARE;
-        ICO.PASSWORD = WIcon.UNDO;
-        ICO.COPY = WIcon.COPY;
-        ICO.CUT = WIcon.CUT;
-        ICO.PASTE = WIcon.PASTE;
-        ICO.FORWARD = WIcon.ANGLE_DOUBLE_RIGHT;
-        ICO.BACKWARD = WIcon.ANGLE_DOUBLE_LEFT;
-        ICO.NEXT = WIcon.FORWARD;
-        ICO.PREVIOUS = WIcon.BACKWARD;
-        ICO.CONFIRM = WIcon.CHECK;
-        ICO.FILTER = WIcon.FILTER;
-        ICO.SEND = WIcon.SEND;
-        ICO.SEND_EMAIL = WIcon.ENVELOPE_O;
-        ICO.WAIT = WIcon.COG;
-        ICO.WORK = WIcon.COG;
-        ICO.CONFIG = WIcon.COG;
-        ICO.LEFT = WIcon.ARROW_CIRCLE_LEFT;
-        ICO.RIGHT = WIcon.ARROW_CIRCLE_RIGHT;
-        ICO.SELECT_ALL = WIcon.TH_LIST;
-        ICO.REWORK = WIcon.REFRESH;
-        ICO.PUSH = WIcon.TRUCK;
-        ICO.AHEAD = WIcon.ANGLE_DOUBLE_RIGHT;
-        ICO.SUSPEND = WIcon.TOGGLE_OFF;
-        ICO.RESUME = WIcon.RECYCLE;
-        ICO.PAIRING = WIcon.RANDOM;
-        ICO.CHECK = WIcon.CHECK_SQUARE_O;
-        ICO.EVENT = WIcon.BOLT;
-        ICO.MESSAGE = WIcon.ENVELOPE_O;
-        ICO.USER = WIcon.USER_O;
-        ICO.GROUP = WIcon.USERS;
-        ICO.TOOL = WIcon.WRENCH;
-        ICO.DEMOGRAPHIC = WIcon.ADDRESS_CARD;
-        ICO.DOCUMENT = WIcon.FILE_TEXT_O;
-        ICO.LINKS = WIcon.CHAIN;
-        ICO.WARNING = WIcon.WARNING;
-        ICO.INFO = WIcon.INFO_CIRCLE;
-        ICO.CRITICAL = WIcon.TIMES_CIRCLE;
-        return ICO;
+        TXT.OK = 'OK';
+        TXT.CLOSE = 'Chiudi';
+        TXT.NEW = 'Nuovo';
+        TXT.OPEN = 'Modifica';
+        TXT.DELETE = 'Elimina';
+        TXT.SAVE = 'Salva';
+        TXT.SEND = 'Invia';
+        TXT.SEND_EMAIL = 'Email';
+        TXT.FIND = 'Cerca';
+        TXT.FORCE = 'Forza';
+        TXT.SEARCH = 'Cerca';
+        TXT.CANCEL = 'Annulla';
+        TXT.RESET = 'Annulla';
+        TXT.PRINT = 'Stampa';
+        TXT.PRINT_ALL = 'Stampa Tutto';
+        TXT.PREVIEW = 'Anteprima';
+        TXT.EXPORT = 'Esporta';
+        TXT.IMPORT = 'Importa';
+        TXT.HELP = 'Guida';
+        TXT.VIEW = 'Vedi';
+        TXT.ENABLE = 'Abilita';
+        TXT.DISABLE = 'Disabilita';
+        TXT.ADD = 'Aggiungi';
+        TXT.APPLY = 'Applica';
+        TXT.REMOVE = 'Rimuovi';
+        TXT.REMOVE_ALL = 'Rim.Tutto';
+        TXT.REFRESH = 'Aggiorna';
+        TXT.UNDO = 'Annulla';
+        TXT.SETTINGS = 'Impostazioni';
+        TXT.COPY = 'Copia';
+        TXT.CUT = 'Taglia';
+        TXT.PASTE = 'Incolla';
+        TXT.CONFIRM = 'Conferma';
+        TXT.FORWARD = 'Avanti';
+        TXT.BACKWARD = 'Indietro';
+        TXT.NEXT = 'Prossimo';
+        TXT.PREVIOUS = 'Precedente';
+        TXT.SELECT = 'Seleziona';
+        TXT.SELECT_ALL = 'Sel.Tutto';
+        TXT.WORK = 'Lavora';
+        TXT.AGGREGATE = 'Aggrega';
+        TXT.SET = 'Imposta';
+        TXT.DEFAULT = 'Predefinito';
+        TXT.REWORK = 'Rielabora';
+        TXT.PUSH = 'Spedisci';
+        TXT.SUSPEND = 'Sospendi';
+        TXT.RESUME = 'Riattiva';
+        TXT.CODE = 'Codice';
+        TXT.DESCRIPTION = 'Descrizione';
+        TXT.GROUP = 'Gruppo';
+        TXT.ROLE = 'Ruolo';
+        TXT.TYPE = 'Tipo';
+        TXT.NAME = 'Nome';
+        TXT.SIZE = 'Dim.';
+        TXT.LAST_MOD = 'Agg.';
+        return TXT;
     }());
-    WUX.ICO = ICO;
+    WUX.TXT = TXT;
+    var MSG = (function () {
+        function MSG() {
+        }
+        MSG.CONF_DELETE = 'Eliminare l\'elemento selezionato?';
+        MSG.CONF_DISABLE = 'Disabilitare l\'elemento selezionato?';
+        MSG.CONF_ENABLE = 'Abilitare l\'elemento selezionato?';
+        MSG.CONF_CANCEL = 'Si vogliono annullare le modifiche apportate?';
+        MSG.CONF_PROCEED = 'Si vuole procedere con l\'operazione?';
+        MSG.CONF_OVERWRITE = 'Si vuole procedere con la sovrascrittura?';
+        MSG.INVALID_DATE = 'Data selezionata non ammessa.';
+        MSG.INVALID_VALUE = 'Valore non ammesso.';
+        MSG.MSG_COMPLETED = 'Operazione completata con successo.';
+        MSG.MSG_ERRORS = 'Si sono verificati degli errori durante l\'elaborazione.';
+        return MSG;
+    }());
+    WUX.MSG = MSG;
 })(WUX || (WUX = {}));
 var WUX;
 (function (WUX) {
@@ -3880,7 +3793,7 @@ var WUX;
                 return this;
             if (typeof tool == 'string') {
                 if (!icon)
-                    icon = WUX.ICO.TOOL;
+                    icon = WUX.WIcon.WRENCH;
                 if (!this.cntls) {
                     this.cntls = new WContainer('', WUX.global.box_tools);
                     this.header.add(this.cntls);
@@ -4267,300 +4180,6 @@ var WUX;
         return WDialog;
     }(WUX.WComponent));
     WUX.WDialog = WDialog;
-    var WFullDialog = (function (_super) {
-        __extends(WFullDialog, _super);
-        function WFullDialog(id, name, btnOk, btnClose, classStyle, style, attributes) {
-            if (name === void 0) { name = 'WFullDialog'; }
-            if (btnOk === void 0) { btnOk = true; }
-            if (btnClose === void 0) { btnClose = true; }
-            var _this = _super.call(this, id, name, undefined, classStyle, style, attributes) || this;
-            _this.buttons = [];
-            _this.tagTitle = 'h3';
-            if (btnClose) {
-                if (!btnOk)
-                    _this.txtCancel = WUX.TXT.CLOSE;
-                _this.buttonCancel();
-            }
-            if (btnOk)
-                _this.buttonOk();
-            _this.ok = false;
-            _this.cancel = false;
-            _this.isShown = false;
-            if (_this.id && _this.id != '*') {
-                if ($('#' + _this.id).length)
-                    $('#' + _this.id).remove();
-            }
-            WuxDOM.onRender(function (e) {
-                if (_this.mounted)
-                    return;
-                _this.mount(e.element);
-            });
-            return _this;
-        }
-        WFullDialog.prototype.onShownModal = function (handler) {
-            if (!this.handlers['_pageshown'])
-                this.handlers['_pageshown'] = [];
-            this.handlers['_pageshown'].push(handler);
-        };
-        WFullDialog.prototype.onHiddenModal = function (handler) {
-            if (!this.handlers['_pagehidden'])
-                this.handlers['_pagehidden'] = [];
-            this.handlers['_pagehidden'].push(handler);
-        };
-        Object.defineProperty(WFullDialog.prototype, "header", {
-            get: function () {
-                var _this = this;
-                if (this.cntHeader)
-                    return this.cntHeader;
-                this.cntHeader = new WContainer('', 'modal-header');
-                this.btnCloseHeader = new WButton(this.subId('bhc'), '<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>', undefined, 'close');
-                this.btnCloseHeader.on('click', function (e) {
-                    _this.close();
-                });
-                this.cntHeader.add(this.btnCloseHeader);
-                return this.cntHeader;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(WFullDialog.prototype, "body", {
-            get: function () {
-                if (this.cntBody)
-                    return this.cntBody;
-                this.cntBody = new WContainer('', WUX.cls('modal-body', this._classStyle), '', this._attributes);
-                return this.cntBody;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(WFullDialog.prototype, "footer", {
-            get: function () {
-                if (this.cntFooter)
-                    return this.cntFooter;
-                this.cntFooter = new WContainer('', 'modal-footer');
-                return this.cntFooter;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(WFullDialog.prototype, "title", {
-            get: function () {
-                return this._title;
-            },
-            set: function (s) {
-                if (this._title && this.cntHeader) {
-                    this._title = s;
-                    this.cntHeader.getRoot().children(this.tagTitle + ':first').text(s);
-                }
-                else {
-                    this._title = s;
-                    this.header.add(this.buildTitle(s));
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        WFullDialog.prototype.onClickOk = function () {
-            return true;
-        };
-        WFullDialog.prototype.onClickCancel = function () {
-            return true;
-        };
-        WFullDialog.prototype.buildBtnOK = function () {
-            return new WButton(this.subId('bfo'), WUX.TXT.OK, '', WUX.BTN.INFO + ' button-sm', '', '');
-        };
-        WFullDialog.prototype.buildBtnCancel = function () {
-            if (this.txtCancel) {
-                return new WButton(this.subId('bfc'), this.txtCancel, '', WUX.BTN.SECONDARY + ' button-sm', '', '');
-            }
-            return new WButton(this.subId('bfc'), WUX.TXT.CANCEL, '', WUX.BTN.SECONDARY + ' button-sm', '', '');
-        };
-        WFullDialog.prototype.buttonOk = function () {
-            var _this = this;
-            if (this.btnOK)
-                return this.btnOK;
-            this.btnOK = this.buildBtnOK();
-            this.btnOK.on('click', function (e) {
-                if (_this.onClickOk()) {
-                    _this.ok = true;
-                    _this.cancel = false;
-                    _this.hide();
-                }
-            });
-            this.buttons.push(this.btnOK);
-        };
-        WFullDialog.prototype.buttonCancel = function () {
-            var _this = this;
-            if (this.btnCancel)
-                return this.btnCancel;
-            this.btnCancel = this.buildBtnCancel();
-            this.btnCancel.on('click', function (e) {
-                if (_this.onClickCancel()) {
-                    _this.ok = false;
-                    _this.cancel = true;
-                    _this.hide();
-                }
-            });
-            this.buttons.push(this.btnCancel);
-        };
-        WFullDialog.prototype.show = function (parent, handler) {
-            if (!this.beforeShow())
-                return;
-            this.ok = false;
-            this.cancel = false;
-            this.parent = parent;
-            this.parentHandler = handler;
-            if (!this.mounted)
-                WuxDOM.mount(this);
-            if (this.root && this.root.length) {
-                if (WFullDialog.fullDialogsShown.length) {
-                    WFullDialog.fullDialogsShown[WFullDialog.fullDialogsShown.length - 1].visible = false;
-                }
-                else {
-                    this.hideView();
-                }
-                this.cntRoot.visible = true;
-                this.isShown = true;
-                this.onShown();
-                WFullDialog.fullDialogsShown.push(this);
-                if (!this.handlers['_pageshown'])
-                    return;
-                for (var _i = 0, _a = this.handlers['_pageshown']; _i < _a.length; _i++) {
-                    var h = _a[_i];
-                    h(this.createEvent('_pageshown'));
-                }
-            }
-        };
-        WFullDialog.prototype.hide = function (e) {
-            if (this.root && this.root.length) {
-                this.cntRoot.visible = false;
-                this.isShown = false;
-                this.onHidden();
-                WFullDialog.fullDialogsShown.pop();
-                if (WFullDialog.fullDialogsShown.length) {
-                    WFullDialog.fullDialogsShown[WFullDialog.fullDialogsShown.length - 1].visible = true;
-                }
-                else {
-                    this.showView();
-                }
-                if (this.parentHandler) {
-                    this.parentHandler(e);
-                    this.parentHandler = null;
-                }
-                if (!this.handlers['_pagehidden'])
-                    return;
-                for (var _i = 0, _a = this.handlers['_pagehidden']; _i < _a.length; _i++) {
-                    var h = _a[_i];
-                    h(this.createEvent('_pagehidden'));
-                }
-            }
-        };
-        WFullDialog.prototype.showView = function () {
-            if (this.parent) {
-                var rc = WUX.getRootComponent(this.parent);
-                if (rc)
-                    rc.visible = true;
-            }
-            if (this.phHidden) {
-                var $ph = WUX.getPageHeader();
-                if ($ph && $ph.length)
-                    $ph.show();
-                this.phHidden = false;
-            }
-        };
-        WFullDialog.prototype.hideView = function () {
-            this.phHidden = false;
-            if (this.parent) {
-                var rc = WUX.getRootComponent(this.parent);
-                if (rc)
-                    rc.visible = false;
-            }
-            var $ph = WUX.getPageHeader();
-            if ($ph && $ph.length && $ph.is(':visible')) {
-                $ph.hide();
-                this.phHidden = true;
-            }
-        };
-        WFullDialog.prototype.close = function () {
-            this.ok = false;
-            this.cancel = false;
-            this.hide();
-        };
-        WFullDialog.prototype.selection = function (table, warn) {
-            if (!table)
-                return false;
-            var sr = table.getSelectedRows();
-            if (!sr || !sr.length) {
-                if (warn)
-                    WUX.showWarning(warn);
-                return false;
-            }
-            var sd = table.getSelectedRowsData();
-            if (!sd || !sd.length) {
-                if (warn)
-                    WUX.showWarning(warn);
-                return false;
-            }
-            if (this.props == null || typeof this.props == 'number') {
-                var idx = sr[0];
-                this.setProps(idx);
-            }
-            this.setState(sd[0]);
-            return true;
-        };
-        WFullDialog.prototype.beforeShow = function () {
-            return true;
-        };
-        WFullDialog.prototype.onShown = function () {
-        };
-        WFullDialog.prototype.onHidden = function () {
-        };
-        WFullDialog.prototype.render = function () {
-            this.isShown = false;
-            this.cntRoot = new WContainer(this.id, 'inmodal');
-            this.cntRoot.visible = false;
-            this.cntMain = this.cntRoot.addContainer('', 'modal-dialog', WUX.css(this._style, { w: '100%', m: 0, z: 'auto' }));
-            this.cntContent = this.cntMain.addContainer('', 'modal-content');
-            if (this.cntHeader)
-                this.cntContent.addContainer(this.cntHeader);
-            if (this.cntBody)
-                this.cntContent.addContainer(this.cntBody);
-            for (var _i = 0, _a = this.buttons; _i < _a.length; _i++) {
-                var btn = _a[_i];
-                this.footer.add(btn);
-            }
-            if (this.cntFooter)
-                this.cntContent.addContainer(this.cntFooter);
-            return this.cntRoot;
-        };
-        WFullDialog.prototype.componentWillUnmount = function () {
-            this.isShown = false;
-            if (this.btnCloseHeader)
-                this.btnCloseHeader.unmount();
-            if (this.btnCancel)
-                this.btnCancel.unmount();
-            if (this.cntFooter)
-                this.cntFooter.unmount();
-            if (this.cntBody)
-                this.cntBody.unmount();
-            if (this.cntHeader)
-                this.cntHeader.unmount();
-            if (this.cntContent)
-                this.cntContent.unmount();
-            if (this.cntMain)
-                this.cntMain.unmount();
-            if (this.cntRoot)
-                this.cntRoot.unmount();
-        };
-        WFullDialog.prototype.buildTitle = function (title) {
-            if (!this.tagTitle)
-                this.tagTitle = 'h3';
-            return '<' + this.tagTitle + '>' + WUX.WUtil.toText(title) + '</' + this.tagTitle + '>';
-        };
-        WFullDialog.fullDialogsShown = [];
-        return WFullDialog;
-    }(WUX.WComponent));
-    WUX.WFullDialog = WFullDialog;
     var WLabel = (function (_super) {
         __extends(WLabel, _super);
         function WLabel(id, text, icon, classStyle, style, attributes) {
@@ -4943,49 +4562,6 @@ var WUX;
         return WButton;
     }(WUX.WComponent));
     WUX.WButton = WButton;
-    var WButtonSelect = (function (_super) {
-        __extends(WButtonSelect, _super);
-        function WButtonSelect(id, text, options, classStyle, style, attributes) {
-            if (classStyle === void 0) { classStyle = 'btn-group'; }
-            var _this = _super.call(this, id, 'WButtonDropDown', null, classStyle, style, attributes) || this;
-            _this.updateState(text);
-            _this.options = options;
-            return _this;
-        }
-        WButtonSelect.prototype.componentDidMount = function () {
-            var _this = this;
-            if (this._tooltip)
-                this.root.attr('title', this._tooltip);
-            if (!this.btnClass)
-                this.btnClass = 'btn btn-gray';
-            var btn = WUX.build('button', this.state + ' <span class="caret"></span>', this.btnClass + ' dropdown-toggle', 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"');
-            this.root.append(btn);
-            var $opt = $('<ul class="dropdown-menu"></ul>');
-            this.root.append($opt);
-            if (this.options) {
-                for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
-                    var o = _a[_i];
-                    var ot = typeof o == 'string' ? o : o.text;
-                    var oi = typeof o == 'string' ? o : o.id;
-                    var $li = $('<li></li>');
-                    $opt.append($li);
-                    var $a = $('<a href="#" data-id="' + oi + '">' + ot + '</a>');
-                    $li.append($a);
-                    $a.on('click', function (e) {
-                        var id = $(e.currentTarget).attr('data-id');
-                        _this.trigger('propschange', WUX.WUtil.toString(id));
-                    });
-                }
-            }
-        };
-        WButtonSelect.prototype.componentWillUpdate = function (nextProps, nextState) {
-            if (!nextState)
-                nextState = '';
-            this.root.children('button:first').html(nextState + ' <span class="caret"></span>');
-        };
-        return WButtonSelect;
-    }(WUX.WComponent));
-    WUX.WButtonSelect = WButtonSelect;
     var WLink = (function (_super) {
         __extends(WLink, _super);
         function WLink(id, text, icon, classStyle, style, attributes, href, target) {
@@ -5162,54 +4738,6 @@ var WUX;
         return WTab;
     }(WUX.WComponent));
     WUX.WTab = WTab;
-    var WTags = (function (_super) {
-        __extends(WTags, _super);
-        function WTags(id, comp, classStyle, style, attributes, type) {
-            var _this = _super.call(this, id, 'WTags', comp, classStyle, style, attributes) || this;
-            if (!_this._classStyle)
-                _this._classStyle = 'label-default';
-            _this.hideZeroValues = false;
-            return _this;
-        }
-        WTags.prototype.updateState = function (nextState) {
-            _super.prototype.updateState.call(this, nextState);
-            this.buildView();
-        };
-        WTags.prototype.componentDidMount = function () {
-            this.buildView();
-        };
-        WTags.prototype.buildView = function () {
-            if (!this.root)
-                return;
-            this.root.html('');
-            if (!this.state)
-                return;
-            if (typeof this.state != 'object') {
-                this.state = WUX.WUtil.toArray(this.state);
-            }
-            for (var k in this.state) {
-                var v = this.state[k];
-                var t = WUX.format(v);
-                if (!t)
-                    continue;
-                if (this.hideZeroValues && (t == '0' || t == 'null'))
-                    continue;
-                if (t.length > 100)
-                    t = t.substring(0, 97) + '...';
-                if (typeof this.state[k] == 'boolean') {
-                    if (this.props instanceof WUX.WFormPanel) {
-                        var f = this.props.getField(k);
-                        if (f && f.label) {
-                            t = f.label + '=' + t;
-                        }
-                    }
-                }
-                this.root.append('<span class="label ' + this._classStyle + '">' + t + '</span>');
-            }
-        };
-        return WTags;
-    }(WUX.WComponent));
-    WUX.WTags = WTags;
     var WSelect = (function (_super) {
         __extends(WSelect, _super);
         function WSelect(id, options, multiple, classStyle, style, attributes) {
@@ -5228,6 +4756,12 @@ var WUX;
                 _this.props.push($(e).text());
             });
             return this.props;
+        };
+        WSelect.prototype.select = function (i) {
+            if (!this.root || !this.options)
+                return this;
+            this.setState(this.options.length > i ? this.options[i] : null);
+            return this;
         };
         WSelect.prototype.addOption = function (e, sel) {
             if (!e)
@@ -5315,8 +4849,8 @@ var WUX;
                 if (this.state == null) {
                     this.root.val('');
                 }
-                else if (typeof this.state == 'string') {
-                    this.root.val(this.state);
+                else if (typeof this.state == 'string' || typeof this.state == 'number') {
+                    this.root.val('' + this.state);
                 }
                 else {
                     this.root.val(this.state.id);
@@ -5383,6 +4917,12 @@ var WUX;
             enumerable: true,
             configurable: true
         });
+        WRadio.prototype.select = function (i) {
+            if (!this.root || !this.options)
+                return this;
+            this.setState(this.options.length > i ? this.options[i] : null);
+            return this;
+        };
         WRadio.prototype.render = function () {
             var r = '';
             if (this.label) {
@@ -5449,69 +4989,6 @@ var WUX;
         return WRadio;
     }(WUX.WComponent));
     WUX.WRadio = WRadio;
-    var WLinkOptions = (function (_super) {
-        __extends(WLinkOptions, _super);
-        function WLinkOptions(id, options, classStyle, style, attributes, props) {
-            var _this = _super.call(this, id ? id : '*', 'WLinkOptions', props, classStyle, style, attributes) || this;
-            _this.rootTag = 'span';
-            _this._style = WUX.css(style, _this._baseStyle = 'display:inline-block;');
-            _this.options = options;
-            return _this;
-        }
-        Object.defineProperty(WLinkOptions.prototype, "tooltip", {
-            set: function (s) {
-                this._tooltip = s;
-                if (this.internal)
-                    this.internal.tooltip = s;
-                if (!this.options || !this.options.length)
-                    return;
-                for (var i = 0; i < this.options.length; i++) {
-                    var $item = $('#' + this.id + '-' + i);
-                    if (!$item.length)
-                        continue;
-                    if (this._tooltip)
-                        $item.attr('title', this._tooltip);
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        WLinkOptions.prototype.componentDidMount = function () {
-            var _this = this;
-            if (!this.options || !this.options.length)
-                return;
-            var r = '';
-            for (var i = 0; i < this.options.length; i++) {
-                var opt = this.options[i];
-                if (typeof opt == "string") {
-                    r += ' <a id="' + this.id + '-' + i + '"> ' + opt + ' </a>';
-                }
-                else {
-                    r += ' <a id="' + this.id + '-' + i + '"> ' + opt.text + ' </a>';
-                }
-                if (i < this.options.length - 1)
-                    r += ' | ';
-            }
-            this.root.html(r);
-            var _loop_2 = function (i) {
-                var $item = $('#' + this_2.id + '-' + i);
-                if (!$item.length)
-                    return "continue";
-                if (this_2._tooltip)
-                    $item.attr('title', this_2._tooltip);
-                var opt = this_2.options[i];
-                $item.click(function () {
-                    _this.setState(opt);
-                });
-            };
-            var this_2 = this;
-            for (var i = 0; i < this.options.length; i++) {
-                _loop_2(i);
-            }
-        };
-        return WLinkOptions;
-    }(WUX.WComponent));
-    WUX.WLinkOptions = WLinkOptions;
     var WTable = (function (_super) {
         __extends(WTable, _super);
         function WTable(id, header, keys, classStyle, style, attributes, props) {
@@ -5824,13 +5301,13 @@ var WUX;
                             v = WUX.formatDateTime(v);
                             break;
                         case 'b':
-                            v = v ? WUX.buildIcon(WUX.ICO.TRUE) : WUX.buildIcon(WUX.ICO.FALSE);
+                            v = v ? '&check;' : '';
                             break;
                         default:
                             if (v instanceof Date)
                                 v = WUX.formatDate(v);
                             if (typeof v == 'boolean')
-                                v = v ? WUX.buildIcon(WUX.ICO.TRUE) : WUX.buildIcon(WUX.ICO.FALSE);
+                                v = v ? '&check;' : '';
                             if (typeof v == 'number') {
                                 v = WUX.formatNum2(v);
                                 align = 'text-right';
@@ -6560,7 +6037,7 @@ var WUX;
                         case WUX.WInputType.Date:
                             this.dpids.push(f.id);
                             var dr = '<div class="input-group" id="igd-' + f.id + '">';
-                            dr += '<span class="input-group-addon">' + WUX.buildIcon(WUX.ICO.CALENDAR) + '</span> ';
+                            dr += '<span class="input-group-addon">' + WUX.buildIcon(WUX.WIcon.CALENDAR) + '</span> ';
                             dr += '<input type="text" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
                             if (f.readonly)
                                 dr += 'readonly ';
@@ -6779,8 +6256,8 @@ var WUX;
                     }
                 }
             }
-            var _loop_3 = function (fid) {
-                var minDate = WUX.WUtil.getDate(this_3.minValues, fid);
+            var _loop_2 = function (fid) {
+                var minDate = WUX.WUtil.getDate(this_2.minValues, fid);
                 $('#' + fid).datepicker({
                     language: 'it',
                     todayBtn: 'linked',
@@ -6818,10 +6295,10 @@ var WUX;
                     }
                 });
             };
-            var this_3 = this;
+            var this_2 = this;
             for (var _f = 0, _g = this.dpids; _f < _g.length; _f++) {
                 var fid = _g[_f];
-                _loop_3(fid);
+                _loop_2(fid);
             }
             if (typeof this.state == 'object')
                 this.updateView();
@@ -7002,10 +6479,11 @@ var WUX;
             if (!fieldId)
                 return this;
             var f = this.getField(fieldId);
-            if (!f)
+            if (!f || !f.component)
                 return this;
-            if (f.component instanceof WUX.WSelect2) {
-                f.component.select(i);
+            var s = f.component['select'];
+            if (typeof s === 'function') {
+                s.bind(f.component)(i);
                 return this;
             }
             console.error('WFormPanel.select(' + fieldId + ',' + i + ') not applicable.');
@@ -7240,518 +6718,6 @@ var WUX;
         return WFormPanel;
     }(WUX.WComponent));
     WUX.WFormPanel = WFormPanel;
-    var WGridCol = (function () {
-        function WGridCol(grid, row, index, width, height, classStyle, style) {
-            var components = [];
-            for (var _i = 7; _i < arguments.length; _i++) {
-                components[_i - 7] = arguments[_i];
-            }
-            this.grid = grid;
-            this.row = row;
-            this.index = index;
-            this.width = width ? width : 0;
-            this.height = height ? height : 0;
-            this.classStyle = classStyle;
-            this.style = style;
-            this.titles = [];
-            this.components = components ? components : [];
-            for (var _a = 0, components_1 = components; _a < components_1.length; _a++) {
-                var component = components_1[_a];
-                if (component instanceof WUX.WComponent && !component.parent)
-                    component.parent = this.grid;
-            }
-        }
-        WGridCol.prototype.css = function (s) {
-            if (!s)
-                return this;
-            if (typeof s == 'string') {
-                if (s.indexOf(':') > 0) {
-                    this.style = WUX.style(s);
-                }
-                else {
-                    this.classStyle = s;
-                }
-            }
-            else {
-                if (s.n)
-                    this.classStyle = s.n;
-                this.style = s;
-            }
-            if (this.grid.mounted)
-                WUX.setCss($('#' + this.grid.id + '-' + this.row.index + '-' + this.index), s);
-            return this;
-        };
-        WGridCol.prototype.removeClass = function (className) {
-            if (!className)
-                return this;
-            if (this.classStyle)
-                this.classStyle = WUX.removeClass(this.classStyle, className);
-            if (this.grid.mounted)
-                $('#' + this.grid.id + '-' + this.row.index + '-' + this.index).removeClass(className);
-            return this;
-        };
-        WGridCol.prototype.addCol = function (width, height) {
-            var _a;
-            var components = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                components[_i - 2] = arguments[_i];
-            }
-            return (_a = this.row).addCol.apply(_a, __spreadArrays([width, height], components));
-        };
-        WGridCol.prototype.addRow = function (width, height, classStyle, style) {
-            return this.grid.addRow(width, height, classStyle, style);
-        };
-        WGridCol.prototype.add = function (component) {
-            if (component)
-                this.components.push(component);
-            if (component instanceof WUX.WComponent && !component.parent)
-                component.parent = this.grid;
-            return this;
-        };
-        WGridCol.prototype.cell = function () {
-            var components = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                components[_i] = arguments[_i];
-            }
-            this.components = components ? components : [];
-            for (var _a = 0, components_2 = components; _a < components_2.length; _a++) {
-                var component = components_2[_a];
-                if (component instanceof WUX.WComponent && !component.parent)
-                    component.parent = this.grid;
-            }
-            return this;
-        };
-        WGridCol.prototype.y = function () {
-            this.ylayout = true;
-            return this;
-        };
-        WGridCol.prototype.tip = function () {
-            var titles = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                titles[_i] = arguments[_i];
-            }
-            this.titles = titles ? titles : [];
-            return this;
-        };
-        WGridCol.prototype.title = function (k) {
-            if (!this.titles || !this.titles.length)
-                return '';
-            if (!k)
-                return this.titles[0];
-            if (this.titles.length > k)
-                return this.titles[k];
-            return '';
-        };
-        return WGridCol;
-    }());
-    WUX.WGridCol = WGridCol;
-    var WGridRow = (function () {
-        function WGridRow(grid, index, width, height, classStyle, style, attributes) {
-            this.grid = grid;
-            this.index = index;
-            this.width = width ? width : 0;
-            this.height = height ? height : 0;
-            this.classStyle = classStyle;
-            this.style = style;
-            this.cols = [];
-            this.attributes = WUX.attributes(attributes);
-        }
-        WGridRow.prototype.css = function (s) {
-            if (!s)
-                return this;
-            if (typeof s == 'string') {
-                if (s.indexOf(':') > 0) {
-                    this.style = WUX.style(s);
-                }
-                else {
-                    this.classStyle = s;
-                }
-            }
-            else {
-                if (s.n)
-                    this.classStyle = s.n;
-                this.style = s;
-            }
-            if (this.grid.mounted)
-                WUX.setCss($('#' + this.grid.id + '-' + this.index), s);
-            return this;
-        };
-        WGridRow.prototype.removeClass = function (className) {
-            if (!className)
-                return this;
-            if (this.classStyle)
-                this.classStyle = WUX.removeClass(this.classStyle, className);
-            if (this.grid.mounted)
-                $('#' + this.grid.id + '-' + this.index).removeClass(className);
-            return this;
-        };
-        WGridRow.prototype.addCol = function (width, height) {
-            var components = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                components[_i - 2] = arguments[_i];
-            }
-            if (!width && this.grid.rows.length > 1) {
-                if (this.grid.rows[0].cols.length > this.cols.length) {
-                    width = this.grid.rows[0].cols[this.cols.length].width;
-                }
-            }
-            var col = new (WGridCol.bind.apply(WGridCol, __spreadArrays([void 0, this.grid, this, this.cols.length, width, height, '', ''], components)))();
-            this.cols.push(col);
-            return col;
-        };
-        WGridRow.prototype.addRow = function (width, height, classStyle, style) {
-            return this.grid.addRow(width, height, classStyle, style);
-        };
-        return WGridRow;
-    }());
-    WUX.WGridRow = WGridRow;
-    var WGrid = (function (_super) {
-        __extends(WGrid, _super);
-        function WGrid(id, classStyle, style, attributes, props) {
-            var _this = _super.call(this, id ? id : '*', 'WGrid', props, classStyle, style, attributes) || this;
-            _this.rows = [];
-            _this.overflow = 'auto';
-            return _this;
-        }
-        WGrid.prototype.getWidth = function () {
-            var maxw = 0;
-            for (var i = 0; i < this.rows.length; i++) {
-                var row = this.rows[i];
-                var wro = 0;
-                for (var j = 0; j < row.cols.length; j++) {
-                    var w = row.cols[j].width;
-                    wro += w ? w : 50;
-                }
-                if (wro > maxw)
-                    maxw = wro;
-            }
-            return maxw;
-        };
-        WGrid.prototype.getHeight = function () {
-            var r = 0;
-            for (var i = 0; i < this.rows.length; i++) {
-                var row = this.rows[i];
-                if (row.height) {
-                    r += row.height;
-                    continue;
-                }
-                var maxh = 0;
-                for (var j = 0; j < row.cols.length; j++) {
-                    if (row.cols[j].height > maxh)
-                        maxh = row.cols[j].height;
-                }
-                if (maxh == 0)
-                    maxh = 25;
-                r += maxh;
-            }
-            return r;
-        };
-        WGrid.prototype.getRowIndex = function (ref) {
-            if (!this.rows || !this.rows.length)
-                return -1;
-            for (var i = 0; i < this.rows.length; i++) {
-                if (this.rows[i].ref == ref)
-                    return i;
-            }
-            return -1;
-        };
-        WGrid.prototype.removeAll = function () {
-            this.rows = [];
-            return this;
-        };
-        WGrid.prototype.addRow = function (width, height, classStyle, style, attributes) {
-            var row = new WGridRow(this, this.rows.length, width, height, classStyle, style, attributes);
-            this.rows.push(row);
-            return row;
-        };
-        WGrid.prototype.addCol = function (width, height) {
-            var _a;
-            var components = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                components[_i - 2] = arguments[_i];
-            }
-            return (_a = this.row()).addCol.apply(_a, __spreadArrays([width, height], components));
-        };
-        WGrid.prototype.add = function (component) {
-            if (!component)
-                return this.col();
-            return this.col().add(component);
-        };
-        WGrid.prototype.y = function () {
-            return this.col().y();
-        };
-        WGrid.prototype.tip = function () {
-            var _a;
-            var titles = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                titles[_i] = arguments[_i];
-            }
-            return (_a = this.col()).tip.apply(_a, titles);
-        };
-        WGrid.prototype.row = function (r) {
-            if (!r && this.rows.length <= r)
-                return undefined;
-            if (!this.rows.length)
-                this.addRow();
-            if (r === undefined || r === null)
-                r = this.rows.length - 1;
-            return this.rows[r];
-        };
-        WGrid.prototype.col = function (r, c) {
-            var rrow = this.row(r);
-            if (!rrow)
-                return undefined;
-            if (!c && rrow.cols.length <= c)
-                return undefined;
-            if (!rrow.cols.length)
-                rrow.addCol();
-            if (c === undefined || c === null)
-                c = rrow.cols.length - 1;
-            return rrow.cols[c];
-        };
-        WGrid.prototype.find = function (component) {
-            for (var i = 0; i < this.rows.length; i++) {
-                var row = this.rows[i];
-                for (var j = 0; j < row.cols.length; j++) {
-                    var col = row.cols[j];
-                    for (var k = 0; k < col.components.length; k++) {
-                        if (WUX.same(col.components[k], component))
-                            return [i, j, k];
-                    }
-                }
-            }
-            return [-1, -1, -1];
-        };
-        WGrid.prototype.element = function (row, col, idx) {
-            if (col === undefined || col === null)
-                return $('#' + this.id + '-' + row);
-            if (idx === undefined || idx === null)
-                return $('#' + this.id + '-' + row + '-' + col);
-            var gcol = this.col(row, col);
-            if (!gcol)
-                return undefined;
-            if (gcol.components.length > idx)
-                return gcol.components[idx];
-            return undefined;
-        };
-        WGrid.prototype.html = function (row, col, k, h) {
-            if (!this.mounted)
-                return false;
-            if (row >= 0 && this.rows.length <= row)
-                return false;
-            if (col >= 0 && this.rows[row].cols.length <= col)
-                return false;
-            var gcol = this.rows[row].cols[col];
-            var cid = this.id + '-' + row + '-' + col;
-            if (gcol.ylayout) {
-                $('#' + cid + '-' + k).html(h);
-            }
-            else {
-                $('#' + cid).html(h);
-            }
-            return true;
-        };
-        WGrid.prototype.cell = function (row, col) {
-            var ac = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                ac[_i - 2] = arguments[_i];
-            }
-            if (row >= 0 && this.rows.length <= row)
-                return false;
-            if (col >= 0 && this.rows[row].cols.length <= col)
-                return false;
-            var gcol = this.rows[row].cols[col];
-            if (this.mounted) {
-                if (ac && ac.length == 1)
-                    gcol.ylayout = false;
-                var cid = this.id + '-' + row + '-' + col;
-                if (gcol.ylayout) {
-                    for (var k = 0; k < gcol.components.length; k++) {
-                        $('#' + cid + '-' + k).html('');
-                    }
-                }
-                else {
-                    $('#' + cid).html('');
-                }
-                if (ac) {
-                    for (var k = 0; k < ac.length; k++) {
-                        if (gcol.ylayout)
-                            cid = this.id + '-' + row + '-' + col + '-' + k;
-                        var c = ac[k];
-                        if (c instanceof WUX.WComponent) {
-                            c.mount($('#' + cid));
-                            if (!c.parent)
-                                c.parent = this;
-                        }
-                        else {
-                            $('#' + cid).append(c);
-                        }
-                    }
-                }
-            }
-            gcol.cell.apply(gcol, ac);
-            return true;
-        };
-        WGrid.prototype.make = function () {
-            if (!this.overflow)
-                this.overflow = 'auto';
-            var r = '';
-            for (var i = 0; i < this.rows.length; i++) {
-                var row = this.rows[i];
-                var firstRow = i == 0;
-                var lastRow = i == this.rows.length - 1;
-                if (row.attributes) {
-                    r += '<div id="' + this.id + '-' + i + '"' + this.buildRowStyle(row, firstRow, lastRow) + this.buildClass(row) + ' ' + row.attributes + '>';
-                }
-                else {
-                    r += '<div id="' + this.id + '-' + i + '"' + this.buildRowStyle(row, firstRow, lastRow) + this.buildClass(row) + '>';
-                }
-                for (var j = 0; j < row.cols.length; j++) {
-                    var col = row.cols[j];
-                    var cid = this.id + '-' + i + '-' + j;
-                    if (col.ylayout) {
-                        r += '<span' + this.buildColStyle(col, firstRow, lastRow, false, row.height) + this.buildClass(col) + ' id="' + cid + '">';
-                        var dh = Math.round(100 / col.components.length);
-                        for (var k = 0; k < col.components.length; k++) {
-                            var divs = WUX.css(this.ydivStyle, this.isText(col.components[k]) ? this.textStyle : '');
-                            var ct = col.title(k);
-                            var dt = ct ? ' title="' + ct + '"' : '';
-                            r += '<div id="' + this.id + '-' + i + '-' + j + '-' + k + '" + style="width:100%;height:' + dh + '%;' + divs + '"' + dt + '></div>';
-                        }
-                        r += '</span>';
-                    }
-                    else {
-                        var ct = col.title();
-                        var st = ct ? ' title="' + ct + '"' : '';
-                        if (col.width == 0 && j == row.cols.length - 1) {
-                            r += '<div' + this.buildColStyle(col, firstRow, lastRow, true, row.height) + this.buildClass(col) + ' id="' + cid + '"' + st + '></div>';
-                        }
-                        else {
-                            r += '<span' + this.buildColStyle(col, firstRow, lastRow, false, row.height) + this.buildClass(col) + ' id="' + cid + '"' + st + '></span>';
-                        }
-                    }
-                }
-                r += '</div>';
-            }
-            return r;
-        };
-        WGrid.prototype.componentDidMount = function () {
-            for (var i = 0; i < this.rows.length; i++) {
-                var row = this.rows[i];
-                for (var j = 0; j < row.cols.length; j++) {
-                    var col = row.cols[j];
-                    for (var k = 0; k < col.components.length; k++) {
-                        var c = col.components[k];
-                        var cid = this.id + '-' + i + '-' + j;
-                        if (col.ylayout)
-                            cid += '-' + k;
-                        if (c instanceof WUX.WComponent) {
-                            c.mount($('#' + cid));
-                        }
-                        else {
-                            $('#' + cid).append(c);
-                        }
-                    }
-                }
-            }
-        };
-        WGrid.prototype.componentWillUnmount = function () {
-            for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
-                var row = _a[_i];
-                for (var _b = 0, _c = row.cols; _b < _c.length; _b++) {
-                    var col = _c[_b];
-                    for (var _d = 0, _e = col.components; _d < _e.length; _d++) {
-                        var c = _e[_d];
-                        if (c instanceof WUX.WComponent)
-                            c.unmount();
-                    }
-                }
-            }
-        };
-        WGrid.prototype.buildRowStyle = function (e, fistRow, lastRow) {
-            var s = '';
-            if (e.width < 0) {
-                s = WUX.css(this.rowsStyle, { d: 'table', h: e.height }, e.style);
-            }
-            else {
-                s = WUX.css(this.rowsStyle, { w: e.width, h: e.height }, e.style);
-            }
-            if (s.indexOf('overflow') > 0)
-                return ' style="' + s + '"';
-            if (e.width || e.height)
-                return ' style="' + s + 'overflow:' + this.overflow + ';"';
-            return ' style="' + s + 'overflow:hidden;"';
-        };
-        WGrid.prototype.buildColStyle = function (e, fistRow, lastRow, fill, h) {
-            var styles = [];
-            if (!this.ydivStyle || !e.ylayout) {
-                styles.push(this.colsStyle);
-            }
-            if (fistRow && this.headStyle) {
-                styles.push(this.headStyle);
-            }
-            else if (lastRow && this.footStyle) {
-                styles.push(this.footStyle);
-            }
-            if (!e.ylayout && this.isAllText(e.components)) {
-                styles.push(this.textStyle);
-            }
-            styles.push(e.style);
-            styles.push({ w: e.width, h: e.height ? e.height : h });
-            var s = WUX.css.apply(void 0, styles);
-            if (fill) {
-                if (s.indexOf('overflow') > 0)
-                    return ' style="' + s + '"';
-                return ' style="' + s + 'overflow:' + this.overflow + ';"';
-            }
-            else {
-                if (s.indexOf('overflow') > 0)
-                    return ' style="' + s + 'float:left;"';
-                return ' style="' + s + 'float:left;overflow:hidden;"';
-            }
-        };
-        WGrid.prototype.buildClass = function (e) {
-            return e.classStyle ? ' class="' + e.classStyle + '"' : '';
-        };
-        WGrid.prototype.isAllText = function (ae) {
-            if (!ae)
-                return false;
-            for (var _i = 0, ae_1 = ae; _i < ae_1.length; _i++) {
-                var e = ae_1[_i];
-                if (!this.isText(e))
-                    return false;
-            }
-            return true;
-        };
-        WGrid.prototype.isText = function (e) {
-            if (typeof e == 'string') {
-                if (!e)
-                    return false;
-                if (e.indexOf('<') < 0)
-                    return true;
-                if (e.indexOf('<di') >= 0)
-                    return false;
-                if (e.indexOf('<in') >= 0)
-                    return false;
-                if (e.indexOf('<se') >= 0)
-                    return false;
-                if (e.indexOf('<bu') >= 0)
-                    return false;
-                if (e.indexOf('<im') >= 0)
-                    return false;
-                if (e.indexOf('<ta') >= 0)
-                    return false;
-                if (e.indexOf('<if') >= 0)
-                    return false;
-                if (e.indexOf('<a') >= 0)
-                    return false;
-                return true;
-            }
-            return false;
-        };
-        return WGrid;
-    }(WUX.WComponent));
-    WUX.WGrid = WGrid;
     var WWindow = (function (_super) {
         __extends(WWindow, _super);
         function WWindow(id, name, position, attributes, props) {
@@ -8036,452 +7002,5 @@ var WUX;
         return WWindow;
     }(WUX.WComponent));
     WUX.WWindow = WWindow;
-})(WUX || (WUX = {}));
-var WUX;
-(function (WUX) {
-    var WSelect2 = (function (_super) {
-        __extends(WSelect2, _super);
-        function WSelect2(id, options, multiple, classStyle, style, attributes, props) {
-            var _this = _super.call(this, id ? id : '*', 'WSelect2', props, classStyle, style, attributes) || this;
-            _this.rootTag = 'select';
-            _this.options = options;
-            _this.multiple = multiple;
-            _this.openOnFocus = true;
-            _this.dontOpen = false;
-            _this.lastChange = 0;
-            _this.count = options ? options.length : 0;
-            _this._init = false;
-            return _this;
-        }
-        Object.defineProperty(WSelect2.prototype, "visible", {
-            set: function (b) {
-                this._visible = b;
-                if (this.internal)
-                    this.internal.visible = b;
-                if (this.root && this.root.length) {
-                    if (!this.$cb)
-                        this.$cb = this.root.parent().find('span[role="combobox"]').first();
-                    if (this._visible) {
-                        if (this.$cb && this.$cb.length) {
-                            this.$cb.show();
-                        }
-                        else {
-                            this.root.show();
-                        }
-                    }
-                    else {
-                        if (this.$cb && this.$cb.length) {
-                            this.$cb.hide();
-                        }
-                        else {
-                            this.root.hide();
-                        }
-                    }
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        WSelect2.prototype.focus = function () {
-            if (!this.mounted)
-                return this;
-            if (!this._enabled)
-                return this;
-            this.root.focus();
-            if (!this.$cb)
-                this.$cb = this.root.parent().find('span[role="combobox"]').first();
-            if (this.$cb && this.$cb.length)
-                this.$cb.focus();
-            return this;
-        };
-        WSelect2.prototype.getProps = function () {
-            var _this = this;
-            if (!this.root)
-                return this.props;
-            this.props = [];
-            this.root.find('option:selected').each(function (i, e) {
-                var t = $(e).text();
-                if (_this.prefix)
-                    t = _this.prefix + ' ' + t;
-                if (_this.suffix)
-                    t = t + ' ' + _this.suffix;
-                _this.props.push(t);
-            });
-            return this.props;
-        };
-        WSelect2.prototype.getState = function () {
-            if (!this.root)
-                return this.state;
-            return this.state = this.root.val();
-        };
-        WSelect2.prototype.getValue = function () {
-            var id = this.getState();
-            if (id == null)
-                return null;
-            var text = WUX.WUtil.toString(this.getProps());
-            if (!text)
-                text = '' + id;
-            return { id: id, text: text };
-        };
-        WSelect2.prototype.select = function (i) {
-            if (!this.root)
-                return this;
-            var val = this.root.find('option:eq(' + i + ')').val();
-            if (val == null)
-                return this;
-            this.root.select2('val', val);
-            return this;
-        };
-        WSelect2.prototype.selectVal = function (av, ad, r) {
-            if (!av || !av.length) {
-                this.root.val([]).trigger('change');
-                return;
-            }
-            if (r) {
-                this.root.empty();
-                for (var i = 0; i < av.length; i++) {
-                    var d = ad ? ad[i] : '' + av[i];
-                    this.root.append('<option value="' + av[i] + '">' + d + '</option>');
-                }
-            }
-            this.root.select2('val', av);
-        };
-        WSelect2.prototype.setOptions = function (items) {
-            this.options = items;
-            if (!this.root)
-                return this;
-            this.root.empty();
-            var data = [];
-            if (this.options) {
-                for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
-                    var opt = _a[_i];
-                    if (typeof opt == 'string') {
-                        data.push({ id: opt, text: opt });
-                    }
-                    else {
-                        data.push(opt);
-                    }
-                }
-            }
-            var options = { data: data, placeholder: "", allowClear: true };
-            this.init(options);
-            return this;
-        };
-        WSelect2.prototype.reload = function (clear) {
-            if (clear)
-                this.setState(null);
-            if (!this.mounted)
-                return this;
-            this.root.empty();
-            this.componentDidMount();
-            return this;
-        };
-        WSelect2.prototype.render = function () {
-            if (this.multiple)
-                return this.buildRoot(this.rootTag, '', 'multiple="multiple"', 'form-control');
-            return this.buildRoot(this.rootTag, '', '', 'form-control');
-        };
-        WSelect2.prototype.updateState = function (nextState) {
-            _super.prototype.updateState.call(this, nextState);
-            if (!this.root)
-                return;
-            if (Array.isArray(this.state) && this.state.length > 1) {
-                this.root.append('<option value="' + this.state[0] + '">' + this.state[this.state.length - 1] + '</option>');
-                this.root.val(this.state[0]).trigger('change');
-            }
-            else if (this.state) {
-                if (typeof this.state == 'object') {
-                    this.root.append('<option value="' + this.state.id + '">' + this.state.text + '</option>');
-                    this.root.val(this.state.id).trigger('change');
-                }
-                else {
-                    this.root.val(this.state).trigger('change');
-                }
-            }
-            else {
-                this.root.val([]).trigger('change');
-            }
-            this.dontTrigger = true;
-            this.lastChange = new Date().getTime();
-        };
-        WSelect2.prototype.componentDidMount = function () {
-            if (this._tooltip)
-                this.root.attr('title', this._tooltip);
-            if (this.options) {
-                for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
-                    var opt = _a[_i];
-                    if (typeof opt == 'string') {
-                        this.root.append('<option>' + WUX.WUtil.toText(opt) + '</option>');
-                    }
-                    else {
-                        this.root.append('<option value="' + opt.id + '">' + WUX.WUtil.toText(opt.text) + '</option>');
-                    }
-                }
-            }
-            var options = { placeholder: "", allowClear: true };
-            this.init(options);
-        };
-        WSelect2.prototype.init = function (options) {
-            var _this = this;
-            this.root.select2(options);
-            this.updateState(this.state);
-            if (options) {
-                if (options.data) {
-                    this.count = WUX.WUtil.size(options.data);
-                }
-            }
-            else {
-                this.count = 0;
-            }
-            if (this._init)
-                return;
-            this.$cb = this.root.parent().find('span[role="combobox"]').first();
-            if (this.$cb.length) {
-                this.$cb.on('focus', function (e) {
-                    if (e.relatedTarget == null)
-                        return;
-                    if (_this.dontOpen) {
-                        _this.dontOpen = false;
-                        return;
-                    }
-                    if (_this.openOnFocus)
-                        setTimeout(function () {
-                            if (_this.multiple) {
-                                if (_this.$cb && _this.$cb.length) {
-                                    var $sf = _this.$cb.find('input.select2-search__field').first();
-                                    if ($sf && $sf.length && !$sf.is(':focus'))
-                                        $sf.focus();
-                                }
-                            }
-                            else {
-                                var d = new Date().getTime() - _this.lastChange;
-                                if (d > 900)
-                                    _this.root.select2('open');
-                                _this.dontOpen = true;
-                            }
-                        }, 50);
-                });
-            }
-            else {
-                this.root.on('focus', function (e) {
-                    if (_this.dontOpen) {
-                        _this.dontOpen = false;
-                        return;
-                    }
-                    if (_this.openOnFocus)
-                        setTimeout(function () {
-                            var d = new Date().getTime() - _this.lastChange;
-                            if (d > 900)
-                                _this.root.select2('open');
-                            _this.dontOpen = true;
-                        }, 50);
-                });
-            }
-            if (this.multiple) {
-                this.root.on('select2:select', function (e) {
-                    _this.lastChange = new Date().getTime();
-                    _this.trigger('statechange');
-                });
-                this.root.on('select2:unselect', function (e) {
-                    setTimeout(function () {
-                        _this.lastChange = new Date().getTime();
-                        _this.trigger('statechange');
-                    }, 0);
-                });
-            }
-            else {
-                this.root.on('change', function (e) {
-                    _this.lastChange = new Date().getTime();
-                    _this.trigger('statechange');
-                });
-            }
-            this._init = true;
-        };
-        WSelect2.prototype.transferTo = function (dest, force, callback) {
-            if (dest instanceof WSelect2) {
-                dest.setState(this.getValue(), force, callback);
-                return true;
-            }
-            return _super.prototype.transferTo.call(this, dest, force, callback);
-        };
-        return WSelect2;
-    }(WUX.WComponent));
-    WUX.WSelect2 = WSelect2;
-    var WLookupDialog = (function (_super) {
-        __extends(WLookupDialog, _super);
-        function WLookupDialog(id, title, keys, onlyTable) {
-            var _this = _super.call(this, id, 'WLookupDialog') || this;
-            _this.title = title;
-            if (!onlyTable) {
-                _this.fp = new WUX.WFormPanel(_this.subId('fp'));
-                _this.fp.addRow();
-                _this.fp.addTextField('c', WUX.TXT.CODE);
-                _this.fp.addRow();
-                _this.fp.addTextField('d', WUX.TXT.DESCRIPTION);
-                _this.fp.on('statechange', function (e) {
-                    if (_this.lookup) {
-                        _this.lookup(_this.getFilter(), function (result) {
-                            _this.table.setState(result);
-                        });
-                    }
-                });
-            }
-            _this.table = new WUX.WTable(_this.subId('table'), [WUX.TXT.CODE, WUX.TXT.DESCRIPTION], keys);
-            _this.table.widths[0] = 200;
-            _this.table.css({ h: 360 });
-            _this.table.onDoubleClick(function (e) {
-                var rd = _this.table.getSelectedRowsData();
-                _this.selected = rd && rd.length ? rd[0] : undefined;
-                if (_this.selected) {
-                    _this.hide();
-                    _this.trigger('_selected', _this.selected);
-                }
-            });
-            if (onlyTable) {
-                _this.body
-                    .addRow()
-                    .addCol('12', { pt: 8, pb: 8 })
-                    .add(_this.table);
-            }
-            else {
-                _this.body
-                    .addRow()
-                    .addCol('12')
-                    .add(_this.fp)
-                    .addRow()
-                    .addCol('12', { pt: 8, pb: 8 })
-                    .add(_this.table);
-            }
-            return _this;
-        }
-        WLookupDialog.prototype.updateState = function (nextState) {
-            _super.prototype.updateState.call(this, nextState);
-            if (this.table) {
-                this.table.setState(this.state);
-            }
-        };
-        WLookupDialog.prototype.setFilter = function (params) {
-            if (!this.fp)
-                return;
-            this.fp.setValue('c', WUX.WUtil.getItem(params, 0));
-            this.fp.setValue('d', WUX.WUtil.getItem(params, 1));
-        };
-        WLookupDialog.prototype.getFilter = function () {
-            var r = [];
-            if (!this.fp) {
-                r.push('');
-                r.push('');
-                return r;
-            }
-            r.push(this.fp.getValue('c'));
-            r.push(this.fp.getValue('d'));
-            return r;
-        };
-        WLookupDialog.prototype.onSelected = function (handler) {
-            if (!this.handlers['_selected'])
-                this.handlers['_selected'] = [];
-            this.handlers['_selected'].push(handler);
-        };
-        WLookupDialog.prototype.onShown = function () {
-            this.startup = true;
-            this.table.refresh();
-            if (this.fp) {
-                var d = this.fp.getValue('d');
-                if (d) {
-                    this.fp.focusOn('d');
-                }
-                else {
-                    this.fp.focusOn('c');
-                }
-            }
-        };
-        WLookupDialog.prototype.onClickOk = function () {
-            var _this = this;
-            var rd = this.table.getSelectedRowsData();
-            this.selected = rd && rd.length ? rd[0] : undefined;
-            if (!this.selected) {
-                WUX.showWarning('Selezionare un elemento.');
-                return;
-            }
-            setTimeout(function () {
-                _this.trigger('_selected', _this.selected);
-            }, 100);
-            return true;
-        };
-        return WLookupDialog;
-    }(WUX.WDialog));
-    WUX.WLookupDialog = WLookupDialog;
-    var WMenu = (function (_super) {
-        __extends(WMenu, _super);
-        function WMenu(id, classStyle) {
-            if (classStyle === void 0) { classStyle = 'btn-group'; }
-            var _this = _super.call(this, id ? id : '*', 'WMenu', '', classStyle) || this;
-            _this.items = [];
-            _this.title = 'Seleziona';
-            return _this;
-        }
-        WMenu.prototype.addItem = function (id, icon, text, bdef) {
-            if (typeof id == 'string') {
-                this.items.push({ id: id, icon: icon, text: text, marked: bdef });
-            }
-            else {
-                this.items.push(id);
-            }
-            return this;
-        };
-        WMenu.prototype.addSep = function () {
-            this.items.push({ id: '', type: 'b' });
-            return this;
-        };
-        WMenu.prototype.addSection = function (name) {
-            this.items.push({ id: '', type: 's', text: name });
-            return this;
-        };
-        WMenu.prototype.onClick = function (handler) {
-            this.handler = handler;
-        };
-        WMenu.prototype.buildItem = function (node, code, icon, text, bdef) {
-            var _this = this;
-            var $li = $('<li></li>');
-            $li.appendTo(node);
-            var $a;
-            if (bdef) {
-                $a = $('<a href="#"><i class="fa ' + icon + '"></i> &nbsp;<strong>' + text + '</strong></a>');
-            }
-            else {
-                $a = $('<a href="#"><i class="fa ' + icon + '"></i> &nbsp;' + text + '</a>');
-            }
-            $a.appendTo($li);
-            $a.on('click', function (e) {
-                e.data = _this.data;
-                e.key = code;
-                _this.handler(e);
-            });
-        };
-        WMenu.prototype.componentDidMount = function () {
-            if (this.title == null)
-                this.title = 'Seleziona';
-            var dt = $('<a class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + this.title + ' <span class="caret"></span></a>');
-            dt.appendTo(this.root);
-            var dm = $('<ul class="dropdown-menu dropdown-menu-right"></ul>');
-            dm.appendTo(this.root);
-            if (!this.items)
-                this.items = [];
-            for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
-                var item = _a[_i];
-                if (!item.type || item.type == 'i') {
-                    this.buildItem(dm, item.id, item.icon, item.text, item.marked);
-                }
-                else if (item.type == 'b') {
-                    dm.append($('<li role="separator" class="divider"></li>'));
-                }
-                else if (item.type == 's') {
-                    dm.append($('<li class="dropdown-header">' + item.text + '</li>'));
-                }
-            }
-        };
-        return WMenu;
-    }(WUX.WComponent));
-    WUX.WMenu = WMenu;
 })(WUX || (WUX = {}));
 //# sourceMappingURL=wux.js.map

@@ -95,7 +95,6 @@
     <TypeScriptCompile Include="ts\wux\wux.base.ts" />
     <TypeScriptCompile Include="ts\wux\wux.cfg.ts" />
     <TypeScriptCompile Include="ts\wux\wux.comp.ts" />
-    <TypeScriptCompile Include="ts\wux\wux.ext.ts" />
     <TypeScriptCompile Include="ts\test.ts" />
   </ItemGroup>
   <ItemGroup>

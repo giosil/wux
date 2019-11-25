@@ -45,7 +45,7 @@ var Test = (function (_super) {
             _this.tabTest.setState(result);
             WUX.showSuccess(result.length + ' items found');
         });
-        this.btnDialog = new WUX.WButton('btnDialog', 'Show Dialog', WUX.ICO.EXPORT, WUX.BTN.SECONDARY, 'width: 180px');
+        this.btnDialog = new WUX.WButton('btnDialog', 'Show Dialog', WUX.WIcon.SHARE_SQUARE_O, WUX.BTN.SECONDARY, 'width: 180px');
         this.btnDialog.on('click', function (e) {
             console.log('btnDialog:click');
             WUX.confirm('Are you sure?', function (res) {
@@ -54,7 +54,7 @@ var Test = (function (_super) {
                 _this.dlgTest.show();
             });
         });
-        this.btnWindow = new WUX.WButton('btnWindow', 'Show Window', WUX.ICO.OPEN, WUX.BTN.INFO, 'width: 180px');
+        this.btnWindow = new WUX.WButton('btnWindow', 'Show Window', WUX.WIcon.EDIT, WUX.BTN.INFO, 'width: 180px');
         this.btnWindow.on('click', function (e) {
             console.log('btnWindow:click');
             _this.winTest.show();
@@ -99,9 +99,9 @@ var Test = (function (_super) {
             console.log('WWindow:hide');
         });
         this.tcoTest = new WUX.WTab('tcoTest');
-        this.tcoTest.addTab('First tab', WUX.ICO.EXPORT).add('<h1>First tab</h1>');
-        this.tcoTest.addTab('Second tab', WUX.ICO.EXPORT).add('<h1>Second tab</h1>');
-        this.tcoTest.addTab('Third tab', WUX.ICO.EXPORT).add('<h1>Third tab</h1>');
+        this.tcoTest.addTab('First tab', WUX.WIcon.CALENDAR).add('<h1>First tab</h1>');
+        this.tcoTest.addTab('Second tab', WUX.WIcon.ADDRESS_CARD).add('<h1>Second tab</h1>');
+        this.tcoTest.addTab('Third tab', WUX.WIcon.CALCULATOR).add('<h1>Third tab</h1>');
         this.tcoTest.setState(1);
         this.tcoTest.on('statechange', function (e) {
             console.log('WTab:statechange', _this.tcoTest.getState());

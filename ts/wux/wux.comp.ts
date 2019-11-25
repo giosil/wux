@@ -520,7 +520,7 @@
         addTool(tool: string | JQuery | WComponent, icon?: WIcon, attributes?: string, handler?: (e?: any) => any): this {
             if (!tool) return this;
             if (typeof tool == 'string') {
-                if (!icon) icon = ICO.TOOL;
+                if (!icon) icon = WIcon.WRENCH;
                 if (!this.cntls) {
                     this.cntls = new WContainer('', global.box_tools);
                     this.header.add(this.cntls);
@@ -867,292 +867,6 @@
                     this.parentHandler = null;
                 }
             });
-        }
-
-        componentWillUnmount(): void {
-            this.isShown = false;
-            if (this.btnCloseHeader) this.btnCloseHeader.unmount();
-            if (this.btnCancel) this.btnCancel.unmount();
-            if (this.cntFooter) this.cntFooter.unmount();
-            if (this.cntBody) this.cntBody.unmount();
-            if (this.cntHeader) this.cntHeader.unmount();
-            if (this.cntContent) this.cntContent.unmount();
-            if (this.cntMain) this.cntMain.unmount();
-            if (this.cntRoot) this.cntRoot.unmount();
-        }
-
-        protected buildTitle(title: string): string {
-            if (!this.tagTitle) this.tagTitle = 'h3';
-            return '<' + this.tagTitle + '>' + WUtil.toText(title) + '</' + this.tagTitle + '>';
-        }
-    }
-
-    export class WFullDialog<P = any, S = any> extends WComponent<P, S> {
-        cntRoot: WContainer;
-        cntMain: WContainer;
-        cntContent: WContainer;
-        cntHeader: WContainer;
-        cntBody: WContainer;
-        cntFooter: WContainer;
-        // GUI
-        protected _title: string;
-        protected tagTitle: string;
-        btnCloseHeader: WButton;
-        btnOK: WButton;
-        btnCancel: WButton;
-        txtCancel: string;
-        buttons: WButton[];
-        // Flag
-        ok: boolean;
-        cancel: boolean;
-        isShown: boolean;
-        // Control
-        parentHandler: (e?: JQueryEventObject) => any;
-        // Internal flags
-        protected phHidden: boolean;
-
-        static fullDialogsShown: WFullDialog[] = [];
-
-        constructor(id: string, name: string = 'WFullDialog', btnOk = true, btnClose = true, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
-            super(id, name, undefined, classStyle, style, attributes);
-            this.buttons = [];
-            this.tagTitle = 'h3';
-            if (btnClose) {
-                if (!btnOk) this.txtCancel = WUX.TXT.CLOSE;
-                this.buttonCancel();
-            }
-            if (btnOk) this.buttonOk();
-            this.ok = false;
-            this.cancel = false;
-            this.isShown = false;
-            // Auto-mount
-            if (this.id && this.id != '*') {
-                if ($('#' + this.id).length) $('#' + this.id).remove();
-            }
-            WuxDOM.onRender((e: WEvent) => {
-                if (this.mounted) return;
-                this.mount(e.element);
-            });
-        }
-
-        onShownModal(handler: (e?: JQueryEventObject) => any) {
-            if (!this.handlers['_pageshown']) this.handlers['_pageshown'] = [];
-            this.handlers['_pageshown'].push(handler);
-        }
-
-        onHiddenModal(handler: (e?: JQueryEventObject) => any) {
-            if (!this.handlers['_pagehidden']) this.handlers['_pagehidden'] = [];
-            this.handlers['_pagehidden'].push(handler);
-        }
-
-        get header(): WContainer {
-            if (this.cntHeader) return this.cntHeader;
-            this.cntHeader = new WContainer('', 'modal-header');
-            this.btnCloseHeader = new WButton(this.subId('bhc'), '<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>', undefined, 'close');
-            this.btnCloseHeader.on('click', (e: JQueryEventObject) => {
-                this.close();
-            });
-            this.cntHeader.add(this.btnCloseHeader);
-            return this.cntHeader;
-        }
-
-        get body(): WContainer {
-            if (this.cntBody) return this.cntBody;
-            this.cntBody = new WContainer('', WUX.cls('modal-body', this._classStyle), '', this._attributes);
-            return this.cntBody;
-        }
-
-        get footer(): WContainer {
-            if (this.cntFooter) return this.cntFooter;
-            this.cntFooter = new WContainer('', 'modal-footer');
-            return this.cntFooter;
-        }
-
-        get title(): string {
-            return this._title;
-        }
-        set title(s: string) {
-            if (this._title && this.cntHeader) {
-                this._title = s;
-                this.cntHeader.getRoot().children(this.tagTitle + ':first').text(s);
-            }
-            else {
-                this._title = s;
-                this.header.add(this.buildTitle(s));
-            }
-        }
-
-        protected onClickOk(): boolean {
-            return true;
-        }
-
-        protected onClickCancel(): boolean {
-            return true;
-        }
-
-        protected buildBtnOK(): WButton {
-            return new WButton(this.subId('bfo'), TXT.OK, '', BTN.INFO + ' button-sm', '', '');
-        }
-
-        protected buildBtnCancel(): WButton {
-            if (this.txtCancel) {
-                return new WButton(this.subId('bfc'), this.txtCancel, '', BTN.SECONDARY + ' button-sm', '', '');
-            }
-            return new WButton(this.subId('bfc'), TXT.CANCEL, '', BTN.SECONDARY + ' button-sm', '', '');
-        }
-
-        buttonOk(): WButton {
-            if (this.btnOK) return this.btnOK;
-            this.btnOK = this.buildBtnOK();
-            this.btnOK.on('click', (e: JQueryEventObject) => {
-                if (this.onClickOk()) {
-                    this.ok = true;
-                    this.cancel = false;
-                    this.hide();
-                }
-            });
-            this.buttons.push(this.btnOK);
-        }
-
-        buttonCancel(): WButton {
-            if (this.btnCancel) return this.btnCancel;
-            this.btnCancel = this.buildBtnCancel();
-            this.btnCancel.on('click', (e: JQueryEventObject) => {
-                if (this.onClickCancel()) {
-                    this.ok = false;
-                    this.cancel = true;
-                    this.hide();
-                }
-            });
-            this.buttons.push(this.btnCancel);
-        }
-
-        show(parent: WComponent, handler?: (e?: JQueryEventObject) => any): void {
-            if (!this.beforeShow()) return;
-            this.ok = false;
-            this.cancel = false;
-            this.parent = parent;
-            this.parentHandler = handler;
-            if (!this.mounted) WuxDOM.mount(this);
-            if (this.root && this.root.length) {
-                if (WFullDialog.fullDialogsShown.length) {
-                    // Hide previous full dialog
-                    WFullDialog.fullDialogsShown[WFullDialog.fullDialogsShown.length - 1].visible = false;
-                }
-                else {
-                    // Hide view
-                    this.hideView();
-                }
-                // Show FullDialog
-                this.cntRoot.visible = true;
-                this.isShown = true;
-                this.onShown();
-                WFullDialog.fullDialogsShown.push(this);
-                // Trigger event
-                if (!this.handlers['_pageshown']) return;
-                for (let h of this.handlers['_pageshown']) {
-                    h(this.createEvent('_pageshown'));
-                }
-            }
-        }
-
-        hide(e?: JQueryEventObject): void {
-            if (this.root && this.root.length) {
-                this.cntRoot.visible = false;
-                this.isShown = false;
-                this.onHidden();
-                WFullDialog.fullDialogsShown.pop();
-                if (WFullDialog.fullDialogsShown.length) {
-                    // Show previous full dialog
-                    WFullDialog.fullDialogsShown[WFullDialog.fullDialogsShown.length - 1].visible = true;
-                }
-                else {
-                    // Show view
-                    this.showView();
-                }
-                if (this.parentHandler) {
-                    this.parentHandler(e);
-                    this.parentHandler = null;
-                }
-                if (!this.handlers['_pagehidden']) return;
-                for (let h of this.handlers['_pagehidden']) {
-                    h(this.createEvent('_pagehidden'));
-                }
-            }
-        }
-
-        protected showView() {
-            if (this.parent) {
-                let rc = WUX.getRootComponent(this.parent);
-                if (rc) rc.visible = true;
-            }
-            if (this.phHidden) {
-                let $ph = WUX.getPageHeader();
-                if ($ph && $ph.length) $ph.show();
-                this.phHidden = false;
-            }
-        }
-
-        protected hideView() {
-            this.phHidden = false;
-            if (this.parent) {
-                let rc = WUX.getRootComponent(this.parent);
-                if (rc) rc.visible = false;
-            }
-            let $ph = WUX.getPageHeader();
-            if ($ph && $ph.length && $ph.is(':visible')) {
-                $ph.hide();
-                this.phHidden = true;
-            }
-        }
-
-        close(): void {
-            this.ok = false;
-            this.cancel = false;
-            this.hide();
-        }
-
-        selection(table: WITable, warn?: string): boolean {
-            if (!table) return false;
-            let sr = table.getSelectedRows();
-            if (!sr || !sr.length) {
-                if (warn) WUX.showWarning(warn);
-                return false;
-            }
-            let sd = table.getSelectedRowsData();
-            if (!sd || !sd.length) {
-                if (warn) WUX.showWarning(warn);
-                return false;
-            }
-            if (this.props == null || typeof this.props == 'number') {
-                let idx: any = sr[0];
-                this.setProps(idx);
-            }
-            this.setState(sd[0]);
-            return true;
-        }
-
-        protected beforeShow(): boolean {
-            return true;
-        }
-
-        protected onShown() {
-        }
-
-        protected onHidden() {
-        }
-
-        protected render() {
-            this.isShown = false;
-            this.cntRoot = new WContainer(this.id, 'inmodal');
-            this.cntRoot.visible = false;
-            this.cntMain = this.cntRoot.addContainer('', 'modal-dialog', WUX.css(this._style, { w: '100%', m: 0, z: 'auto' }));
-            this.cntContent = this.cntMain.addContainer('', 'modal-content');
-            if (this.cntHeader) this.cntContent.addContainer(this.cntHeader);
-            if (this.cntBody) this.cntContent.addContainer(this.cntBody);
-            for (let btn of this.buttons) this.footer.add(btn);
-            if (this.cntFooter) this.cntContent.addContainer(this.cntFooter);
-            return this.cntRoot;
         }
 
         componentWillUnmount(): void {
@@ -1539,47 +1253,6 @@
         }
     }
 
-    export class WButtonSelect extends WComponent<string, string> {
-        options: Array<string | WEntity>;
-        btnClass: string;
-
-        constructor(id: string, text?: string, options?: Array<string | WEntity>, classStyle: string = 'btn-group', style?: string | WStyle, attributes?: string | object) {
-            // WComponent init
-            super(id, 'WButtonDropDown', null, classStyle, style, attributes);
-            this.updateState(text);
-            this.options = options;
-        }
-
-        protected componentDidMount(): void {
-            if (this._tooltip) this.root.attr('title', this._tooltip);
-
-            if (!this.btnClass) this.btnClass = 'btn btn-gray';
-            let btn = WUX.build('button', this.state + ' <span class="caret"></span>', this.btnClass + ' dropdown-toggle', 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"');
-            this.root.append(btn);
-            let $opt = $('<ul class="dropdown-menu"></ul>');
-            this.root.append($opt);
-            if (this.options) {
-                for (let o of this.options) {
-                    let ot = typeof o == 'string' ? o : o.text;
-                    let oi = typeof o == 'string' ? o : o.id;
-                    let $li = $('<li></li>');
-                    $opt.append($li);
-                    let $a = $('<a href="#" data-id="' + oi + '">' + ot + '</a>');
-                    $li.append($a);
-                    $a.on('click', (e: JQueryEventObject) => {
-                        let id = $(e.currentTarget).attr('data-id');
-                        this.trigger('propschange', WUtil.toString(id));
-                    });
-                }
-            }
-        }
-
-        protected componentWillUpdate(nextProps: any, nextState: any): void {
-            if (!nextState) nextState = '';
-            this.root.children('button:first').html(nextState + ' <span class="caret"></span>');
-        }
-    }
-
     export class WLink extends WComponent<string, string> {
         protected _href: string;
         protected _target: string;
@@ -1747,53 +1420,9 @@
         }
     }
 
-    export class WTags extends WComponent<WComponent, any> {
-        hideZeroValues: boolean;
-
-        constructor(id: string, comp?: WComponent, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string) {
-            // WComponent init
-            super(id, 'WTags', comp, classStyle, style, attributes);
-            if (!this._classStyle) this._classStyle = 'label-default';
-            this.hideZeroValues = false;
-        }
-
-        protected updateState(nextState: any) {
-            super.updateState(nextState);
-            this.buildView();
-        }
-
-        protected componentDidMount(): void {
-            this.buildView();
-        }
-
-        protected buildView(): void {
-            if (!this.root) return;
-            this.root.html('');
-            if (!this.state) return;
-            if (typeof this.state != 'object') {
-                this.state = WUtil.toArray(this.state);
-            }
-            for (let k in this.state) {
-                let v = this.state[k];
-                let t = WUX.format(v);
-                if (!t) continue;
-                if (this.hideZeroValues && (t == '0' || t == 'null')) continue;
-                if (t.length > 100) t = t.substring(0, 97) + '...';
-                if (typeof this.state[k] == 'boolean') {
-                    if (this.props instanceof WUX.WFormPanel) {
-                        let f = this.props.getField(k);
-                        if (f && f.label) {
-                            t = f.label + '=' + t;
-                        }
-                    }
-                }
-                this.root.append('<span class="label ' + this._classStyle + '">' + t + '</span>');
-            }
-        }
-    }
-
     export interface WISelectable extends WComponent {
         options: Array<string | WEntity>;
+        select(i: number): this;
     }
 
     export class WSelect extends WComponent implements WISelectable {
@@ -1816,6 +1445,12 @@
                 this.props.push($(e).text());
             });
             return this.props;
+        }
+
+        select(i: number): this {
+            if (!this.root || !this.options) return this;
+            this.setState(this.options.length > i ? this.options[i] : null);
+            return this;
         }
 
         addOption(e: string | WEntity, sel?: boolean): this {
@@ -1899,8 +1534,8 @@
                 if (this.state == null) {
                     this.root.val('');
                 }
-                else if (typeof this.state == 'string') {
-                    this.root.val(this.state);
+                else if (typeof this.state == 'string' || typeof this.state == 'number') {
+                    this.root.val('' + this.state);
                 }
                 else {
                     this.root.val(this.state.id);
@@ -1960,6 +1595,12 @@
             }
         }
 
+        select(i: number): this {
+            if (!this.root || !this.options) return this;
+            this.setState(this.options.length > i ? this.options[i] : null);
+            return this;
+        }
+
         protected render() {
             let r = '';
             if (this.label) {
@@ -2016,55 +1657,6 @@
         }
     }
 
-    export class WLinkOptions extends WComponent implements WISelectable {
-        options: Array<string | WEntity>;
-
-        constructor(id: string, options: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
-            // WComponent init
-            super(id ? id : '*', 'WLinkOptions', props, classStyle, style, attributes);
-            this.rootTag = 'span';
-            this._style = WUX.css(style, this._baseStyle = 'display:inline-block;');
-            // WLinks init
-            this.options = options;
-        }
-
-        set tooltip(s: string) {
-            this._tooltip = s;
-            if (this.internal) this.internal.tooltip = s;
-            if (!this.options || !this.options.length) return;
-            for (let i = 0; i < this.options.length; i++) {
-                let $item = $('#' + this.id + '-' + i);
-                if (!$item.length) continue;
-                if (this._tooltip) $item.attr('title', this._tooltip);
-            }
-        }
-
-        protected componentDidMount(): void {
-            if (!this.options || !this.options.length) return;
-            let r = '';
-            for (let i = 0; i < this.options.length; i++) {
-                let opt = this.options[i];
-                if (typeof opt == "string") {
-                    r += ' <a id="' + this.id + '-' + i + '"> ' + opt + ' </a>';
-                }
-                else {
-                    r += ' <a id="' + this.id + '-' + i + '"> ' + opt.text + ' </a>';
-                }
-                if (i < this.options.length - 1) r += ' | ';
-            }
-            this.root.html(r);
-            for (let i = 0; i < this.options.length; i++) {
-                let $item = $('#' + this.id + '-' + i);
-                if (!$item.length) continue;
-                if (this._tooltip) $item.attr('title', this._tooltip);
-                let opt = this.options[i];
-                $item.click(() => {
-                    this.setState(opt);
-                });
-            }
-        }
-    }
-
     export interface WITable extends WComponent {
         // Attributi base
         header: string[];
@@ -2073,6 +1665,7 @@
         types: string[];
         widths: number[];
         widthsPerc: boolean;
+        filter: boolean;
         templates: ((cnt: JQuery, opt: { data: any, text: string }) => any)[];
 
         // Selezione
@@ -2099,6 +1692,7 @@
         types: string[];
         widths: number[];
         widthsPerc: boolean;
+        filter: boolean;
         templates: ((cnt: JQuery, opt: { data: any, text: string }) => any)[];
 
         selectionMode: 'single' | 'multiple' | 'none';
@@ -2399,11 +1993,11 @@
                             v = WUX.formatDateTime(v);
                             break;
                         case 'b':
-                            v = v ? WUX.buildIcon(ICO.TRUE) : WUX.buildIcon(ICO.FALSE);
+                            v = v ? '&check;' : '';
                             break;
                         default:
                             if (v instanceof Date) v = WUX.formatDate(v);
-                            if (typeof v == 'boolean') v = v ? WUX.buildIcon(ICO.TRUE) : WUX.buildIcon(ICO.FALSE);
+                            if (typeof v == 'boolean') v = v ? '&check;' : '';
                             if (typeof v == 'number') {
                                 v = WUX.formatNum2(v);
                                 align = 'text-right';
@@ -3135,7 +2729,7 @@
                         case WInputType.Date:
                             this.dpids.push(f.id);
                             let dr = '<div class="input-group" id="igd-' + f.id + '">';
-                            dr += '<span class="input-group-addon">' + WUX.buildIcon(ICO.CALENDAR) + '</span> ';
+                            dr += '<span class="input-group-addon">' + WUX.buildIcon(WUX.WIcon.CALENDAR) + '</span> ';
                             dr += '<input type="text" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
                             if (f.readonly) dr += 'readonly ';
                             if (f.enabled == false) dr += 'disabled ';
@@ -3525,9 +3119,10 @@
         select(fieldId: string, i: number): this {
             if (!fieldId) return this;
             let f = this.getField(fieldId);
-            if (!f) return this;
-            if (f.component instanceof WUX.WSelect2) {
-                f.component.select(i);
+            if (!f || !f.component) return this;
+            let s = f.component['select'];
+            if (typeof s === 'function') {
+                s.bind(f.component)(i);
                 return this;
             }
             console.error('WFormPanel.select(' + fieldId + ',' + i + ') not applicable.');
@@ -3743,490 +3338,6 @@
                 }
             }
             return values;
-        }
-    }
-
-    export interface WGridElement {
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        ylayout?: boolean;
-        components?: Array<WElement>;
-        css(s: string | WStyle): this;
-        removeClass(className: string): this;
-    }
-
-    export class WGridCol implements WGridElement {
-        grid: WGrid;
-        row: WGridRow;
-        index: number;
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        components: Array<WElement>;
-        ylayout: boolean;
-        titles: string[];
-
-        constructor(grid: WGrid, row: WGridRow, index: number, width?: number, height?: number, classStyle?: string, style?: string | WStyle, ...components: (WElement)[]) {
-            this.grid = grid;
-            this.row = row;
-            this.index = index;
-            this.width = width ? width : 0;
-            this.height = height ? height : 0;
-            this.classStyle = classStyle;
-            this.style = style;
-            this.titles = [];
-            this.components = components ? components : [];
-            for (let component of components) {
-                if (component instanceof WComponent && !component.parent) component.parent = this.grid;
-            }
-        }
-
-        css(s: string | WStyle): this {
-            if (!s) return this;
-            if (typeof s == 'string') {
-                if (s.indexOf(':') > 0) {
-                    this.style = WUX.style(s);
-                }
-                else {
-                    this.classStyle = s;
-                }
-            }
-            else {
-                if (s.n) this.classStyle = s.n;
-                this.style = s;
-            }
-            if (this.grid.mounted) WUX.setCss($('#' + this.grid.id + '-' + this.row.index + '-' + this.index), s);
-            return this;
-        }
-
-        removeClass(className: string): this {
-            if (!className) return this;
-            if (this.classStyle) this.classStyle = WUX.removeClass(this.classStyle, className);
-            if (this.grid.mounted) $('#' + this.grid.id + '-' + this.row.index + '-' + this.index).removeClass(className);
-            return this;
-        }
-
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol {
-            return this.row.addCol(width, height, ...components);
-        }
-
-        addRow(width?: number, height?: number, classStyle?: string, style?: string): WGridRow {
-            return this.grid.addRow(width, height, classStyle, style);
-        }
-
-        add(component?: WElement): this {
-            if (component) this.components.push(component);
-            if (component instanceof WComponent && !component.parent) component.parent = this.grid;
-            return this;
-        }
-
-        cell(...components: (WElement)[]): this {
-            this.components = components ? components : [];
-            for (let component of components) {
-                if (component instanceof WComponent && !component.parent) component.parent = this.grid;
-            }
-            return this;
-        }
-
-        y(): this {
-            this.ylayout = true;
-            return this;
-        }
-
-        tip(...titles: string[]): this {
-            this.titles = titles ? titles : [];
-            return this;
-        }
-
-        title(k?: number): string {
-            if (!this.titles || !this.titles.length) return '';
-            if (!k) return this.titles[0];
-            if (this.titles.length > k) return this.titles[k];
-            return '';
-        }
-    }
-
-    export class WGridRow implements WGridElement {
-        grid: WGrid;
-        index: number;
-        width: number;
-        height: number;
-        classStyle: string;
-        style: string | WStyle;
-        cols: WGridCol[];
-        ref: string;
-        attributes: string;
-
-        constructor(grid: WGrid, index: number, width?: number, height?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
-            this.grid = grid;
-            this.index = index;
-            this.width = width ? width : 0;
-            this.height = height ? height : 0;
-            this.classStyle = classStyle;
-            this.style = style;
-            this.cols = [];
-            this.attributes = WUX.attributes(attributes);
-        }
-
-        css(s: string | WStyle): this {
-            if (!s) return this;
-            if (typeof s == 'string') {
-                if (s.indexOf(':') > 0) {
-                    this.style = WUX.style(s);
-                }
-                else {
-                    this.classStyle = s;
-                }
-            }
-            else {
-                if (s.n) this.classStyle = s.n;
-                this.style = s;
-            }
-            if (this.grid.mounted) WUX.setCss($('#' + this.grid.id + '-' + this.index), s);
-            return this;
-        }
-
-        removeClass(className: string): this {
-            if (!className) return this;
-            if (this.classStyle) this.classStyle = WUX.removeClass(this.classStyle, className);
-            if (this.grid.mounted) $('#' + this.grid.id + '-' + this.index).removeClass(className);
-            return this;
-        }
-
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol {
-            if (!width && this.grid.rows.length > 1) {
-                if (this.grid.rows[0].cols.length > this.cols.length) {
-                    width = this.grid.rows[0].cols[this.cols.length].width;
-                }
-            }
-            let col = new WGridCol(this.grid, this, this.cols.length, width, height, '', '', ...components);
-            this.cols.push(col);
-            return col;
-        }
-
-        addRow(width?: number, height?: number, classStyle?: string, style?: string | WStyle): WGridRow {
-            return this.grid.addRow(width, height, classStyle, style);
-        }
-    }
-
-    export class WGrid extends WComponent<any, any> {
-        rows: WGridRow[];
-        rowsStyle: string | WStyle;
-        colsStyle: string | WStyle;
-        headStyle: string | WStyle;
-        footStyle: string | WStyle;
-        ydivStyle: string | WStyle;
-        textStyle: string | WStyle;
-        overflow: 'visible' | 'hidden' | 'scroll' | 'auto' | 'initial' | 'inherit';
-
-        constructor(id?: string, classStyle?: string, style?: string, attributes?: string | object, props?: any) {
-            // WComponent init
-            super(id ? id : '*', 'WGrid', props, classStyle, style, attributes);
-            // WGrid init
-            this.rows = [];
-            this.overflow = 'auto';
-        }
-
-        getWidth(): number {
-            let maxw = 0;
-            for (let i = 0; i < this.rows.length; i++) {
-                let row = this.rows[i];
-                let wro = 0;
-                for (let j = 0; j < row.cols.length; j++) {
-                    let w = row.cols[j].width;
-                    wro += w ? w : 50;
-                }
-                if (wro > maxw) maxw = wro;
-            }
-            return maxw;
-        }
-
-        getHeight(): number {
-            let r = 0;
-            for (let i = 0; i < this.rows.length; i++) {
-                let row = this.rows[i];
-                if (row.height) {
-                    r += row.height
-                    continue;
-                }
-                let maxh = 0;
-                for (let j = 0; j < row.cols.length; j++) {
-                    if (row.cols[j].height > maxh) maxh = row.cols[j].height;
-                }
-                if (maxh == 0) maxh = 25;
-                r += maxh;
-            }
-            return r;
-        }
-
-        getRowIndex(ref: string): number {
-            if (!this.rows || !this.rows.length) return -1;
-            for (let i = 0; i < this.rows.length; i++) {
-                if (this.rows[i].ref == ref) return i;
-            }
-            return -1;
-        }
-
-        removeAll(): this {
-            this.rows = [];
-            return this;
-        }
-
-        addRow(width?: number, height?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object): WGridRow {
-            let row = new WGridRow(this, this.rows.length, width, height, classStyle, style, attributes);
-            this.rows.push(row);
-            return row;
-        }
-
-        addCol(width?: number, height?: number, ...components: (WElement)[]): WGridCol {
-            return this.row().addCol(width, height, ...components);
-        }
-
-        add(component?: WElement): WGridCol {
-            if (!component) return this.col();
-            return this.col().add(component);
-        }
-
-        y(): WGridCol {
-            return this.col().y();
-        }
-
-        tip(...titles: string[]): WGridCol {
-            return this.col().tip(...titles);
-        }
-
-        row(r?: number): WGridRow {
-            if (!r && this.rows.length <= r) return undefined;
-            if (!this.rows.length) this.addRow();
-            if (r === undefined || r === null) r = this.rows.length - 1;
-            return this.rows[r];
-        }
-
-        col(r?: number, c?: number): WGridCol {
-            let rrow = this.row(r);
-            if (!rrow) return undefined;
-            if (!c && rrow.cols.length <= c) return undefined;
-            if (!rrow.cols.length) rrow.addCol();
-            if (c === undefined || c === null) c = rrow.cols.length - 1;
-            return rrow.cols[c];
-        }
-
-        find(component?: WElement): [number, number, number] {
-            for (let i = 0; i < this.rows.length; i++) {
-                let row = this.rows[i];
-                for (let j = 0; j < row.cols.length; j++) {
-                    let col = row.cols[j];
-                    for (let k = 0; k < col.components.length; k++) {
-                        if (WUX.same(col.components[k], component)) return [i, j, k];
-                    }
-                }
-            }
-            return [-1, -1, -1];
-        }
-
-        element(row: number): JQuery;
-        element(row: number, col: number): JQuery;
-        element(row: number, col: number, idx: number): WElement;
-        element(row: number, col?: number, idx?: number): WElement {
-            if (col === undefined || col === null) return $('#' + this.id + '-' + row);
-            if (idx === undefined || idx === null) return $('#' + this.id + '-' + row + '-' + col);
-            let gcol = this.col(row, col);
-            if (!gcol) return undefined;
-            if (gcol.components.length > idx) return gcol.components[idx];
-            return undefined;
-        }
-
-        html(row: number, col: number, k: number, h: string): boolean {
-            if (!this.mounted) return false;
-            if (row >= 0 && this.rows.length <= row) return false;
-            if (col >= 0 && this.rows[row].cols.length <= col) return false;
-            let gcol = this.rows[row].cols[col];
-            let cid = this.id + '-' + row + '-' + col;
-            if (gcol.ylayout) {
-                $('#' + cid + '-' + k).html(h);
-            }
-            else {
-                $('#' + cid).html(h);
-            }
-            return true;            
-        }
-
-        cell(row: number, col: number, ...ac: (WElement)[]): boolean {
-            if (row >= 0 && this.rows.length <= row) return false;
-            if (col >= 0 && this.rows[row].cols.length <= col) return false;
-            let gcol = this.rows[row].cols[col];
-            if (this.mounted) {
-                if (ac && ac.length == 1) gcol.ylayout = false;
-                let cid = this.id + '-' + row + '-' + col;
-                if (gcol.ylayout) {
-                    for (let k = 0; k < gcol.components.length; k++) {
-                        $('#' + cid + '-' + k).html('');
-                    }
-                }
-                else {
-                    $('#' + cid).html('');
-                }
-                if (ac) {
-                    for (let k = 0; k < ac.length; k++) {
-                        if (gcol.ylayout) cid = this.id + '-' + row + '-' + col + '-' + k;
-                        let c = ac[k];
-                        if (c instanceof WComponent) {
-                            c.mount($('#' + cid));
-                            if (!c.parent) c.parent = this;
-                        }
-                        else {
-                            $('#' + cid).append(c);
-                        }
-                    }
-                }
-            }
-            gcol.cell(...ac);
-            return true;
-        }
-
-        protected make(): string {
-            if (!this.overflow) this.overflow = 'auto';
-            let r = '';
-            for (let i = 0; i < this.rows.length; i++) {
-                let row = this.rows[i];
-                let firstRow = i == 0;
-                let lastRow = i == this.rows.length - 1;
-                if (row.attributes) {
-                    r += '<div id="' + this.id + '-' + i + '"' + this.buildRowStyle(row, firstRow, lastRow) + this.buildClass(row) + ' ' + row.attributes + '>';
-                }
-                else {
-                    r += '<div id="' + this.id + '-' + i + '"' + this.buildRowStyle(row, firstRow, lastRow) + this.buildClass(row) + '>';
-                }
-                for (let j = 0; j < row.cols.length; j++) {
-                    let col = row.cols[j];
-                    let cid = this.id + '-' + i + '-' + j;
-                    if (col.ylayout) {
-                        r += '<span' + this.buildColStyle(col, firstRow, lastRow, false, row.height) + this.buildClass(col) + ' id="' + cid + '">';
-                        let dh = Math.round(100 / col.components.length);
-                        for (let k = 0; k < col.components.length; k++) {
-                            let divs = WUX.css(this.ydivStyle, this.isText(col.components[k]) ? this.textStyle : '');
-                            let ct = col.title(k);
-                            let dt = ct ? ' title="' + ct + '"' : '';
-                            r += '<div id="' + this.id + '-' + i + '-' + j + '-' + k + '" + style="width:100%;height:' + dh + '%;' + divs + '"' + dt + '></div>';
-                        }
-                        r += '</span>';
-                    }
-                    else {
-                        let ct = col.title();
-                        let st = ct ? ' title="' + ct + '"' : '';
-                        if (col.width == 0 && j == row.cols.length - 1) {
-                            r += '<div' + this.buildColStyle(col, firstRow, lastRow, true, row.height) + this.buildClass(col) + ' id="' + cid + '"' + st + '></div>';
-                        }
-                        else {
-                            r += '<span' + this.buildColStyle(col, firstRow, lastRow, false, row.height) + this.buildClass(col) + ' id="' + cid + '"' + st + '></span>';
-                        }
-                    }
-                }
-                r += '</div>';
-            }
-            return r;
-        }
-
-        protected componentDidMount(): void {
-            for (let i = 0; i < this.rows.length; i++) {
-                let row = this.rows[i];
-                for (let j = 0; j < row.cols.length; j++) {
-                    let col = row.cols[j];
-                    for (let k = 0; k < col.components.length; k++) {
-                        let c = col.components[k];
-                        let cid = this.id + '-' + i + '-' + j;
-                        if (col.ylayout) cid += '-' + k;
-                        if (c instanceof WComponent) {
-                            c.mount($('#' + cid));
-                        }
-                        else {
-                            $('#' + cid).append(c);
-                        }
-                    }
-                }
-            }
-        }
-
-        componentWillUnmount(): void {
-            for (let row of this.rows) {
-                for (let col of row.cols) {
-                    for (let c of col.components) {
-                        if (c instanceof WComponent) c.unmount();
-                    }
-                }
-            }
-        }
-
-        protected buildRowStyle(e: WGridElement, fistRow: boolean, lastRow: boolean): string {
-            let s = '';
-            if (e.width < 0) {
-                s = WUX.css(this.rowsStyle, { d: 'table', h: e.height }, e.style);
-            }
-            else {
-                s = WUX.css(this.rowsStyle, { w: e.width, h: e.height }, e.style);
-            }
-            if (s.indexOf('overflow') > 0) return ' style="' + s + '"';
-            if (e.width || e.height) return ' style="' + s + 'overflow:' + this.overflow + ';"';
-            return ' style="' + s + 'overflow:hidden;"';
-        }
-
-        protected buildColStyle(e: WGridElement, fistRow: boolean, lastRow: boolean, fill?: boolean, h?: number): string {
-            let styles: (string | WStyle)[] = [];
-            if (!this.ydivStyle || !e.ylayout) {
-                styles.push(this.colsStyle);
-            }
-            if (fistRow && this.headStyle) {
-                styles.push(this.headStyle);
-            }
-            else if (lastRow && this.footStyle) {
-                styles.push(this.footStyle);
-            }
-            if (!e.ylayout && this.isAllText(e.components)) {
-                styles.push(this.textStyle);
-            }
-            styles.push(e.style);
-            styles.push({ w: e.width, h: e.height ? e.height : h });
-            let s = css(...styles);
-            if (fill) {
-                if (s.indexOf('overflow') > 0) return ' style="' + s + '"';
-                return ' style="' + s + 'overflow:' + this.overflow + ';"';
-            }
-            else {
-                if (s.indexOf('overflow') > 0) return ' style="' + s + 'float:left;"';
-                return ' style="' + s + 'float:left;overflow:hidden;"';
-            }
-        }
-
-        protected buildClass(e: WGridElement): string {
-            return e.classStyle ? ' class="' + e.classStyle + '"' : '';
-        }
-
-        protected isAllText(ae: WElement[]): boolean {
-            if (!ae) return false;
-            for (let e of ae) {
-                if (!this.isText(e)) return false;
-            }
-            return true;
-        }
-
-        protected isText(e: WElement): boolean {
-            if (typeof e == 'string') {
-                if (!e) return false;
-                if (e.indexOf('<') < 0) return true;
-                if (e.indexOf('<di') >= 0) return false;
-                if (e.indexOf('<in') >= 0) return false;
-                if (e.indexOf('<se') >= 0) return false;
-                if (e.indexOf('<bu') >= 0) return false;
-                if (e.indexOf('<im') >= 0) return false;
-                if (e.indexOf('<ta') >= 0) return false;
-                if (e.indexOf('<if') >= 0) return false;
-                if (e.indexOf('<a') >= 0) return false;
-                return true;
-            }
-            return false;
         }
     }
 
