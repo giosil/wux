@@ -318,7 +318,7 @@
                 if (Array.isArray(p) && p.length > 1) {
                     let y = '';
                     for (let e of p) {
-                        let v = WUtil.toString(e);
+                        let v = '' + e;
                         if (!v) continue;
                         if (v.length > 9) {
                             let w = v.indexOf(' -');
@@ -333,7 +333,7 @@
                     return y;
                 }
                 else {
-                    let v = WUtil.toString(a.getProps());
+                    let v = '' + a.getProps();
                     if (!v) v = a.getState();
                     return WUX.format(v);
                 }
@@ -407,7 +407,7 @@
 
     export function norm(t: any): string {
         if (!t) return '';
-        t = WUtil.toString(t);
+        t = '' + t;
         t = t.replace("\300", "A'").replace("\310", "E'").replace("\314", "I'").replace("\322", "O'").replace("\331", "U'");
         t = t.replace("\340", "a'").replace("\350", "e'").replace("\354", "i'").replace("\362", "o'").replace("\371", "u'");
         t = t.replace("\341", "a`").replace("\351", "e`").replace("\355", "i`").replace("\363", "o`").replace("\372", "u`");
@@ -417,7 +417,7 @@
 
     export function den(t: any): string {
         if (!t) return '';
-        t = WUtil.toString(t);
+        t = '' + t;
         t = t.replace("A'", "\300").replace("E'", "\310").replace("I'", "\314").replace("O'", "\322").replace("U'", "\331");
         t = t.replace("a'", "\340").replace("e'", "\350").replace("i'", "\354").replace("o'", "\362").replace("u'", "\371");
         t = t.replace("a`", "\341").replace("e`", "\351").replace("i`", "\355").replace("o`", "\363").replace("u`", "\372");
@@ -427,7 +427,7 @@
 
     export function text(t: any): string {
         if (!t) return '';
-        t = WUtil.toString(t);
+        t = '' + t;
         t = t.replace("&Agrave;", "A'").replace("&Egrave;", "E'").replace("&Igrave;", "I'").replace("&Ograve;", "O'").replace("&Ugrave;", "U'");
         t = t.replace("&agrave;", "a'").replace("&egrave;", "e'").replace("&igrave;", "i'").replace("&ograve;", "o'").replace("&ugrave;", "u'");
         t = t.replace("&aacute;", "a`").replace("&eacute;", "e`").replace("&iacute;", "i`").replace("&oacute;", "o`").replace("&uacute;", "u`");
@@ -439,7 +439,7 @@
 
     export function encrypt(a: any): string {
         if (!a) return '';
-        let t = WUtil.toString(a);
+        let t = '' + a;
         let s = '';
         let k = 0;
         for (let i = 0; i < t.length; i++) {
@@ -458,7 +458,7 @@
 
     export function decrypt(a: any): string {
         if (!a) return '';
-        let t = WUtil.toString(a);
+        let t = '' + a;
         let s = '';
         let k = 0;
         for (let i = 0; i < t.length; i++) {
@@ -645,7 +645,6 @@
     }
 
     export class RES {
-        // Captions
         static readonly OK = 'OK';
         static readonly CLOSE = 'Chiudi';
         static readonly CANCEL = 'Annulla';

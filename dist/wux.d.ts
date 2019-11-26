@@ -234,6 +234,10 @@ declare namespace WUX {
         onfocus?: (e: JQueryEventObject) => any;
         onblur?: (e: JQueryEventObject) => any;
     }
+    interface WISelectable extends WComponent {
+        options: Array<string | WEntity>;
+        select(i: number): this;
+    }
     class WUtil {
         static toArrayComponent(a: any): WComponent[];
         static hasComponents(a: any): boolean;
@@ -813,10 +817,6 @@ declare namespace WUX {
         protected componentDidUpdate(prevProps: any, prevState: any): void;
         protected componentDidMount(): void;
         componentWillUnmount(): void;
-    }
-    interface WISelectable extends WComponent {
-        options: Array<string | WEntity>;
-        select(i: number): this;
     }
     class WSelect extends WComponent implements WISelectable {
         options: Array<string | WEntity>;

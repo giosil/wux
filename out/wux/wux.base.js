@@ -1934,7 +1934,7 @@ var WUX;
     function hashCode(a) {
         if (!a)
             return 0;
-        var s = WUtil.toString(a);
+        var s = '' + a;
         var h = 0, l = s.length, i = 0;
         if (l > 0)
             while (i < l)

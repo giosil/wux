@@ -1420,11 +1420,6 @@
         }
     }
 
-    export interface WISelectable extends WComponent {
-        options: Array<string | WEntity>;
-        select(i: number): this;
-    }
-
     export class WSelect extends WComponent implements WISelectable {
         options: Array<string | WEntity>;
         multiple: boolean;

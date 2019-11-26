@@ -325,7 +325,7 @@ var WUX;
                     var y = '';
                     for (var _i = 0, p_1 = p; _i < p_1.length; _i++) {
                         var e = p_1[_i];
-                        var v = WUX.WUtil.toString(e);
+                        var v = '' + e;
                         if (!v)
                             continue;
                         if (v.length > 9) {
@@ -343,7 +343,7 @@ var WUX;
                     return y;
                 }
                 else {
-                    var v = WUX.WUtil.toString(a.getProps());
+                    var v = '' + a.getProps();
                     if (!v)
                         v = a.getState();
                     return WUX.format(v);
@@ -434,7 +434,7 @@ var WUX;
     function norm(t) {
         if (!t)
             return '';
-        t = WUX.WUtil.toString(t);
+        t = '' + t;
         t = t.replace("\300", "A'").replace("\310", "E'").replace("\314", "I'").replace("\322", "O'").replace("\331", "U'");
         t = t.replace("\340", "a'").replace("\350", "e'").replace("\354", "i'").replace("\362", "o'").replace("\371", "u'");
         t = t.replace("\341", "a`").replace("\351", "e`").replace("\355", "i`").replace("\363", "o`").replace("\372", "u`");
@@ -445,7 +445,7 @@ var WUX;
     function den(t) {
         if (!t)
             return '';
-        t = WUX.WUtil.toString(t);
+        t = '' + t;
         t = t.replace("A'", "\300").replace("E'", "\310").replace("I'", "\314").replace("O'", "\322").replace("U'", "\331");
         t = t.replace("a'", "\340").replace("e'", "\350").replace("i'", "\354").replace("o'", "\362").replace("u'", "\371");
         t = t.replace("a`", "\341").replace("e`", "\351").replace("i`", "\355").replace("o`", "\363").replace("u`", "\372");
@@ -456,7 +456,7 @@ var WUX;
     function text(t) {
         if (!t)
             return '';
-        t = WUX.WUtil.toString(t);
+        t = '' + t;
         t = t.replace("&Agrave;", "A'").replace("&Egrave;", "E'").replace("&Igrave;", "I'").replace("&Ograve;", "O'").replace("&Ugrave;", "U'");
         t = t.replace("&agrave;", "a'").replace("&egrave;", "e'").replace("&igrave;", "i'").replace("&ograve;", "o'").replace("&ugrave;", "u'");
         t = t.replace("&aacute;", "a`").replace("&eacute;", "e`").replace("&iacute;", "i`").replace("&oacute;", "o`").replace("&uacute;", "u`");
@@ -468,7 +468,7 @@ var WUX;
     function encrypt(a) {
         if (!a)
             return '';
-        var t = WUX.WUtil.toString(a);
+        var t = '' + a;
         var s = '';
         var k = 0;
         for (var i = 0; i < t.length; i++) {
@@ -489,7 +489,7 @@ var WUX;
     function decrypt(a) {
         if (!a)
             return '';
-        var t = WUX.WUtil.toString(a);
+        var t = '' + a;
         var s = '';
         var k = 0;
         for (var i = 0; i < t.length; i++) {

@@ -880,6 +880,12 @@ namespace WUX {
         onfocus?: (e: JQueryEventObject) => any;
         onblur?: (e: JQueryEventObject) => any;
     }
+
+    export interface WISelectable extends WComponent {
+        options: Array<string | WEntity>;
+        select(i: number): this;
+    }
+
     /**
      * Utilities
      */
@@ -1810,7 +1816,7 @@ namespace WUX {
 
     export function hashCode(a: any): number {
         if (!a) return 0;
-        let s = WUtil.toString(a);
+        let s = '' + a;
         let h = 0, l = s.length, i = 0;
         if (l > 0)
             while (i < l)
