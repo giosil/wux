@@ -664,82 +664,15 @@ var WUX;
         WIcon["WIFI"] = "fa-wifi";
         WIcon["WRENCH"] = "fa-wrench";
     })(WIcon = WUX.WIcon || (WUX.WIcon = {}));
-    var TXT = (function () {
-        function TXT() {
+    var RES = (function () {
+        function RES() {
         }
-        TXT.OK = 'OK';
-        TXT.CLOSE = 'Chiudi';
-        TXT.NEW = 'Nuovo';
-        TXT.OPEN = 'Modifica';
-        TXT.DELETE = 'Elimina';
-        TXT.SAVE = 'Salva';
-        TXT.SEND = 'Invia';
-        TXT.SEND_EMAIL = 'Email';
-        TXT.FIND = 'Cerca';
-        TXT.FORCE = 'Forza';
-        TXT.SEARCH = 'Cerca';
-        TXT.CANCEL = 'Annulla';
-        TXT.RESET = 'Annulla';
-        TXT.PRINT = 'Stampa';
-        TXT.PRINT_ALL = 'Stampa Tutto';
-        TXT.PREVIEW = 'Anteprima';
-        TXT.EXPORT = 'Esporta';
-        TXT.IMPORT = 'Importa';
-        TXT.HELP = 'Guida';
-        TXT.VIEW = 'Vedi';
-        TXT.ENABLE = 'Abilita';
-        TXT.DISABLE = 'Disabilita';
-        TXT.ADD = 'Aggiungi';
-        TXT.APPLY = 'Applica';
-        TXT.REMOVE = 'Rimuovi';
-        TXT.REMOVE_ALL = 'Rim.Tutto';
-        TXT.REFRESH = 'Aggiorna';
-        TXT.UNDO = 'Annulla';
-        TXT.SETTINGS = 'Impostazioni';
-        TXT.COPY = 'Copia';
-        TXT.CUT = 'Taglia';
-        TXT.PASTE = 'Incolla';
-        TXT.CONFIRM = 'Conferma';
-        TXT.FORWARD = 'Avanti';
-        TXT.BACKWARD = 'Indietro';
-        TXT.NEXT = 'Prossimo';
-        TXT.PREVIOUS = 'Precedente';
-        TXT.SELECT = 'Seleziona';
-        TXT.SELECT_ALL = 'Sel.Tutto';
-        TXT.WORK = 'Lavora';
-        TXT.AGGREGATE = 'Aggrega';
-        TXT.SET = 'Imposta';
-        TXT.DEFAULT = 'Predefinito';
-        TXT.REWORK = 'Rielabora';
-        TXT.PUSH = 'Spedisci';
-        TXT.SUSPEND = 'Sospendi';
-        TXT.RESUME = 'Riattiva';
-        TXT.CODE = 'Codice';
-        TXT.DESCRIPTION = 'Descrizione';
-        TXT.GROUP = 'Gruppo';
-        TXT.ROLE = 'Ruolo';
-        TXT.TYPE = 'Tipo';
-        TXT.NAME = 'Nome';
-        TXT.SIZE = 'Dim.';
-        TXT.LAST_MOD = 'Agg.';
-        return TXT;
+        RES.OK = 'OK';
+        RES.CLOSE = 'Chiudi';
+        RES.CANCEL = 'Annulla';
+        RES.ERR_DATE = 'Data non ammessa.';
+        return RES;
     }());
-    WUX.TXT = TXT;
-    var MSG = (function () {
-        function MSG() {
-        }
-        MSG.CONF_DELETE = 'Eliminare l\'elemento selezionato?';
-        MSG.CONF_DISABLE = 'Disabilitare l\'elemento selezionato?';
-        MSG.CONF_ENABLE = 'Abilitare l\'elemento selezionato?';
-        MSG.CONF_CANCEL = 'Si vogliono annullare le modifiche apportate?';
-        MSG.CONF_PROCEED = 'Si vuole procedere con l\'operazione?';
-        MSG.CONF_OVERWRITE = 'Si vuole procedere con la sovrascrittura?';
-        MSG.INVALID_DATE = 'Data selezionata non ammessa.';
-        MSG.INVALID_VALUE = 'Valore non ammesso.';
-        MSG.MSG_COMPLETED = 'Operazione completata con successo.';
-        MSG.MSG_ERRORS = 'Si sono verificati degli errori durante l\'elaborazione.';
-        return MSG;
-    }());
-    WUX.MSG = MSG;
+    WUX.RES = RES;
 })(WUX || (WUX = {}));
 //# sourceMappingURL=wux.cfg.js.map

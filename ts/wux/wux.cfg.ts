@@ -644,79 +644,11 @@
         WRENCH = 'fa-wrench'
     }
 
-    export class TXT {
+    export class RES {
         // Captions
         static readonly OK = 'OK';
         static readonly CLOSE = 'Chiudi';
-        static readonly NEW = 'Nuovo';
-        static readonly OPEN = 'Modifica';
-        static readonly DELETE = 'Elimina';
-        static readonly SAVE = 'Salva';
-        static readonly SEND = 'Invia';
-        static readonly SEND_EMAIL = 'Email';
-        static readonly FIND = 'Cerca';
-        static readonly FORCE = 'Forza';
-        static readonly SEARCH = 'Cerca';
         static readonly CANCEL = 'Annulla';
-        static readonly RESET = 'Annulla';
-        static readonly PRINT = 'Stampa';
-        static readonly PRINT_ALL = 'Stampa Tutto';
-        static readonly PREVIEW = 'Anteprima';
-        static readonly EXPORT = 'Esporta';
-        static readonly IMPORT = 'Importa';
-        static readonly HELP = 'Guida';
-        static readonly VIEW = 'Vedi';
-        static readonly ENABLE = 'Abilita';
-        static readonly DISABLE = 'Disabilita';
-        static readonly ADD = 'Aggiungi';
-        static readonly APPLY = 'Applica';
-        static readonly REMOVE = 'Rimuovi';
-        static readonly REMOVE_ALL = 'Rim.Tutto';
-        static readonly REFRESH = 'Aggiorna';
-        static readonly UNDO = 'Annulla';
-        static readonly SETTINGS = 'Impostazioni';
-        static readonly COPY = 'Copia';
-        static readonly CUT = 'Taglia';
-        static readonly PASTE = 'Incolla';
-        static readonly CONFIRM = 'Conferma';
-        static readonly FORWARD = 'Avanti';
-        static readonly BACKWARD = 'Indietro';
-        static readonly NEXT = 'Prossimo';
-        static readonly PREVIOUS = 'Precedente';
-        static readonly SELECT = 'Seleziona';
-        static readonly SELECT_ALL = 'Sel.Tutto';
-        static readonly WORK = 'Lavora';
-        static readonly AGGREGATE = 'Aggrega';
-        static readonly SET = 'Imposta';
-        static readonly DEFAULT = 'Predefinito';
-        static readonly REWORK = 'Rielabora';
-        static readonly PUSH = 'Spedisci';
-        static readonly SUSPEND = 'Sospendi';
-        static readonly RESUME = 'Riattiva';
-        // Entities
-        static readonly CODE = 'Codice';
-        static readonly DESCRIPTION = 'Descrizione';
-        static readonly GROUP = 'Gruppo';
-        static readonly ROLE = 'Ruolo';
-        static readonly TYPE = 'Tipo';
-        // FILES
-        static readonly NAME = 'Nome';
-        static readonly SIZE = 'Dim.';
-        static readonly LAST_MOD = 'Agg.';
-    }
-
-    export class MSG {
-        static readonly CONF_DELETE = 'Eliminare l\'elemento selezionato?';
-        static readonly CONF_DISABLE = 'Disabilitare l\'elemento selezionato?';
-        static readonly CONF_ENABLE = 'Abilitare l\'elemento selezionato?';
-        static readonly CONF_CANCEL = 'Si vogliono annullare le modifiche apportate?';
-        static readonly CONF_PROCEED = 'Si vuole procedere con l\'operazione?';
-        static readonly CONF_OVERWRITE = 'Si vuole procedere con la sovrascrittura?';
-
-        static readonly INVALID_DATE = 'Data selezionata non ammessa.';
-        static readonly INVALID_VALUE = 'Valore non ammesso.';
-
-        static readonly MSG_COMPLETED = 'Operazione completata con successo.';
-        static readonly MSG_ERRORS = 'Si sono verificati degli errori durante l\'elaborazione.';
+        static readonly ERR_DATE = 'Data non ammessa.';
     }
 }

@@ -730,7 +730,7 @@ var WUX;
             _this.tagTitle = 'h3';
             if (btnClose) {
                 if (!btnOk)
-                    _this.txtCancel = WUX.TXT.CLOSE;
+                    _this.txtCancel = WUX.RES.CLOSE;
                 _this.buttonCancel();
             }
             if (btnOk)
@@ -811,13 +811,13 @@ var WUX;
             return true;
         };
         WDialog.prototype.buildBtnOK = function () {
-            return new WButton(this.subId('bfo'), WUX.TXT.OK, '', WUX.BTN.INFO + ' button-sm', '', '');
+            return new WButton(this.subId('bfo'), WUX.RES.OK, '', WUX.BTN.INFO + ' button-sm', '', '');
         };
         WDialog.prototype.buildBtnCancel = function () {
             if (this.txtCancel) {
                 return new WButton(this.subId('bfc'), this.txtCancel, '', WUX.BTN.SECONDARY + ' button-sm', '', '');
             }
-            return new WButton(this.subId('bfc'), WUX.TXT.CANCEL, '', WUX.BTN.SECONDARY + ' button-sm', '', '');
+            return new WButton(this.subId('bfc'), WUX.RES.CANCEL, '', WUX.BTN.SECONDARY + ' button-sm', '', '');
         };
         WDialog.prototype.buttonOk = function () {
             var _this = this;
@@ -3062,12 +3062,12 @@ var WUX;
                         return;
                     var mv = WUX.WUtil.toInt(md);
                     if (mv >= 19000101 && iv < mv) {
-                        WUX.showWarning(WUX.MSG.INVALID_DATE);
+                        WUX.showWarning(WUX.RES.ERR_DATE);
                         $(e.target).datepicker('setDate', md);
                     }
                     var xv = WUX.WUtil.toInt(xd);
                     if (xv >= 19000101 && iv > xv) {
-                        WUX.showWarning(WUX.MSG.INVALID_DATE);
+                        WUX.showWarning(WUX.RES.ERR_DATE);
                         $(e.target).datepicker('setDate', xd);
                     }
                 });
