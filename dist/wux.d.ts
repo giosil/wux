@@ -318,7 +318,6 @@ declare namespace WUX {
         static diffMinutes(ah: any, al: any): number;
         static diffHours(ah: any, al: any): number;
         static diffDays(ah: any, al: any): number;
-        static isValidPhone(p: string): boolean;
     }
     function getId(e: any): string;
     function firstSub(e: any, r?: boolean): string;

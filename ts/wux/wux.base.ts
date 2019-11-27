@@ -1575,12 +1575,6 @@ namespace WUX {
             }
             return r;
         }
-
-        static isValidPhone(p: string): boolean {
-            if (!p) return false;
-            if (p.match("^[0-9]*$")) return true;
-            return false;
-        }
     }
 
     /* Global functions */

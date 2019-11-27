@@ -1657,13 +1657,6 @@ var WUX;
             }
             return r;
         };
-        WUtil.isValidPhone = function (p) {
-            if (!p)
-                return false;
-            if (p.match("^[0-9]*$"))
-                return true;
-            return false;
-        };
         return WUtil;
     }());
     WUX.WUtil = WUtil;
