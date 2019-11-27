@@ -48,7 +48,7 @@ var Test = (function (_super) {
         this.btnDialog = new WUX.WButton('btnDialog', 'Show Dialog', WUX.WIcon.SHARE_SQUARE_O, WUX.BTN.SECONDARY, 'width: 180px');
         this.btnDialog.on('click', function (e) {
             console.log('btnDialog:click');
-            WUX.confirm('Are you sure?', function (res) {
+            WUX.confirm('Si vuole mostrare la dialog?', function (res) {
                 if (!res)
                     return;
                 _this.dlgTest.show();
