@@ -63,14 +63,14 @@
                 this.dlgTest.show();
             });
         });
-        //                                id           etichetta     icona                  classe        stile
+        //                               id           etichetta      icona           classe        stile
         this.btnWindow = new WUX.WButton('btnWindow', 'Show Window', WUX.WIcon.EDIT, WUX.BTN.INFO, 'width: 180px');
         this.btnWindow.on('click', (e: JQueryEventObject) => {
             console.log('btnWindow:click');
             this.winTest.show();
         });
 
-        // Costruzione tabella        id       header
+        // Costruzione tabella        id         header
         this.tabTest = new WUX.WTable('tabTest', ['Id', 'Description', 'DateTime', 'Flag']);
         this.tabTest.css({ h: 200 });
         this.tabTest.selectionMode = 'multiple';
