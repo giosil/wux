@@ -10,13 +10,26 @@ A simple Javascript library to build component based user interface.
 ## Example
 
 ```typescript
-class HelloWord extends WUX.WComponent {
+class HelloWorld extends WUX.WComponent {
   protected render() {
-    return '<h1>Hello word</h1>';
+    return '<h1>Hello world</h1>';
   }
 }
+```
 
-WuxDOM.render(new HelloWord(), 'view-root');
+```html
+<!DOCTYPE html>
+<html>
+ <head>
+  ...
+ </head>
+ <body>
+  <div id="view-root"></div>
+  <script type="text/javascript">
+   WuxDOM.render(new HelloWorld(), 'view-root');
+  </script>
+ </body>
+</html>
 ```
 
 ## Documentation
