@@ -1,6 +1,6 @@
 # WUX - Wrapped User Experience 
 
-A simple Javascript library to build component based user interface.
+A Javascript library to build component based user interface.
 
 ## Build
 
