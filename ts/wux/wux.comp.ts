@@ -2457,12 +2457,14 @@
                 else {
                     if (visible)
                         $('#' + f.id).show();
-                    else $('#' + f.id).hide();
+                    else
+                        $('#' + f.id).hide();
                 }                
                 if (f.label) {
                     if (visible)
                         $('label[for="' + f.id + '"]').show();
-                    else $('label[for="' + f.id + '"]').hide();
+                    else
+                        $('label[for="' + f.id + '"]').hide();
                 }
             }
             this.trigger('propschange');
@@ -2473,6 +2475,21 @@
             let f = this.getField(fieldId);
             if (!f) return this;
             f.labelCss = css;
+            if (this.mounted) {
+                let $l = $('label[for="' + f.id + '"]');
+                if ($l.length) WUX.setCss($l, css);
+            }
+            return this;
+        }
+
+        setLabelText(fieldId: string, t: string): this {
+            let f = this.getField(fieldId);
+            if (!f) return this;
+            f.label = t;
+            if (this.mounted) {
+                let $l = $('label[for="' + f.id + '"]');
+                if ($l.length) $l.html(t);
+            }
             return this;
         }
 

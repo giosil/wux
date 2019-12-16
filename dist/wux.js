@@ -5680,6 +5680,23 @@ var WUX;
             if (!f)
                 return this;
             f.labelCss = css;
+            if (this.mounted) {
+                var $l = $('label[for="' + f.id + '"]');
+                if ($l.length)
+                    WUX.setCss($l, css);
+            }
+            return this;
+        };
+        WFormPanel.prototype.setLabelText = function (fieldId, t) {
+            var f = this.getField(fieldId);
+            if (!f)
+                return this;
+            f.label = t;
+            if (this.mounted) {
+                var $l = $('label[for="' + f.id + '"]');
+                if ($l.length)
+                    $l.html(t);
+            }
             return this;
         };
         WFormPanel.prototype.setSpanField = function (fieldId, span) {

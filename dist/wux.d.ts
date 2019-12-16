@@ -1008,6 +1008,7 @@ declare namespace WUX {
         setEnabled(fieldId: string, enabled?: boolean): this;
         setVisible(fieldId: string, visible?: boolean): this;
         setLabelCss(fieldId: string, css: string | WStyle): this;
+        setLabelText(fieldId: string, t: string): this;
         setSpanField(fieldId: string, span: number): this;
         getField(fid: string): WField;
         onMount(fid: string, h: (f: WField) => any): this;
