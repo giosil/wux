@@ -2701,7 +2701,7 @@ var WUX;
     }
     WUX.formatTime = formatTime;
     function formatNum2(a, nz, z, neg) {
-        if (a == null)
+        if (a === '' || a == null)
             return '';
         var n = WUX.WUtil.toNumber(a);
         var r = ('' + (Math.round(n * 100) / 100)).replace('.', ',');
@@ -2716,7 +2716,7 @@ var WUX;
     }
     WUX.formatNum2 = formatNum2;
     function formatNum(a, nz, z, neg) {
-        if (a == null)
+        if (a === '' || a == null)
             return '';
         var n = WUX.WUtil.toNumber(a);
         var r = ('' + n).replace('.', ',');
@@ -2736,7 +2736,7 @@ var WUX;
     }
     WUX.formatNum = formatNum;
     function formatCurr(a, nz, z, neg) {
-        if (a == null)
+        if (a === '' || a == null)
             return '';
         var n = WUX.WUtil.toNumber(a);
         var r = (Math.round(n * 100) / 100).toLocaleString('it-IT');
@@ -2756,7 +2756,7 @@ var WUX;
     }
     WUX.formatCurr = formatCurr;
     function formatCurr5(a, nz, z, neg) {
-        if (a == null)
+        if (a === '' || a == null)
             return '';
         var n = WUX.WUtil.toNumber(a);
         var r = ('' + (Math.round(n * 100000) / 100000)).replace('.', ',');
@@ -2787,6 +2787,8 @@ var WUX;
     }
     WUX.formatCurr5 = formatCurr5;
     function formatBoolean(a) {
+        if (a == null)
+            return '';
         return a ? 'S' : 'N';
     }
     WUX.formatBoolean = formatBoolean;

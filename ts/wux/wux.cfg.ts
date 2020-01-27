@@ -218,7 +218,7 @@
      * Formatta numero alla 2a cifra decimale SENZA separatore migliaia.
      */
     export function formatNum2(a: any, nz?: string, z?: string, neg?: string): string {
-        if (a == null) return '';
+        if (a === '' || a == null) return '';
         let n = WUtil.toNumber(a);
         let r = ('' + (Math.round(n * 100) / 100)).replace('.', ',');
         if (nz != null && n != 0) {
@@ -233,7 +233,7 @@
      * Formatta numero di default SENZA separatore migliaia. Specificare 'l' per la rappresentazione locale.
      */
     export function formatNum(a: any, nz?: string, z?: string, neg?: string): string {
-        if (a == null) return '';
+        if (a === '' || a == null) return '';
         let n = WUtil.toNumber(a);
         let r = ('' + n).replace('.', ',');
         if (nz != null && n != 0) {
@@ -252,7 +252,7 @@
      * Formatta numero alla 2a cifra decimale CON separatore migliaia e riportando SEMPRE le cifre decimali.
      */
     export function formatCurr(a: any, nz?: string, z?: string, neg?: string): string {
-        if (a == null) return '';
+        if (a === '' || a == null) return '';
         let n = WUtil.toNumber(a);
         let r = (Math.round(n * 100) / 100).toLocaleString('it-IT');
         let d = r.indexOf(',');
@@ -270,7 +270,7 @@
      * Formatta numero alla 5a cifra decimale CON separatore migliaia e riportando SEMPRE le cifre decimali (massimo 2).
      */
     export function formatCurr5(a: any, nz?: string, z?: string, neg?: string): string {
-        if (a == null) return '';
+        if (a === '' || a == null) return '';
         let n = WUtil.toNumber(a);
         let r = ('' + (Math.round(n * 100000) / 100000)).replace('.', ',');
         let d = r.indexOf(',');
@@ -295,6 +295,7 @@
     }
 
     export function formatBoolean(a: any): string {
+        if (a == null) return '';
         return a ? 'S' : 'N';
     }
 
