@@ -4,8 +4,23 @@ A Javascript library to build component based user interface.
 
 ## Build
 
-- `git clone https://github.com/giosil/wux.git` 
+- `git clone https://github.com/giosil/wux.git`
+- `npm install typescript -g`
 - `tsc --declaration --project ./ts/wux/tsconfig.json`
+
+## Gulp
+
+- `npm install gulp -g`
+- `npm install gulp-clean -g`
+- `npm install gulp-concat -g`
+- `npm install gulp-rename -g`
+- `npm install gulp-sourcemaps -g`
+- `npm install gulp-typescript -g`
+- `npm install gulp-uglify -g`
+- `npm install merge-stream -g`
+- `npm list -g --depth 0`
+- `npm link`
+- `gulp`
 
 ## Example
 
