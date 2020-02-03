@@ -3,3 +3,4 @@
 /node_modules/
 /obj/
 /Properties/
+package-lock.json
