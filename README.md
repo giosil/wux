@@ -10,16 +10,32 @@ A Javascript library to build component based user interface.
 
 ## Gulp
 
+### Gulp global installation
+
 - `npm install gulp -g`
-- `npm install gulp-clean -g`
-- `npm install gulp-concat -g`
+- `npm install gulp-debug -g`
 - `npm install gulp-rename -g`
 - `npm install gulp-sourcemaps -g`
 - `npm install gulp-typescript -g`
 - `npm install gulp-uglify -g`
 - `npm install merge-stream -g`
 - `npm list -g --depth 0`
-- `npm link`
+
+### Gulp local installation
+
+- `npm link gulp`
+- `npm link gulp-debug`
+- `npm link gulp-rename`
+- `npm link gulp-sourcemaps`
+- `npm link gulp-typescript`
+- `npm link gulp-uglify`
+- `npm link merge-stream`
+- `npm link typescript`
+- `npm list --depth 0`
+- `gulp --verify`
+
+### Gulp build
+
 - `gulp`
 
 ## Example

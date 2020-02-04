@@ -1,31 +1,32 @@
 var gulp    = require('gulp');
+var debug   = require('gulp-debug');
 var rename  = require('gulp-rename');
 var uglify  = require('gulp-uglify');
 var ts      = require('gulp-typescript');
 var smaps   = require('gulp-sourcemaps');
 var merge   = require('merge-stream');
 
-var dist    = 'wux/dist';
+console.log('__dirname:  ' + __dirname);
+console.log('__filename: ' + __filename);
+
+var tsprj = ts.createProject('./ts/wux/tsconfig.json', {declaration: true});
+var tsout = tsprj.src().pipe(tsprj());
 
 gulp.task('default', function(){
-    var prj_wux = ts.createProject('./ts/wux/tsconfig.json', {declaration: true});
-    
-    const tsprj = prj_wux
-        .src()
-        .pipe(prj_wux());
-    
     return merge([
-        tsprj
+        tsout
         .dts
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest('wux/dist'))
+        .pipe(debug())
     ,
-        tsprj
+        tsout
         .js
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest('wux/dist'))
         .pipe(rename({suffix: ".min"}))
         .pipe(smaps.init())
         .pipe(uglify())
         .pipe(smaps.write('./'))
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest('wux/dist'))
+        .pipe(debug())
     ]);
 });
