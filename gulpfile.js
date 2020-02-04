@@ -15,19 +15,17 @@ gulp.task('build_wux', function(){
     let tsprj = ts.createProject('./ts/wux/tsconfig.json', {declaration: true});
     let tsout = tsprj.src().pipe(tsprj());
     return merge([
-        tsout
-        .dts
-        .pipe(gulp.dest('wux/dist'))
+        tsout.dts
+        .pipe(gulp.dest(dist))
         .pipe(debug())
     ,
-        tsout
-        .js
-        .pipe(gulp.dest('wux/dist'))
+        tsout.js
+        .pipe(gulp.dest(dist))
         .pipe(rename({suffix: ".min"}))
         .pipe(smaps.init())
         .pipe(uglify())
         .pipe(smaps.write('./'))
-        .pipe(gulp.dest('wux/dist'))
+        .pipe(gulp.dest(dist))
         .pipe(debug())
     ]);
 });
