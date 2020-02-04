@@ -9,10 +9,11 @@ var merge   = require('merge-stream');
 console.log('__dirname:  ' + __dirname);
 console.log('__filename: ' + __filename);
 
-var tsprj = ts.createProject('./ts/wux/tsconfig.json', {declaration: true});
-var tsout = tsprj.src().pipe(tsprj());
+var dist = 'wux/dist';
 
-gulp.task('default', function(){
+gulp.task('build_wux', function(){
+    let tsprj = ts.createProject('./ts/wux/tsconfig.json', {declaration: true});
+    let tsout = tsprj.src().pipe(tsprj());
     return merge([
         tsout
         .dts
@@ -30,3 +31,5 @@ gulp.task('default', function(){
         .pipe(debug())
     ]);
 });
+
+gulp.task('default', gulp.series('build_wux'));
