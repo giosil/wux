@@ -9,11 +9,11 @@ var merge   = require('merge-stream');
 console.log('__dirname:  ' + __dirname);
 console.log('__filename: ' + __filename);
 
-// The actual path also depends on the outFile attribute defined in tsconfig.json.
-// For this reason the outFile attribute is redefined in createProject.
 var dist = 'dist';
 
 gulp.task('build_wux', function(){
+    // The actual path of gulp.dest also depends on the outFile attribute defined in tsconfig.json.
+    // For this reason the outFile attribute is redefined in createProject.
     let tsprj = ts.createProject('./ts/wux/tsconfig.json', {"declaration": true, "outFile": "wux.js"});
     let tsout = tsprj.src().pipe(tsprj());
     return merge([
