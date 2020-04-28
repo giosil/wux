@@ -5388,6 +5388,13 @@ var WUX;
             this.handlers['_enter'].push(h);
             this.nextOnEnter = false;
         };
+        WFormPanel.prototype.onEnd = function (h) {
+            if (!h)
+                return;
+            if (!this.handlers['_end'])
+                this.handlers['_end'] = [];
+            this.handlers['_end'].push(h);
+        };
         WFormPanel.prototype.onChangeDate = function (h) {
             if (!h)
                 return;
@@ -6276,6 +6283,9 @@ var WUX;
                         _this.trigger('statechange');
                     }
                     _this.trigger('_enter', _this.ripId(tid));
+                    if (!f) {
+                        _this.trigger('_end', _this.ripId(tid));
+                    }
                 }
             });
             if (this.stateChangeOnBlur) {
@@ -6948,3 +6958,4 @@ var WUX;
     }(WUX.WComponent));
     WUX.WWindow = WWindow;
 })(WUX || (WUX = {}));
+//# sourceMappingURL=wux.js.map

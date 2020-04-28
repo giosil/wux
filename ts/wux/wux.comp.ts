@@ -2169,6 +2169,12 @@
             this.nextOnEnter = false;
         }
 
+        onEnd(h: (e: WEvent) => any): void {
+            if (!h) return;
+            if (!this.handlers['_end']) this.handlers['_end'] = [];
+            this.handlers['_end'].push(h);
+        }
+
         onChangeDate(h: (e: JQueryEventObject) => any): void {
             if (!h) return;
             if (!this.handlers['_changedate']) this.handlers['_changedate'] = [];
@@ -2995,6 +3001,9 @@
                         this.trigger('statechange');
                     }
                     this.trigger('_enter', this.ripId(tid));
+                    if (!f) {
+                        this.trigger('_end', this.ripId(tid));
+                    }
                 }
             });
             if (this.stateChangeOnBlur) {

@@ -992,6 +992,7 @@ declare namespace WUX {
         first(enabled?: boolean): WField;
         focusOn(fieldId: string): this;
         onEnterPressed(h: (e: WEvent) => any): void;
+        onEnd(h: (e: WEvent) => any): void;
         onChangeDate(h: (e: JQueryEventObject) => any): void;
         addToFooter(c: WElement, sep?: number | string): this;
         addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type?: string): this;
