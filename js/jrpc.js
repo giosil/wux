@@ -44,7 +44,7 @@ JRPC.prototype.execute = function(methodName, params, successHandler, exceptionH
 	this.callId++;
 	var request, postData;
 	request = {
-		version : "2.0",
+		jsonrpc : "2.0",
 		method : methodName,
 		id : this.callId
 	};
@@ -106,7 +106,7 @@ JRPC.prototype.executeSync = function(methodName, params){
 	this.callId++;
 	var request, postData;
 	request = {
-		version : "2.0",
+		jsonrpc : "2.0",
 		method : methodName,
 		id : this.callId
 	};
