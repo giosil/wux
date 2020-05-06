@@ -1684,6 +1684,9 @@ var WUX;
             if (e.indexOf('<') < 0)
                 return e.indexOf('#') == 0 ? e.substring(1) : e;
         }
+        if (typeof e == 'object' && e.id != null) {
+            return '' + e.id;
+        }
         var $e = $(e);
         var id = $e.attr('id');
         if (!id) {
