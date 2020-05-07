@@ -1684,7 +1684,7 @@ var WUX;
             if (e.indexOf('<') < 0)
                 return e.indexOf('#') == 0 ? e.substring(1) : e;
         }
-        if (typeof e == 'object' && e.id != null) {
+        if (typeof e == 'object' && !e.id) {
             return '' + e.id;
         }
         var $e = $(e);
