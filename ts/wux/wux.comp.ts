@@ -1653,7 +1653,7 @@
     }
 
     export interface WITable extends WComponent {
-        // Attributi base
+        // Base attributes
         header: string[];
         keys: any[];
         /** 's'=string, 'n'=number, 'p'=percentage, 'c'=currency, 'c5'=currency, 'i'=integer, 'd'=date, 't'=date-time, 'h'=time, 'b'=boolean */
@@ -1661,9 +1661,10 @@
         widths: number[];
         widthsPerc: boolean;
         filter: boolean;
+        hideHeader: boolean;
         templates: ((cnt: JQuery, opt: { data: any, text: string }) => any)[];
 
-        // Selezione
+        // Selection
         selectionMode: 'single' | 'multiple' | 'none';
         clearSelection(): this;
         select(idxs: number[]): this;
@@ -1671,11 +1672,11 @@
         getSelectedRows(): number[];
         getSelectedRowsData(): any[];
 
-        // Utilita'
+        // Utilities
         getFilteredRowsData(): any[];
         refresh(): this;
 
-        // Eventi
+        // Events
         onSelectionChanged(handler: (e: { element?: JQuery, selectedRowsData?: Array<any> }) => any): void;
         onDoubleClick(handler: (e: { element?: JQuery }) => any): void;
         onRowPrepared(handler: (e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number }) => any): void;
@@ -1688,6 +1689,7 @@
         widths: number[];
         widthsPerc: boolean;
         filter: boolean;
+        hideHeader: boolean;
         templates: ((cnt: JQuery, opt: { data: any, text: string }) => any)[];
 
         selectionMode: 'single' | 'multiple' | 'none';
@@ -1835,39 +1837,41 @@
                 else if (this.headStyle && this.headStyle.a) {
                     ths = true;
                 }
-                if (ths) {
-                    r += '<thead><tr>';
-                }
-                else {
-                    r += '<thead><tr' + WUX.buildCss(this.headStyle) + '>';
-                }
-                let j = -1;
-                for (let h of this.header) {
-                    j++;
-                    let s: string | WStyle;
-                    if (j == 0) {
-                        s = this.col0Style ? this.col0Style : this.colStyle;
-                    }
-                    else if (j == this.header.length - 1) {
-                        s = this.colLStyle ? this.colLStyle : this.colStyle;
+                if (!this.hideHeader) {
+                    if (ths) {
+                        r += '<thead><tr>';
                     }
                     else {
-                        s = ths ? this.headStyle : this.colStyle;
+                        r += '<thead><tr' + WUX.buildCss(this.headStyle) + '>';
                     }
-                    let w = this.widths && this.widths.length > j ? this.widths[j] : 0;
-                    if (w) {
-                        if (this.widthsPerc) {
-                            r += '<th' + WUX.buildCss(s, { w: w + '%' }) + '>' + h + '</th>';
+                    let j = -1;
+                    for (let h of this.header) {
+                        j++;
+                        let s: string | WStyle;
+                        if (j == 0) {
+                            s = this.col0Style ? this.col0Style : this.colStyle;
+                        }
+                        else if (j == this.header.length - 1) {
+                            s = this.colLStyle ? this.colLStyle : this.colStyle;
                         }
                         else {
-                            r += '<th' + WUX.buildCss(s, { w: w }) + '>' + h + '</th>';
+                            s = ths ? this.headStyle : this.colStyle;
+                        }
+                        let w = this.widths && this.widths.length > j ? this.widths[j] : 0;
+                        if (w) {
+                            if (this.widthsPerc) {
+                                r += '<th' + WUX.buildCss(s, { w: w + '%' }) + '>' + h + '</th>';
+                            }
+                            else {
+                                r += '<th' + WUX.buildCss(s, { w: w }) + '>' + h + '</th>';
+                            }
+                        }
+                        else {
+                            r += '<th' + WUX.buildCss(s) + '>' + h + '</th>';
                         }
                     }
-                    else {
-                        r += '<th' + WUX.buildCss(s) + '>' + h + '</th>';
-                    }
+                    r += '</tr></thead>';
                 }
-                r += '</tr></thead>';
             }
             r += '<tbody></tbody>';
             r += '</table></div>';

@@ -1914,40 +1914,42 @@ var WUX;
                 else if (this.headStyle && this.headStyle.a) {
                     ths = true;
                 }
-                if (ths) {
-                    r += '<thead><tr>';
-                }
-                else {
-                    r += '<thead><tr' + WUX.buildCss(this.headStyle) + '>';
-                }
-                var j = -1;
-                for (var _i = 0, _a = this.header; _i < _a.length; _i++) {
-                    var h = _a[_i];
-                    j++;
-                    var s = void 0;
-                    if (j == 0) {
-                        s = this.col0Style ? this.col0Style : this.colStyle;
-                    }
-                    else if (j == this.header.length - 1) {
-                        s = this.colLStyle ? this.colLStyle : this.colStyle;
+                if (!this.hideHeader) {
+                    if (ths) {
+                        r += '<thead><tr>';
                     }
                     else {
-                        s = ths ? this.headStyle : this.colStyle;
+                        r += '<thead><tr' + WUX.buildCss(this.headStyle) + '>';
                     }
-                    var w = this.widths && this.widths.length > j ? this.widths[j] : 0;
-                    if (w) {
-                        if (this.widthsPerc) {
-                            r += '<th' + WUX.buildCss(s, { w: w + '%' }) + '>' + h + '</th>';
+                    var j = -1;
+                    for (var _i = 0, _a = this.header; _i < _a.length; _i++) {
+                        var h = _a[_i];
+                        j++;
+                        var s = void 0;
+                        if (j == 0) {
+                            s = this.col0Style ? this.col0Style : this.colStyle;
+                        }
+                        else if (j == this.header.length - 1) {
+                            s = this.colLStyle ? this.colLStyle : this.colStyle;
                         }
                         else {
-                            r += '<th' + WUX.buildCss(s, { w: w }) + '>' + h + '</th>';
+                            s = ths ? this.headStyle : this.colStyle;
+                        }
+                        var w = this.widths && this.widths.length > j ? this.widths[j] : 0;
+                        if (w) {
+                            if (this.widthsPerc) {
+                                r += '<th' + WUX.buildCss(s, { w: w + '%' }) + '>' + h + '</th>';
+                            }
+                            else {
+                                r += '<th' + WUX.buildCss(s, { w: w }) + '>' + h + '</th>';
+                            }
+                        }
+                        else {
+                            r += '<th' + WUX.buildCss(s) + '>' + h + '</th>';
                         }
                     }
-                    else {
-                        r += '<th' + WUX.buildCss(s) + '>' + h + '</th>';
-                    }
+                    r += '</tr></thead>';
                 }
-                r += '</tr></thead>';
             }
             r += '<tbody></tbody>';
             r += '</table></div>';
@@ -2236,6 +2238,13 @@ var WUX;
                 this.handlers['_enter'] = [];
             this.handlers['_enter'].push(h);
             this.nextOnEnter = false;
+        };
+        WFormPanel.prototype.onEnd = function (h) {
+            if (!h)
+                return;
+            if (!this.handlers['_end'])
+                this.handlers['_end'] = [];
+            this.handlers['_end'].push(h);
         };
         WFormPanel.prototype.onChangeDate = function (h) {
             if (!h)
@@ -3125,6 +3134,9 @@ var WUX;
                         _this.trigger('statechange');
                     }
                     _this.trigger('_enter', _this.ripId(tid));
+                    if (!f) {
+                        _this.trigger('_end', _this.ripId(tid));
+                    }
                 }
             });
             if (this.stateChangeOnBlur) {

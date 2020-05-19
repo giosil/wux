@@ -863,6 +863,7 @@ declare namespace WUX {
         widths: number[];
         widthsPerc: boolean;
         filter: boolean;
+        hideHeader: boolean;
         templates: ((cnt: JQuery, opt: {
             data: any;
             text: string;
@@ -896,6 +897,7 @@ declare namespace WUX {
         widths: number[];
         widthsPerc: boolean;
         filter: boolean;
+        hideHeader: boolean;
         templates: ((cnt: JQuery, opt: {
             data: any;
             text: string;
