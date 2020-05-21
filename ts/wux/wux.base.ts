@@ -1928,6 +1928,8 @@ namespace WUX {
         minh?: string | number;
         /** max-height */
         maxh?: string | number;
+        /** white-space */
+        ws?: 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap' | 'initial' | 'inherit';
         /** style */
         s?: string;
         /** class name */
@@ -2012,6 +2014,7 @@ namespace WUX {
         if (ws.maxw) s += typeof ws.maxw == 'number' ? 'max-width:' + ws.maxw + 'px;' : 'max-width:' + ws.maxw + ';'
         if (ws.minh) s += typeof ws.minh == 'number' ? 'min-height:' + ws.minh + 'px;' : 'min-height:' + ws.minh + ';'
         if (ws.maxh) s += typeof ws.maxh == 'number' ? 'max-height:' + ws.maxh + 'px;' : 'max-height:' + ws.maxh + ';'
+        if (ws.ws) s += 'white-space:' + ws.ws + ';';
         return s;
     }
 

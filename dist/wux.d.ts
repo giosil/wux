@@ -396,6 +396,7 @@ declare namespace WUX {
         maxw?: string | number;
         minh?: string | number;
         maxh?: string | number;
+        ws?: 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap' | 'initial' | 'inherit';
         s?: string;
         n?: string;
     }
