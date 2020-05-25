@@ -4,13 +4,12 @@
 		"target": "es5",
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"outFile": "../../wux/js/test.js",
+		"outFile": "../dist/js/test.js",
 		"sourceMap": true
 	},
 	"include": [
 		"./types/**/*",
-		"../wux/js/wux.d.ts",
-		"../wux/js/cfcommon.d.ts",
+		"../dist/js/wux.d.ts",
 		"*"
 	]
 }
