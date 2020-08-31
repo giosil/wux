@@ -4,12 +4,12 @@
 		"target": "es5",
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"outFile": "../dist/js/test.js",
+		"outFile": "../dist/test.js",
 		"sourceMap": true
 	},
 	"include": [
 		"./types/**/*",
-		"../dist/js/wux.d.ts",
+		"../dist/wux.d.ts",
 		"*"
 	]
 }
