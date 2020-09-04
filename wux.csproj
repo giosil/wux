@@ -92,6 +92,7 @@
     <TypeScriptCompile Include="ts\types\plugins\select2.d.ts" />
     <TypeScriptCompile Include="ts\types\plugins\sweetalert.d.ts" />
     <TypeScriptCompile Include="ts\types\plugins\toastr.d.ts" />
+    <TypeScriptCompile Include="ts\hello.ts" />
     <TypeScriptCompile Include="ts\wux\wux.base.ts" />
     <TypeScriptCompile Include="ts\wux\wux.cfg.ts" />
     <TypeScriptCompile Include="ts\wux\wux.comp.ts" />

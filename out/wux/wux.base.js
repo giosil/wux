@@ -2079,6 +2079,8 @@ var WUX;
             s += typeof ws.minh == 'number' ? 'min-height:' + ws.minh + 'px;' : 'min-height:' + ws.minh + ';';
         if (ws.maxh)
             s += typeof ws.maxh == 'number' ? 'max-height:' + ws.maxh + 'px;' : 'max-height:' + ws.maxh + ';';
+        if (ws.ws)
+            s += 'white-space:' + ws.ws + ';';
         return s;
     }
     WUX.style = style;
