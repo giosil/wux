@@ -17,7 +17,7 @@ var HelloWorld = (function (_super) {
         return _super.call(this, '', 'HelloWorld') || this;
     }
     HelloWorld.prototype.render = function () {
-        return '<span class="hello">Hello World!</span>';
+        return '<div class="hello">Hello World!</div>';
     };
     return HelloWorld;
 }(WUX.WComponent));
