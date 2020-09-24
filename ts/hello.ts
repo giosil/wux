@@ -5,7 +5,7 @@
     }
 
     protected render() {
-        return '<div class="hello">Hello World!</div>';
+        return '<div class="hello">Ciao</div>';
     }
 
 }
