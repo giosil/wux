@@ -18,7 +18,7 @@ declare class JRPC {
     setPassword(password: string): void;
     setToken(token: string): void;
 
-    execute(methodName: string, params: any[], successHandler?: (result: any) => void, exceptionHandler?: (error: JRPCError) => void): void;
+    execute(methodName: string, params: any[], successHandler?: (result: any) => void, exceptionHandler?: (error: JRPCError) => void, opt?: string): void;
     executeSync(methodName: string, params: any[]): any;
 }
 

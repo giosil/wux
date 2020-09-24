@@ -44,7 +44,7 @@ JRPC.prototype.afterExecute = function(m){
 	$("#page-wrapper").toggleClass('sk-loading');
 	Pace.stop();
 }
-JRPC.prototype.execute = function(methodName, params, successHandler, exceptionHandler){
+JRPC.prototype.execute = function(methodName, params, successHandler, exceptionHandler, opt){
 	this.callId++;
 	var request, postData;
 	request = {
@@ -65,7 +65,7 @@ JRPC.prototype.execute = function(methodName, params, successHandler, exceptionH
 			xhr = new ActiveXObject('Microsoft.XMLHTTP');
 		}
 	}
-	if(successHandler && modal != '!') this.beforeExecute(methodName);
+	if(successHandler && opt != '!') this.beforeExecute(methodName);
 	var _this = this;
 	xhr.open('POST', this.urlEndPoint, true, this.authUserName, this.authPassword);
 	xhr.setRequestHeader('Content-Type', 'application/json');
@@ -79,7 +79,7 @@ JRPC.prototype.execute = function(methodName, params, successHandler, exceptionH
 	xhr.send(postData);
 	xhr.onreadystatechange = function(){
 		if (xhr.readyState == 4){
-			if(successHandler && modal != '!') _this.afterExecute(methodName);
+			if(successHandler && opt != '!') _this.afterExecute(methodName);
 			switch(xhr.status){
 				case 200:
 					var response = JSON.parse(xhr.responseText);
