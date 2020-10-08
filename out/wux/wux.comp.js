@@ -3062,7 +3062,7 @@ var WUX;
             var _loop_2 = function (fid) {
                 var minDate = WUX.WUtil.getDate(this_2.minValues, fid);
                 $('#' + fid).datepicker({
-                    language: 'it',
+                    language: WUX.global.locale,
                     todayBtn: 'linked',
                     keyboardNavigation: false,
                     forceParse: false,
