@@ -2945,7 +2945,7 @@
             for (let fid of this.dpids) {
                 let minDate = WUtil.getDate(this.minValues, fid);
                 $('#' + fid).datepicker({
-                    language: 'it',
+                    language: global.locale,
                     todayBtn: 'linked',
                     keyboardNavigation: false,
                     forceParse: false,
