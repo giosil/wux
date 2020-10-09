@@ -646,9 +646,9 @@
     }
 
     export class RES {
-        static readonly OK = 'OK';
-        static readonly CLOSE = 'Chiudi';
-        static readonly CANCEL = 'Annulla';
-        static readonly ERR_DATE = 'Data non ammessa.';
+        static OK = 'OK';
+        static CLOSE = 'Chiudi';
+        static CANCEL = 'Annulla';
+        static ERR_DATE = 'Data non ammessa.';
     }
 }

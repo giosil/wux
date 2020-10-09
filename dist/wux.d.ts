@@ -607,10 +607,10 @@ declare namespace WUX {
         WRENCH = "fa-wrench"
     }
     class RES {
-        static readonly OK = "OK";
-        static readonly CLOSE = "Chiudi";
-        static readonly CANCEL = "Annulla";
-        static readonly ERR_DATE = "Data non ammessa.";
+        static OK: string;
+        static CLOSE: string;
+        static CANCEL: string;
+        static ERR_DATE: string;
     }
 }
 declare namespace WUX {
