@@ -65,7 +65,8 @@ class HelloWorld extends WUX.WComponent {
 
 ## Documentation
 
-- [Tutorial](wux_tutorial.pdf)
+- [Tutorial (English)](wux_tutorial-en.pdf)
+- [Tutorial (Italiano)](wux_tutorial-it.pdf)
 
 ## Contributors
 
