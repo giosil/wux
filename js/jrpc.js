@@ -128,7 +128,6 @@ JRPC.prototype.executeSync = function(methodName, params){
 			xhr = new ActiveXObject('Microsoft.XMLHTTP');
 		}
 	}
-	var _this = this;
 	xhr.open('POST', this.urlEndPoint, false, this.authUserName, this.authPassword);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.setRequestHeader('Accept', 'application/json');
