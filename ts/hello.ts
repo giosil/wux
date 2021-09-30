@@ -7,5 +7,4 @@
     protected render() {
         return '<div class="hello">Hello World</div>';
     }
-
 }
