@@ -1569,8 +1569,8 @@
     }
 
     export class WRadio extends WComponent implements WISelectable {
-        public options: Array<string | WEntity>;
-        public label: string;
+        options: Array<string | WEntity>;
+        label: string;
 
         constructor(id?: string, options?: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
             // WComponent init
