@@ -891,9 +891,9 @@
         forId: string;
         protected blinks: number;
 
-        constructor(id: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+        constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
             // WComponent init
-            super(id, 'WLabel', icon, classStyle, style, attributes);
+            super(id ? id : '*', 'WLabel', icon, classStyle, style, attributes);
             this.rootTag = 'span';
             this.updateState(text);
         }
@@ -1203,9 +1203,9 @@
     export class WButton extends WComponent<string, string> {
         public readonly type: string;
 
-        constructor(id: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string) {
+        constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string) {
             // WComponent init
-            super(id, 'WButton', icon, classStyle, style, attributes);
+            super(id ? id : '*', 'WButton', icon, classStyle, style, attributes);
             this.updateState(text);
             this.rootTag = 'button';
             // WButton init
@@ -1257,9 +1257,9 @@
         protected _href: string;
         protected _target: string;
 
-        constructor(id: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, href?: string, target?: string) {
+        constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, href?: string, target?: string) {
             // WComponent init
-            super(id, 'WLink', icon, classStyle, style, attributes);
+            super(id ? id : '*', 'WLink', icon, classStyle, style, attributes);
             this.updateState(text);
             this.rootTag = 'a';
             // WLink init
@@ -1340,9 +1340,9 @@
     export class WTab extends WComponent<any, number> {
         tabs: WContainer[];
 
-        constructor(id: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
+        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
             // WComponent init
-            super(id, 'WTab', props, classStyle, style, attributes);
+            super(id ? id : '*', 'WTab', props, classStyle, style, attributes);
             // WTab init
             this.tabs = [];
         }
@@ -1424,7 +1424,7 @@
         options: Array<string | WEntity>;
         multiple: boolean;
 
-        constructor(id: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+        constructor(id?: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
             // WComponent init
             super(id ? id : '*', 'WSelect', null, classStyle, style, attributes);
             // WSelect init
@@ -1569,10 +1569,10 @@
     }
 
     export class WRadio extends WComponent implements WISelectable {
-        options: Array<string | WEntity>;
-        label: string;
+        public options: Array<string | WEntity>;
+        public label: string;
 
-        constructor(id: string, options: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
+        constructor(id?: string, options?: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
             // WComponent init
             super(id ? id : '*', 'WRadio', props, classStyle, style, attributes);
             // WRadio init 

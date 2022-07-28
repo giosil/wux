@@ -2,21 +2,25 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var WUX;
 (function (WUX) {
@@ -74,10 +78,10 @@ var WUX;
             for (var _i = 1; _i < arguments.length; _i++) {
                 extParams[_i - 1] = arguments[_i];
             }
-            _super.prototype.trigger.apply(this, __spreadArrays([eventType], extParams));
+            _super.prototype.trigger.apply(this, __spreadArray([eventType], extParams, false));
             if (eventType == 'statechange') {
                 if (this.stateComp)
-                    (_a = this.stateComp).trigger.apply(_a, __spreadArrays(['statechange'], extParams));
+                    (_a = this.stateComp).trigger.apply(_a, __spreadArray(['statechange'], extParams, false));
             }
             return this;
         };
@@ -561,7 +565,7 @@ var WUX;
                     }
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WBox.prototype.addTool = function (tool, icon, attributes, handler) {
@@ -617,14 +621,14 @@ var WUX;
                     return this._header;
                 return this._header = new WContainer('', WUX.cls(WUX.global.box_header, this._addClassStyle));
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WBox.prototype, "content", {
             get: function () {
                 return this;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WBox.prototype, "footer", {
@@ -633,7 +637,7 @@ var WUX;
                     return this._footer;
                 return this._footer = new WContainer('', WUX.cls(WUX.global.box_footer, this._addClassStyle));
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WBox.prototype.componentDidMount = function () {
@@ -764,7 +768,7 @@ var WUX;
                 this.cntHeader.add(this.btnCloseHeader);
                 return this.cntHeader;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WDialog.prototype, "body", {
@@ -774,7 +778,7 @@ var WUX;
                 this.cntBody = new WContainer('', WUX.cls('modal-body', this._classStyle), '', this._attributes);
                 return this.cntBody;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WDialog.prototype, "footer", {
@@ -784,7 +788,7 @@ var WUX;
                 this.cntFooter = new WContainer('', 'modal-footer');
                 return this.cntFooter;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WDialog.prototype, "title", {
@@ -801,7 +805,7 @@ var WUX;
                     this.header.add(this.buildTitle(s));
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WDialog.prototype.onClickOk = function () {
@@ -960,7 +964,7 @@ var WUX;
     var WLabel = (function (_super) {
         __extends(WLabel, _super);
         function WLabel(id, text, icon, classStyle, style, attributes) {
-            var _this = _super.call(this, id, 'WLabel', icon, classStyle, style, attributes) || this;
+            var _this = _super.call(this, id ? id : '*', 'WLabel', icon, classStyle, style, attributes) || this;
             _this.rootTag = 'span';
             _this.updateState(text);
             return _this;
@@ -972,7 +976,7 @@ var WUX;
             set: function (i) {
                 this.update(i, this.state, true, false, false);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WLabel.prototype.updateState = function (nextState) {
@@ -1212,7 +1216,7 @@ var WUX;
                 if (this.mounted)
                     this.root.html(s);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WCheck.prototype, "checked", {
@@ -1224,7 +1228,7 @@ var WUX;
             set: function (b) {
                 this.setProps(b);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WCheck.prototype.getState = function () {
@@ -1288,7 +1292,7 @@ var WUX;
     var WButton = (function (_super) {
         __extends(WButton, _super);
         function WButton(id, text, icon, classStyle, style, attributes, type) {
-            var _this = _super.call(this, id, 'WButton', icon, classStyle, style, attributes) || this;
+            var _this = _super.call(this, id ? id : '*', 'WButton', icon, classStyle, style, attributes) || this;
             _this.updateState(text);
             _this.rootTag = 'button';
             _this.type = type ? type : 'button';
@@ -1301,7 +1305,7 @@ var WUX;
             set: function (i) {
                 this.update(i, this.state, true, false, false);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WButton.prototype.setText = function (text, icon) {
@@ -1342,7 +1346,7 @@ var WUX;
     var WLink = (function (_super) {
         __extends(WLink, _super);
         function WLink(id, text, icon, classStyle, style, attributes, href, target) {
-            var _this = _super.call(this, id, 'WLink', icon, classStyle, style, attributes) || this;
+            var _this = _super.call(this, id ? id : '*', 'WLink', icon, classStyle, style, attributes) || this;
             _this.updateState(text);
             _this.rootTag = 'a';
             _this._href = href;
@@ -1356,7 +1360,7 @@ var WUX;
             set: function (s) {
                 this.update(s, this.state, true, false, false);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WLink.prototype, "href", {
@@ -1374,7 +1378,7 @@ var WUX;
                     }
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WLink.prototype, "target", {
@@ -1392,7 +1396,7 @@ var WUX;
                     }
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WLink.prototype.render = function () {
@@ -1433,7 +1437,7 @@ var WUX;
     var WTab = (function (_super) {
         __extends(WTab, _super);
         function WTab(id, classStyle, style, attributes, props) {
-            var _this = _super.call(this, id, 'WTab', props, classStyle, style, attributes) || this;
+            var _this = _super.call(this, id ? id : '*', 'WTab', props, classStyle, style, attributes) || this;
             _this.tabs = [];
             return _this;
         }
@@ -1691,7 +1695,7 @@ var WUX;
                         $item.attr('title', this._tooltip);
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WRadio.prototype.select = function (i) {
@@ -2486,7 +2490,7 @@ var WUX;
                     }
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WFormPanel.prototype.setEnabled = function (fieldId, enabled) {
@@ -3572,7 +3576,7 @@ var WUX;
                 this.cntHeader.add(this.btnCloseHeader);
                 return this.cntHeader;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WWindow.prototype, "body", {
@@ -3582,7 +3586,7 @@ var WUX;
                 this.cntBody = new WContainer('', WUX.cls(this._classStyle));
                 return this.cntBody;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WWindow.prototype, "container", {
@@ -3620,7 +3624,7 @@ var WUX;
                 this.cntRoot = new WContainer(this.id, this._classStyle, crs, this._attributes);
                 return this.cntRoot;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WWindow.prototype, "title", {
@@ -3637,7 +3641,7 @@ var WUX;
                     this.header.add(this.buildTitle(s));
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WWindow.prototype.show = function (parent) {

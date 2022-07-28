@@ -1,9 +1,11 @@
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 if (typeof jQuery === 'undefined')
     throw new Error('WUX requires jQuery');
@@ -207,7 +209,7 @@ var WUX;
                         this.root.hide();
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WComponent.prototype, "enabled", {
@@ -223,7 +225,7 @@ var WUX;
                 if (this.root && this.root.length)
                     this.root.prop('disabled', !this._enabled);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WComponent.prototype, "style", {
@@ -239,7 +241,7 @@ var WUX;
                 if (this.root && this.root.length)
                     this.root.attr('style', this._style);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WComponent.prototype, "classStyle", {
@@ -282,7 +284,7 @@ var WUX;
                     }
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WComponent.prototype, "attributes", {
@@ -296,7 +298,7 @@ var WUX;
                 if (this.internal)
                     this.internal.attributes = s;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(WComponent.prototype, "tooltip", {
@@ -312,7 +314,7 @@ var WUX;
                 if (this.root && this.root.length)
                     this.root.attr('title', this._tooltip);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         WComponent.prototype.css = function () {
@@ -454,12 +456,12 @@ var WUX;
             else if (this.root && this.root.length) {
                 if (this.debug)
                     console.log('[' + str(this) + '] trigger ' + eventType + ' on root=' + str(this.root));
-                (_a = this.root).trigger.apply(_a, __spreadArrays([eventType], extParams));
+                (_a = this.root).trigger.apply(_a, __spreadArray([eventType], extParams, false));
             }
             if (this.internal) {
                 if (this.debug)
                     console.log('[' + str(this) + '] trigger ' + eventType + ' on internal=' + str(this.internal));
-                (_b = this.internal).trigger.apply(_b, __spreadArrays([eventType], extParams));
+                (_b = this.internal).trigger.apply(_b, __spreadArray([eventType], extParams, false));
             }
             return this;
         };

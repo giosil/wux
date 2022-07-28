@@ -4,12 +4,11 @@
 		"target": "es5",
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"outDir": "../out",
+		"outDir": "../../out/wux",
 		"sourceMap": true
 	},
 	"include": [
-		"./types/**/*",
-		"../dist/wux.d.ts",
+		"../types/**/*",
 		"*"
 	]
 }

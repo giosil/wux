@@ -81,7 +81,7 @@
             WUX.showWarning('WTable onDoubleClick');
         }); 
         this.tabTest.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
-            let id = WUX.WUtil.getNumber(e.data, 'i', 0);
+            let id = WUX.WUtil.getNumber(e.data, '0');
             switch (id) {
                 case 1:
                     WUX.setCss(e.rowElement, WUX.CSS.WARNING);
