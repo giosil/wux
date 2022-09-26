@@ -2404,7 +2404,7 @@
                                 }
                                 else {
                                     $f.prop('readonly', fieldId);
-                                }                                
+                                }
                             }
                         }
                     }
