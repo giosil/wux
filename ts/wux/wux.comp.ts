@@ -2759,7 +2759,7 @@
                             f.element = $(dr);
                             break;
                         case WInputType.CheckBox:
-                            f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="height:1rem;" />');
+                            f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="height:1.4em;" />');
                             break;
                         case WInputType.Radio:
                             if (f.component) f.component.mount($fg);
