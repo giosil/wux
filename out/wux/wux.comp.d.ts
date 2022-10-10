@@ -353,6 +353,7 @@ declare namespace WUX {
         stateChangeOnBlur: boolean;
         nextOnEnter: boolean;
         inputClass: string;
+        checkboxStyle: string;
         nextMap: {
             [fid: string]: string;
         };

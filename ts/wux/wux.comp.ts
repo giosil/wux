@@ -2070,6 +2070,7 @@
         stateChangeOnBlur: boolean;
         nextOnEnter: boolean;
         inputClass: string;
+        checkboxStyle: string;
         nextMap: { [fid: string]: string };
         lastChanged: string;
         mapTooltips: { [fid: string]: string };
@@ -2759,7 +2760,17 @@
                             f.element = $(dr);
                             break;
                         case WInputType.CheckBox:
-                            f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="height:1.4em;" />');
+                            if (!this.checkboxStyle) {
+                                let ch = Math.round(0.8 * parseInt(this.root.css('font-size')));
+                                if(ch < 16) ch = 16;
+                                this.checkboxStyle = 'height:' + ch + 'px;';
+                            }
+                            if(this.checkboxStyle.length > 2) {
+                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="' + this.checkboxStyle + '"/>');
+                            }
+                            else {
+                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '"/>');
+                            }
                             break;
                         case WInputType.Radio:
                             if (f.component) f.component.mount($fg);

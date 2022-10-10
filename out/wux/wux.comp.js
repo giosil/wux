@@ -2854,7 +2854,18 @@ var WUX;
                             f.element = $(dr);
                             break;
                         case WUX.WInputType.CheckBox:
-                            f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="height:1.4em;" />');
+                            if (!this.checkboxStyle) {
+                                var ch = Math.round(0.8 * parseInt(this.root.css('font-size')));
+                                if (ch < 16)
+                                    ch = 16;
+                                this.checkboxStyle = 'height:' + ch + 'px;';
+                            }
+                            if (this.checkboxStyle.length > 2) {
+                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="' + this.checkboxStyle + '"/>');
+                            }
+                            else {
+                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '"/>');
+                            }
                             break;
                         case WUX.WInputType.Radio:
                             if (f.component)
