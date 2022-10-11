@@ -2762,7 +2762,7 @@
                         case WInputType.CheckBox:
                             if (!this.checkboxStyle) {
                                 let ch = Math.round(0.8 * parseInt(this.root.css('font-size')));
-                                if(ch < 16) ch = 16;
+                                if(isNaN(ch) || ch < 16) ch = 16;
                                 this.checkboxStyle = 'height:' + ch + 'px;';
                             }
                             if(this.checkboxStyle.length > 2) {

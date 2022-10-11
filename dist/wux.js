@@ -6012,7 +6012,7 @@ var WUX;
                         case WUX.WInputType.CheckBox:
                             if (!this.checkboxStyle) {
                                 var ch = Math.round(0.8 * parseInt(this.root.css('font-size')));
-                                if (ch < 16)
+                                if (isNaN(ch) || ch < 16)
                                     ch = 16;
                                 this.checkboxStyle = 'height:' + ch + 'px;';
                             }
