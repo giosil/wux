@@ -470,17 +470,20 @@ declare namespace WUX {
         SM_DEFAULT = "btn btn-sm btn-default btn-block",
         SM_SECONDARY = "btn btn-sm btn-secondary btn-block",
         SM_INFO = "btn btn-sm btn-info btn-block",
+        SM_WARNING = "btn btn-sm btn-warning btn-block",
         SM_DANGER = "btn btn-sm btn-danger btn-block",
         SM_WHITE = "btn btn-sm btn-white btn-block",
         ACT_PRIMARY = "btn btn-sm btn-primary",
         ACT_DEFAULT = "btn btn-sm btn-default",
         ACT_SECONDARY = "btn btn-sm btn-secondary",
         ACT_INFO = "btn btn-sm btn-info",
+        ACT_WARNING = "btn btn-sm btn-warning",
         ACT_DANGER = "btn btn-sm btn-danger",
         ACT_WHITE = "btn btn-sm btn-white",
         ACT_OUTLINE_PRIMARY = "btn btn-sm btn-primary btn-outline",
         ACT_OUTLINE_DEFAULT = "btn btn-sm btn-default btn-outline",
         ACT_OUTLINE_INFO = "btn btn-sm btn-info btn-outline",
+        ACT_OUTLINE_WARNING = "btn btn-sm btn-warning btn-outline",
         ACT_OUTLINE_DANGER = "btn btn-sm btn-danger btn-outline"
     }
     class CSS {
