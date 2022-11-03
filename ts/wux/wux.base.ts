@@ -2132,7 +2132,8 @@ namespace WUX {
     }
 
     export function toggleClass(css: string, name: string): string {
-        if (!css || !name) return css;
+        if (!css) return name;
+        if (!name) return css;
         let classes = css.split(' ');
         let f = false;
         let r = '';

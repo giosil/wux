@@ -2259,7 +2259,9 @@ var WUX;
     }
     WUX.removeClass = removeClass;
     function toggleClass(css, name) {
-        if (!css || !name)
+        if (!css)
+            return name;
+        if (!name)
             return css;
         var classes = css.split(' ');
         var f = false;
