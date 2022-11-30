@@ -2312,7 +2312,7 @@
 
         addCaption(label: string, icon?: string, classStyle?: string, style?: string | WStyle): this {
             if (!label) return;
-            let component = new WUX.WLabel('', label, icon, classStyle, style);            
+            let component = new WUX.WLabel('', label, icon, classStyle, style);
             this.currRow.push({ 'id': '', 'label': '', 'type': WInputType.Component, 'component': component, 'readonly': true });
             this.components.push(component);
             this.captions.push(component);
