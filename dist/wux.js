@@ -6455,6 +6455,12 @@ var WUX;
                         e.value = '';
                 }
             }
+            if (this.dpids) {
+                for (var _i = 0, _a = this.dpids; _i < _a.length; _i++) {
+                    var d = _a[_i];
+                    $('#' + d).datepicker('setDate', null);
+                }
+            }
             return this;
         };
         WFormPanel.prototype.select = function (fieldId, i) {

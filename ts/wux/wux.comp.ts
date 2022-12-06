@@ -3149,6 +3149,12 @@
                         e.value = '';
                 }
             }
+            // Dates
+            if (this.dpids) {
+                for(let d of this.dpids) {
+                    $('#' + d).datepicker('setDate', null);
+                }
+            }
             return this;
         }
 
