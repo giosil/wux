@@ -5,7 +5,8 @@
 		"removeComments": true,
 		"preserveConstEnums": true,
 		"outFile": "../../dist/wux.js",
-		"sourceMap": true
+		"sourceMap": true,
+		"lib": ["es5", "dom"]
 	},
 	"include": [
 		"../types/**/*",
