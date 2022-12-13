@@ -5,7 +5,8 @@
 		"removeComments": true,
 		"preserveConstEnums": true,
 		"outDir": "../out",
-		"sourceMap": true
+		"sourceMap": true,
+		"lib": ["es5", "dom"]
 	},
 	"include": [
 		"./types/**/*",
