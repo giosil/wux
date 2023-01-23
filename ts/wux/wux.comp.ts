@@ -1317,7 +1317,7 @@
             }
             else {
                 html += WUX.buildIcon(this.icon);
-            }            
+            }
             return this.build(this.rootTag, html, addAttributes);
         }
 
