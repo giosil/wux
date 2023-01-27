@@ -194,9 +194,7 @@ declare namespace WUX {
         Blank = "blank",
         Link = "link",
         Integer = "integer",
-        Cron = "crontab",
-        TreeSelect = "tree",
-        Ftp = "ftp"
+        TreeSelect = "tree"
     }
     interface WWrapper {
         id?: string;
@@ -1016,8 +1014,6 @@ declare namespace WUX {
         addRadioField(fieldId: string, label: string, options?: (string | WEntity)[]): this;
         addPasswordField(fieldId: string, label: string, readonly?: boolean): this;
         addEmailField(fieldId: string, label: string, readonly?: boolean): this;
-        addFtpField(fieldId: string, label: string, readonly?: boolean): this;
-        addCronField(fieldId: string, label: string, readonly?: boolean, value?: string): this;
         addComponent(fieldId: string, label: string, component: WComponent, readonly?: boolean): this;
         addCaption(label: string, icon?: string, classStyle?: string, style?: string | WStyle): this;
         addInternalField(fieldId: string, value?: any): this;

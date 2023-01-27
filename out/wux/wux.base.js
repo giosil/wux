@@ -831,9 +831,7 @@ var WUX;
         WInputType["Blank"] = "blank";
         WInputType["Link"] = "link";
         WInputType["Integer"] = "integer";
-        WInputType["Cron"] = "crontab";
         WInputType["TreeSelect"] = "tree";
-        WInputType["Ftp"] = "ftp";
     })(WInputType = WUX.WInputType || (WUX.WInputType = {}));
     var WUtil = (function () {
         function WUtil() {

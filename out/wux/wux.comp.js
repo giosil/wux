@@ -2153,7 +2153,7 @@ var WUX;
     var WFormPanel = (function (_super) {
         __extends(WFormPanel, _super);
         function WFormPanel(id, title, action, props) {
-            var _this = _super.call(this, id, 'WFormPanel', props) || this;
+            var _this = _super.call(this, id ? id : '*', 'WFormPanel', props) || this;
             _this.rootTag = 'form';
             if (action) {
                 _this._attributes = 'role="form" name="' + _this.id + '" action="' + action + '"';
@@ -2343,17 +2343,9 @@ var WUX;
             this.currRow.push({ 'id': this.subId(fieldId), 'label': label, 'type': WUX.WInputType.Email, 'readonly': readonly });
             return this;
         };
-        WFormPanel.prototype.addFtpField = function (fieldId, label, readonly) {
-            this.currRow.push({ 'id': this.subId(fieldId), 'label': label, 'type': WUX.WInputType.Ftp, 'readonly': readonly });
-            return this;
-        };
-        WFormPanel.prototype.addCronField = function (fieldId, label, readonly, value) {
-            this.currRow.push({ 'id': this.subId(fieldId), 'label': label, 'type': WUX.WInputType.Cron, 'readonly': readonly, 'value': value });
-            return this;
-        };
         WFormPanel.prototype.addComponent = function (fieldId, label, component, readonly) {
             if (!component)
-                return;
+                return this;
             if (fieldId) {
                 component.id = this.subId(fieldId);
                 this.currRow.push({ 'id': this.subId(fieldId), 'label': label, 'type': WUX.WInputType.Component, 'component': component, 'readonly': readonly });
@@ -2905,17 +2897,6 @@ var WUX;
                             ie += '/>';
                             f.element = $(ie);
                             break;
-                        case WUX.WInputType.Ftp:
-                            var iftp = '<input type="text" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
-                            if (f.readonly)
-                                iftp += 'readonly ';
-                            if (f.enabled == false)
-                                iftp += 'disabled ';
-                            if (f.style)
-                                iftp += ' style="' + WUX.style(f.style) + '"';
-                            iftp += '/>';
-                            f.element = $(iftp);
-                            break;
                         case WUX.WInputType.Password:
                             var ip = '<input type="password" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
                             if (f.readonly)
@@ -2926,21 +2907,6 @@ var WUX;
                                 ip += ' style="' + WUX.style(f.style) + '"';
                             ip += '/>';
                             f.element = $(ip);
-                            break;
-                        case WUX.WInputType.Cron:
-                            var initial = '';
-                            if (f.value != null && f.value != '')
-                                initial = 'initial: "' + f.value + '" ,';
-                            var is = '<div id="cron_' + f.id + '" class="' + this.inputClass + '" ';
-                            if (f.readonly)
-                                is += 'readonly ';
-                            if (f.enabled == false)
-                                is += 'disabled ';
-                            is += ' ></div>';
-                            is += '<script type="text/javascript">$(document).ready(function() {';
-                            is += '$("#cron_' + f.id + '").cron({' + initial + 'onChange: function() {$("#' + f.id + '").val($(this).cron("value"));},useGentleSelect: true});';
-                            is += '});</script><input type="hidden" name="' + f.id + '" id="' + f.id + '" />';
-                            f.element = $(is);
                             break;
                         case WUX.WInputType.Component:
                             if (f.component) {
@@ -3500,42 +3466,35 @@ var WUX;
                     var k = f.id;
                     var id = this.ripId(k);
                     if (f.required && values[id] == null) {
-                        throw new Error('Campo ' + f.label + ': valore obbligatorio');
+                        throw new Error(f.label + ': obbligatorio');
                     }
                     if (f.size && values[id] != null && values[id].length > f.size) {
-                        throw new Error('Campo ' + f.label + ': dimensione massima superata (massimo " + f.size + " caratteri)');
+                        throw new Error(f.label + ': supera ' + f.size + ' caratteri');
                     }
                     if (f.type && values[id] != null) {
                         var msg = null;
-                        var regExp = null;
+                        var rex = null;
                         if (f.type == WUX.WInputType.Date) {
                             values[id] = WUX.WUtil.toDate(values[id]);
                         }
                         switch (f.type) {
                             case WUX.WInputType.Number:
-                                regExp = new RegExp('^\\d+\\.\\d{1,2}$|^\\d*$');
-                                if (!regExp.test(values[id]))
-                                    msg = "Campo " + f.label + ": valore non idoneo (" + values[id] + " non risulta numerico)";
+                                rex = new RegExp('^\\d+\\.\\d{1,2}$|^\\d*$');
+                                if (!rex.test(values[id]))
+                                    msg = f.label + ": " + values[id] + " non numerico";
                                 break;
                             case WUX.WInputType.Integer:
-                                regExp = new RegExp('^\\d*$');
-                                if (!regExp.test(values[id]))
-                                    msg = "Campo " + f.label + ": valore non idoneo (" + values[id] + " non risulta intero)";
+                                rex = new RegExp('^\\d*$');
+                                if (!rex.test(values[id]))
+                                    msg = f.label + ": " + values[id] + " non intero";
                                 break;
                             case WUX.WInputType.Email:
-                                regExp = new RegExp(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
-                                if (!regExp.test(values[id]))
-                                    msg = "Campo " + f.label + ": valore non idoneo (" + values[id] + " non risulta email)";
-                                break;
-                            case WUX.WInputType.Ftp:
-                                regExp = new RegExp(/(((ftp:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/);
-                                if (!regExp.test(values[id]))
-                                    msg = "Campo " + f.label + ": valore non idoneo (" + values[id] + " non risulta URL FTP)";
-                                break;
-                            default:
+                                rex = new RegExp(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
+                                if (!rex.test(values[id]))
+                                    msg = f.label + ": " + values[id] + " email non valida";
                                 break;
                         }
-                        if (msg != null)
+                        if (msg)
                             throw new Error(msg);
                     }
                 }

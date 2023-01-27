@@ -194,9 +194,7 @@ declare namespace WUX {
         Blank = "blank",
         Link = "link",
         Integer = "integer",
-        Cron = "crontab",
-        TreeSelect = "tree",
-        Ftp = "ftp"
+        TreeSelect = "tree"
     }
     interface WWrapper {
         id?: string;
