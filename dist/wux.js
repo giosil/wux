@@ -5034,7 +5034,7 @@ var WUX;
                 return [];
             if (this.state.length <= this.selectedRow)
                 return [];
-            return this.state[this.selectedRow];
+            return [this.state[this.selectedRow]];
         };
         WTable.prototype.getFilteredRowsData = function () {
             return this.state;

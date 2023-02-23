@@ -1797,7 +1797,7 @@
             if (this.selectedRow < 0) return [];
             if (!this.state || !this.state.length) return [];
             if (this.state.length <= this.selectedRow) return [];
-            return this.state[this.selectedRow];
+            return [this.state[this.selectedRow]];
         }
 
         getFilteredRowsData(): any[] {
