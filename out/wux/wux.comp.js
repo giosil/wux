@@ -2994,7 +2994,7 @@ var WUX;
                         if (f.onfocus)
                             f.element.focus(f.onfocus);
                         if (f.onblur)
-                            f.element.focus(f.onblur);
+                            f.element.blur(f.onblur);
                     }
                 }
             }
