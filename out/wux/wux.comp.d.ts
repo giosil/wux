@@ -291,6 +291,7 @@ declare namespace WUX {
         selectionMode: 'single' | 'multiple' | 'none';
         selectedRow: number;
         selClass: string;
+        divStyle: string | WStyle;
         colStyle: string | WStyle;
         rowStyle: string | WStyle;
         headStyle: string | WStyle;

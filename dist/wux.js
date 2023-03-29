@@ -5067,7 +5067,7 @@ var WUX;
             if (this._classStyle)
                 tableClass = this._classStyle.indexOf('table ') >= 0 ? this._classStyle : tableClass + ' ' + this._classStyle;
             var ts = this.style ? ' style="' + this.style + '"' : '';
-            var r = '<div class="table-responsive"><table id="' + this.id + '" class="' + tableClass + '"' + ts + '>';
+            var r = '<div class="table-responsive"' + WUX.buildCss(this.divStyle) + '><table id="' + this.id + '" class="' + tableClass + '"' + ts + '>';
             if (this.header && this.header.length) {
                 var ths = false;
                 if (typeof this.headStyle == 'string') {

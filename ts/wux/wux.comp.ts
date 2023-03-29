@@ -9,7 +9,7 @@
         legendStyle: string | WStyle;
         wrapper: WWrapper;
         stateComp: WComponent;
-
+        
         constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, inline?: boolean, type?: string, addClassStyle?: string) {
             // WComponent init
             super(id, 'WContainer', type, classStyle, WUX.style(style), attributes);
@@ -1317,7 +1317,7 @@
             }
             else {
                 html += WUX.buildIcon(this.icon);
-            }
+            }            
             return this.build(this.rootTag, html, addAttributes);
         }
 
@@ -1696,6 +1696,7 @@
         selectedRow: number = -1;
 
         selClass: string;
+        divStyle: string | WStyle;
         colStyle: string | WStyle;
         rowStyle: string | WStyle;
         headStyle: string | WStyle;
@@ -1828,7 +1829,7 @@
             let tableClass = 'table';
             if (this._classStyle) tableClass = this._classStyle.indexOf('table ') >= 0 ? this._classStyle : tableClass + ' ' + this._classStyle;
             let ts = this.style ? ' style="' + this.style + '"' : '';
-            let r = '<div class="table-responsive"><table id="' + this.id + '" class="' + tableClass + '"' + ts + '>';
+            let r = '<div class="table-responsive"' + WUX.buildCss(this.divStyle) + '><table id="' + this.id + '" class="' + tableClass + '"' + ts + '>';
             if (this.header && this.header.length) {
                 let ths = false;
                 if (typeof this.headStyle == 'string') {
@@ -2302,7 +2303,7 @@
 
         addCaption(label: string, icon?: string, classStyle?: string, style?: string | WStyle): this {
             if (!label) return;
-            let component = new WUX.WLabel('', label, icon, classStyle, style);
+            let component = new WUX.WLabel('', label, icon, classStyle, style);            
             this.currRow.push({ 'id': '', 'label': '', 'type': WInputType.Component, 'component': component, 'readonly': true });
             this.components.push(component);
             this.captions.push(component);
@@ -2395,7 +2396,7 @@
                                 }
                                 else {
                                     $f.prop('readonly', fieldId);
-                                }
+                                }                                
                             }
                         }
                     }
@@ -2742,7 +2743,7 @@
                         case WInputType.Date:
                             this.dpids.push(f.id);
                             let dr = '<div class="input-group" id="igd-' + f.id + '">';
-                            dr += '<span class="input-group-addon">' + WUX.buildIcon(WUX.WIcon.CALENDAR) + '</span> ';
+                            dr += '<span class="input-group-addon">' + WUX.buildIcon(WIcon.CALENDAR) + '</span> ';
                             dr += '<input type="text" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
                             if (f.readonly) dr += 'readonly ';
                             if (f.enabled == false) dr += 'disabled ';
