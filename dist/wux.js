@@ -2674,6 +2674,8 @@ var WUX;
             return '';
         if (typeof a == 'number') {
             if (withSec) {
+                if (a < 10000)
+                    a = a * 100;
                 var hh = Math.floor(a / 10000);
                 var mm = Math.floor((a % 10000) / 100);
                 var is = (a % 10000) % 100;
@@ -2682,6 +2684,8 @@ var WUX;
                 return hh + ':' + sm + ':' + ss;
             }
             else {
+                if (a > 9999)
+                    a = Math.floor(a / 100);
                 var hh = Math.floor(a / 100);
                 var mm = a % 100;
                 var sm = mm < 10 ? '0' + mm : '' + mm;
@@ -2689,13 +2693,20 @@ var WUX;
             }
         }
         if (typeof a == 'string') {
-            if (a.indexOf(':') > 0)
-                return a;
-            if (a.length < 3)
-                return a + ':00';
-            if (a.length >= 5)
-                return a.substring(0, 2) + ':' + a.substring(2, 4) + ':' + a.substring(4);
-            return a.substring(0, 2) + ':' + a.substring(2);
+            var s = a.indexOf('T');
+            if (s < 0)
+                s = a.indexOf(' ');
+            if (s >= 0)
+                a = a.substring(s + 1);
+            s = a.indexOf('+');
+            if (s < 0)
+                s = a.indexOf('-');
+            if (s < 0)
+                s = a.indexOf('Z');
+            if (s >= 0)
+                a = a.substring(0, s);
+            var n = parseInt(a.replace(':', '').replace('.', ''));
+            return formatTime(n);
         }
         if (a instanceof Date) {
             var sh = a.getHours() < 10 ? '0' + a.getHours() : '' + a.getHours();
