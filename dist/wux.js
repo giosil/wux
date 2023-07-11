@@ -4991,7 +4991,7 @@ var WUX;
             this.selectedRow = -1;
             if (!this.mounted)
                 return this;
-            this.root.find('tbody tr').removeClass('success');
+            this.root.find('tbody tr').removeClass(this.selClass);
             if (!this.handlers['_selectionchanged'])
                 return this;
             for (var _i = 0, _a = this.handlers['_selectionchanged']; _i < _a.length; _i++) {
@@ -5004,11 +5004,11 @@ var WUX;
             this.selectedRow = idxs && idxs.length ? idxs[0] : -1;
             if (!this.mounted)
                 return this;
-            this.root.find('tbody tr').removeClass('success');
+            this.root.find('tbody tr').removeClass(this.selClass);
             var srd = [];
             for (var _i = 0, idxs_1 = idxs; _i < idxs_1.length; _i++) {
                 var idx = idxs_1[_i];
-                this.root.find('tbody tr:eq(' + idx + ')').addClass('success');
+                this.root.find('tbody tr:eq(' + idx + ')').addClass(this.selClass);
                 if (this.state && this.state.length > idx) {
                     srd.push(this.state[idx]);
                 }
@@ -5031,7 +5031,7 @@ var WUX;
             if (this.state && this.state.length) {
                 this.selectedRow = 0;
             }
-            this.root.find('tbody tr').addClass('success');
+            this.root.find('tbody tr').addClass(this.selClass);
             if (!this.handlers['_selectionchanged'])
                 return this;
             for (var _i = 0, _a = this.handlers['_selectionchanged']; _i < _a.length; _i++) {
@@ -5147,7 +5147,7 @@ var WUX;
                 if (!_self.selectionMode || _self.selectionMode == 'none')
                     return;
                 var $this = $(this);
-                $this.addClass('success').siblings().removeClass('success');
+                $this.addClass(this.selClass).siblings().removeClass(this.selClass);
                 _self.selectedRow = $this.index();
                 var rowData = _self.state && _self.state.length ? _self.state[_self.selectedRow] : undefined;
                 if (_self.handlers['_selectionchanged']) {

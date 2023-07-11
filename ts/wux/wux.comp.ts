@@ -1755,7 +1755,7 @@
         clearSelection(): this {
             this.selectedRow = -1;
             if (!this.mounted) return this;
-            this.root.find('tbody tr').removeClass('success');
+            this.root.find('tbody tr').removeClass(this.selClass);
             if (!this.handlers['_selectionchanged']) return this;
             for (let handler of this.handlers['_selectionchanged']) {
                 handler({ element: this.root, selectedRowsData: [] });
@@ -1766,10 +1766,10 @@
         select(idxs: number[]): this {
             this.selectedRow = idxs && idxs.length ? idxs[0] : -1;
             if (!this.mounted) return this;
-            this.root.find('tbody tr').removeClass('success');
+            this.root.find('tbody tr').removeClass(this.selClass);
             let srd = [];
             for (let idx of idxs) {
-                this.root.find('tbody tr:eq(' + idx + ')').addClass('success');
+                this.root.find('tbody tr:eq(' + idx + ')').addClass(this.selClass);
                 if(this.state && this.state.length > idx) {
                     srd.push(this.state[idx]);
                 }
@@ -1790,7 +1790,7 @@
             if(this.state && this.state.length) {
                 this.selectedRow = 0;
             }
-            this.root.find('tbody tr').addClass('success');
+            this.root.find('tbody tr').addClass(this.selClass);
             if (!this.handlers['_selectionchanged']) return this;
             for (let handler of this.handlers['_selectionchanged']) {
                 handler({ element: this.root, selectedRowsData: this.state });
@@ -1897,7 +1897,7 @@
             this.root.on('click', 'tbody tr', function (e) {
                 if (!_self.selectionMode || _self.selectionMode == 'none') return;
                 let $this = $(this);
-                $this.addClass('success').siblings().removeClass('success');
+                $this.addClass(this.selClass).siblings().removeClass(this.selClass);
                 _self.selectedRow = $this.index();
                 let rowData = _self.state && _self.state.length ? _self.state[_self.selectedRow] : undefined;
                 if (_self.handlers['_selectionchanged']) {
