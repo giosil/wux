@@ -80,7 +80,7 @@
         this.tabTest.onDoubleClick((e: { element?: JQuery }) => {
             WUX.showWarning('WTable onDoubleClick');
         }); 
-        this.tabTest.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
+        this.tabTest.onRowPrepared((e: {element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number}) => {
             let id = WUX.WUtil.getNumber(e.data, '0');
             switch (id) {
                 case 1:

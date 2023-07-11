@@ -5005,27 +5005,38 @@ var WUX;
             if (!this.mounted)
                 return this;
             this.root.find('tbody tr').removeClass('success');
+            var srd = [];
             for (var _i = 0, idxs_1 = idxs; _i < idxs_1.length; _i++) {
                 var idx = idxs_1[_i];
                 this.root.find('tbody tr:eq(' + idx + ')').addClass('success');
+                if (this.state && this.state.length > idx) {
+                    srd.push(this.state[idx]);
+                }
             }
             if (!this.handlers['_selectionchanged'])
                 return this;
             for (var _a = 0, _b = this.handlers['_selectionchanged']; _a < _b.length; _a++) {
                 var handler = _b[_a];
-                handler({ element: this.root, selectedRowsData: [] });
+                handler({ element: this.root, selectedRowsData: srd });
             }
             return this;
         };
         WTable.prototype.selectAll = function (toggle) {
             if (!this.mounted)
                 return this;
+            if (toggle && this.selectedRow >= 0) {
+                return this.clearSelection();
+            }
+            this.selectedRow = -1;
+            if (this.state && this.state.length) {
+                this.selectedRow = 0;
+            }
             this.root.find('tbody tr').addClass('success');
             if (!this.handlers['_selectionchanged'])
                 return this;
             for (var _i = 0, _a = this.handlers['_selectionchanged']; _i < _a.length; _i++) {
                 var handler = _a[_i];
-                handler({ element: this.root, selectedRowsData: [] });
+                handler({ element: this.root, selectedRowsData: this.state });
             }
             return this;
         };
@@ -5133,14 +5144,8 @@ var WUX;
             this.buildBody();
             var _self = this;
             this.root.on('click', 'tbody tr', function (e) {
-                if (!_self.handlers['_selectionchanged']) {
-                    if (!_self.selectionMode || _self.selectionMode == 'none')
-                        return;
-                }
-                else {
-                    if (!_self.selectionMode || _self.selectionMode == 'none')
-                        return;
-                }
+                if (!_self.selectionMode || _self.selectionMode == 'none')
+                    return;
                 var $this = $(this);
                 $this.addClass('success').siblings().removeClass('success');
                 _self.selectedRow = $this.index();
