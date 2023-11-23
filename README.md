@@ -68,6 +68,10 @@ class HelloWorld extends WUX.WComponent {
 - [Tutorial (English)](wux_tutorial-en.pdf)
 - [Tutorial (Italiano)](wux_tutorial-it.pdf)
 
+## License
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 ## Contributors
 
 * [Giorgio Silvestris](https://github.com/giosil)
