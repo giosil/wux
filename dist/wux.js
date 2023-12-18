@@ -85,7 +85,20 @@ var WuxDOM = (function () {
             console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> invalid component');
             return;
         }
-        var ctx = typeof node == 'string' ? (node.indexOf('#') < 0) ? $('#' + node) : $(node) : node;
+        var ctx;
+        if (typeof node == 'string') {
+            if (node[0] != '#') {
+                ctx = $('#' + node);
+                if (!ctx.length)
+                    ctx = $(node);
+            }
+            else {
+                ctx = $(node);
+            }
+        }
+        else {
+            ctx = node;
+        }
         if (!ctx.length) {
             console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> context unavailable');
             return;
@@ -108,7 +121,20 @@ var WuxDOM = (function () {
             node = WuxDOM.lastCtx ? WuxDOM.lastCtx : $('#view-root');
         if (WUX.debug)
             console.log('WuxDOM.unmount ' + WUX.str(node) + '...');
-        var ctx = typeof node == 'string' ? (node.indexOf('#') < 0) ? $('#' + node) : $(node) : node;
+        var ctx;
+        if (typeof node == 'string') {
+            if (node[0] != '#') {
+                ctx = $('#' + node);
+                if (!ctx.length)
+                    ctx = $(node);
+            }
+            else {
+                ctx = $(node);
+            }
+        }
+        else {
+            ctx = node;
+        }
         if (!ctx.length) {
             console.error('WuxDOM.unmount ' + WUX.str(node) + ' -> node unavailable');
             return;
