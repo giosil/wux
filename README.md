@@ -49,24 +49,32 @@ class HelloWorld extends WUX.WComponent {
 ```
 
 ```html
-<!DOCTYPE html>
-<html>
- <head>
-  ...
- </head>
- <body>
-  <div id="view-root"></div>
-  <script type="text/javascript">
-   WuxDOM.render(new HelloWorld(), 'view-root');
-  </script>
- </body>
-</html>
+<script type="text/javascript">
+  WuxDOM.render(new HelloWorld(), 'view-root');
+</script>
 ```
 
 ## Documentation
 
 - [Tutorial (English)](wux_tutorial-en.pdf)
 - [Tutorial (Italiano)](wux_tutorial-it.pdf)
+
+## SVG Logo
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 82 72" xmlns="http://www.w3.org/2000/svg">
+  <text style="fill: rgb(0, 0, 0); font-family: Consolas; font-size: 50px;" x="0" y="40">{&#x00B5;}</text>
+  <text style="fill: rgb(0, 0, 0); font-family: Consolas; font-size: 14px;" x="7" y="65">micro-wux</text>
+</svg>
+```
+
+<table>
+  <tr>
+    <td><img src="wux-black.svg" width="300" height="300"></td>
+    <td><img src="wux-white.svg" width="300" height="300"></td>
+  </tr>
+</table>
 
 ## License
 
