@@ -49,9 +49,22 @@ class HelloWorld extends WUX.WComponent {
 ```
 
 ```html
-<script type="text/javascript">
-  WuxDOM.render(new HelloWorld(), 'view-root');
-</script>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <title>WUX</title>
+</head>
+<body>
+  <div id="view-root">
+
+  <script src="js/jquery-3.6.1.min.js"></script>
+  <script src="dist/wux.min.js"></script>
+  <script src="out/hello.js"></script>
+  <script type="text/javascript">
+    WuxDOM.render(new HelloWorld(), 'view-root');
+  </script>
+</body>
+</html>
 ```
 
 ## Documentation
