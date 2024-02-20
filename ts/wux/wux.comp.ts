@@ -1371,7 +1371,7 @@
             for (let i = 0; i < this.tabs.length; i++) {
                 let tab = this.tabs[i];
                 if (i == this.state) {
-                    r += '<li class="active"><a data-toggle="tab" href="#' + this.id + '-' + i + '"> ' + tab.name + '</a></li>';
+                    r += '<li class="active"><a data-toggle="tab" class="active" href="#' + this.id + '-' + i + '" aria-expanded="true"> ' + tab.name + '</a></li>';
                 }
                 else {
                     r += '<li><a data-toggle="tab" href="#' + this.id + '-' + i + '"> ' + tab.name + '</a></li>';
