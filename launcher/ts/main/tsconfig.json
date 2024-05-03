@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"module": "none",
+		"target": "es5",
+		"outFile": "../../js/main.js",
+	},
+	"include": [
+		"*"
+	]
+}
