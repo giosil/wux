@@ -17,7 +17,7 @@ declare class WLaucher {
     js(src: string, v?: any): void;
     create(node: string | Element, tag?: string, id?: string, cs?: string, st?: string, inner?: string | Element): Element;
     clear(node: string | Element): Element;
-    protected appendLinks(cb?: () => any): void;
+    protected appendLinks(): void;
     protected appendScripts(cb?: () => any): void;
     nextCss(): string;
     nextJs(): string;

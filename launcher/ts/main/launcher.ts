@@ -95,18 +95,15 @@ class WLaucher {
 		return n;
 	}
 	
-	protected appendLinks(cb?: () => any) {
+	protected appendLinks() {
 		let href = this.nextCss();
 		// Se non vi sono ulteriori elementi si richiama la callback
 		if(!href) {
-			if(cb) {
-				console.log('Links callback...');
-				cb();
-			}
 			return;
 		}
 		// Si verifica che non sia gia' presente
 		if(this._cx && this._cx.indexOf(href) >= 0) {
+			this.appendLinks();
 			return;
 		}
 	    // Si procede con la creazione del tag link
@@ -117,7 +114,7 @@ class WLaucher {
 		e.href = href;
 		document.head.appendChild(e);
 		e.onload = () => {
-			this.appendLinks(cb);
+			this.appendLinks();
 		}
 		e.onerror = () => {
 			console.error(href + ' not loaded.');
@@ -144,6 +141,7 @@ class WLaucher {
 		}
 		// Si verifica che non sia gia' presente
 		if(this._jx && this._jx.indexOf(src) >= 0) {
+			this.appendScripts(cb);
 			return;
 		}
 		let vx = src.indexOf('?');

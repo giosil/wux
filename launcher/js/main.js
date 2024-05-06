@@ -92,19 +92,16 @@ var WLaucher = /** @class */ (function () {
         n.innerHTML = '';
         return n;
     };
-    WLaucher.prototype.appendLinks = function (cb) {
+    WLaucher.prototype.appendLinks = function () {
         var _this = this;
         var href = this.nextCss();
         // Se non vi sono ulteriori elementi si richiama la callback
         if (!href) {
-            if (cb) {
-                console.log('Links callback...');
-                cb();
-            }
             return;
         }
         // Si verifica che non sia gia' presente
         if (this._cx && this._cx.indexOf(href) >= 0) {
+            this.appendLinks();
             return;
         }
         // Si procede con la creazione del tag link
@@ -115,7 +112,7 @@ var WLaucher = /** @class */ (function () {
         e.href = href;
         document.head.appendChild(e);
         e.onload = function () {
-            _this.appendLinks(cb);
+            _this.appendLinks();
         };
         e.onerror = function () {
             console.error(href + ' not loaded.');
@@ -142,6 +139,7 @@ var WLaucher = /** @class */ (function () {
         }
         // Si verifica che non sia gia' presente
         if (this._jx && this._jx.indexOf(src) >= 0) {
+            this.appendScripts(cb);
             return;
         }
         var vx = src.indexOf('?');
