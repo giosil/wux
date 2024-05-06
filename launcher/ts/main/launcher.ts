@@ -119,6 +119,12 @@ class WLaucher {
 		e.onload = () => {
 			this.appendLinks(cb);
 		}
+		e.onerror = () => {
+			console.error(href + ' not loaded.');
+			if(this._ln) {
+				this._ln.innerHTML = '<span><em>' + href + ' not loaded.</em></span>';
+			}
+		}
 		// Si aggiunge all'array complessivo
 		this._cx.push(href);
 	}
@@ -154,6 +160,12 @@ class WLaucher {
 		document.head.appendChild(e);
 		e.onload = () => {
 			this.appendScripts(cb);
+		}
+		e.onerror = () => {
+			console.error(src + ' not loaded.');
+			if(this._ln) {
+				this._ln.innerHTML = '<span><em>' + src + ' not loaded.</em></span>';
+			}
 		}
 		// Si aggiunge all'array complessivo
 		this._jx.push(src);
@@ -204,7 +216,7 @@ class WLaucher {
 	    }
 	    // Avvio applicazione
 		window.addEventListener("load", () => {
-		    if(this._cf) {
+		    if(this._cf && this._jx.indexOf(this._cf) < 0) {
 				let src = this._cf + '?' + Date.now();
 				console.log('Load ' + src + '...');
 				let e = document.createElement("script");
@@ -214,6 +226,12 @@ class WLaucher {
 				e.onload = () => {
 					this.appendLinks();
 					this.appendScripts(cb);
+				}
+				e.onerror = () => {
+					console.error(src + ' not loaded.');
+					if(this._ln) {
+						this._ln.innerHTML = '<span><em>' + src + ' not loaded.</em></span>';
+					}
 				}
 			}
 			else {

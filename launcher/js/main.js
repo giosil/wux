@@ -117,6 +117,12 @@ var WLaucher = /** @class */ (function () {
         e.onload = function () {
             _this.appendLinks(cb);
         };
+        e.onerror = function () {
+            console.error(href + ' not loaded.');
+            if (_this._ln) {
+                _this._ln.innerHTML = '<span><em>' + href + ' not loaded.</em></span>';
+            }
+        };
         // Si aggiunge all'array complessivo
         this._cx.push(href);
     };
@@ -153,6 +159,12 @@ var WLaucher = /** @class */ (function () {
         document.head.appendChild(e);
         e.onload = function () {
             _this.appendScripts(cb);
+        };
+        e.onerror = function () {
+            console.error(src + ' not loaded.');
+            if (_this._ln) {
+                _this._ln.innerHTML = '<span><em>' + src + ' not loaded.</em></span>';
+            }
         };
         // Si aggiunge all'array complessivo
         this._jx.push(src);
@@ -206,16 +218,22 @@ var WLaucher = /** @class */ (function () {
         }
         // Avvio applicazione
         window.addEventListener("load", function () {
-            if (_this._cf) {
-                var src = _this._cf + '?' + Date.now();
-                console.log('Load ' + src + '...');
+            if (_this._cf && _this._jx.indexOf(_this._cf) < 0) {
+                var src_1 = _this._cf + '?' + Date.now();
+                console.log('Load ' + src_1 + '...');
                 var e = document.createElement("script");
                 e.type = "text/javascript";
-                e.src = src;
+                e.src = src_1;
                 document.head.appendChild(e);
                 e.onload = function () {
                     _this.appendLinks();
                     _this.appendScripts(cb);
+                };
+                e.onerror = function () {
+                    console.error(src_1 + ' not loaded.');
+                    if (_this._ln) {
+                        _this._ln.innerHTML = '<span><em>' + src_1 + ' not loaded.</em></span>';
+                    }
                 };
             }
             else {
