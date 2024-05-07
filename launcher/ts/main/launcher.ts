@@ -14,7 +14,7 @@ class WLaucher {
 	// All 
 	_cx: string[];
 	_jx: string[];
-	
+
 	constructor(config?: string) {
 		this._cf = config;
 		this._cs = [];
@@ -24,21 +24,21 @@ class WLaucher {
 		this._cx = [];
 		this._jx = [];
 	}
-	
+
 	get config(): string {
 		return this._cf;
 	}
 	set config(s: string) {
 		this._cf = s;
 	}
-	
+
 	get loading(): string | Element {
 		return this._le;
 	}
 	set loading(s: string | Element) {
 		this._le = s;
 	}
-	
+
 	css(href: string, v?: any) {
 		if(!href) return;
 		if(v) href += '?' + v;
@@ -50,7 +50,7 @@ class WLaucher {
 		if(v) src += '?' + v;
 		this._js.push(src);
 	}
-	
+
 	create(node: string | Element, tag?: string, id?: string, cs?: string, st?: string, inner?: string | Element): Element {
 		if (!tag) tag = 'div';
 		if (id) {
@@ -81,7 +81,7 @@ class WLaucher {
 		n.append(e);
 		return e;
 	}
-	
+
 	clear(node: string | Element): Element {
 		let n: Element;
 		if (typeof node == 'string') {
@@ -94,7 +94,7 @@ class WLaucher {
 		n.innerHTML = '';
 		return n;
 	}
-	
+
 	protected appendLinks() {
 		let href = this.nextCss();
 		// Se non vi sono ulteriori elementi si richiama la callback
@@ -113,8 +113,8 @@ class WLaucher {
 			let vv = window[vk];
 			if(vv) href = href.substring(0, vx + 1) + vv;
 		}
-	    // Si procede con la creazione del tag link
-	    console.log('Load ' + href + '...');
+		// Si procede con la creazione del tag link
+		console.log('Load ' + href + '...');
 		let e = document.createElement("link");
 		e.rel = "stylesheet";
 		e.type = "text/css";
@@ -132,7 +132,7 @@ class WLaucher {
 		// Si aggiunge all'array complessivo
 		this._cx.push(href);
 	}
-	
+
 	protected appendScripts(cb?: () => any) {
 		let src = this.nextJs();
 		// Se non vi sono ulteriori elementi si richiama la callback
@@ -158,7 +158,7 @@ class WLaucher {
 			let vv = window[vk];
 			if(vv) src = src.substring(0, vx + 1) + vv;
 		}
-	    // Si procede con la creazione del tag script
+		// Si procede con la creazione del tag script
 		console.log('Load ' + src + '...');
 		let e = document.createElement("script");
 		e.type = "text/javascript";
@@ -176,7 +176,7 @@ class WLaucher {
 		// Si aggiunge all'array complessivo
 		this._jx.push(src);
 	}
-	
+
 	nextCss(): string {
 		this._ci++;
 		let lc = this._cs.length;
@@ -190,7 +190,7 @@ class WLaucher {
 		if(lj && this._ji >= lj) return '';
 		return this._js[this._ji];
 	}
-	
+
 	start(cb: () => any) {
 		// Inizializzazione indici
 		this._ci = -1;
@@ -214,15 +214,15 @@ class WLaucher {
 		// Si caricano tutti i css e script presenti per effettuare il controllo.
 		let ls = document.getElementsByTagName('link');
 		for (let i = 0; i < ls.length; i++) {
-	        if(ls[i].href) this._cx.push(ls[i].href);
-	    }
+			if(ls[i].href) this._cx.push(ls[i].href);
+		}
 		let ss = document.getElementsByTagName('script');
-	    for (let i = 0; i < ss.length; i++) {
-	        if(ss[i].src) this._jx.push(ss[i].src)
-	    }
-	    // Avvio applicazione
+		for (let i = 0; i < ss.length; i++) {
+			if(ss[i].src) this._jx.push(ss[i].src)
+		}
+		// Avvio applicazione
 		window.addEventListener("load", () => {
-		    if(this._cf && this._jx.indexOf(this._cf) < 0) {
+			if(this._cf && this._jx.indexOf(this._cf) < 0) {
 				let src = this._cf + '?' + Date.now();
 				console.log('Load ' + src + '...');
 				let e = document.createElement("script");
