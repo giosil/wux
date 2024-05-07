@@ -104,6 +104,14 @@ var WLaucher = /** @class */ (function () {
             this.appendLinks();
             return;
         }
+        // Versionamento
+        var vx = href.indexOf('?');
+        if (vx) {
+            var vk = href.substring(vx + 1);
+            var vv = window[vk];
+            if (vv)
+                href = href.substring(0, vx + 1) + vv;
+        }
         // Si procede con la creazione del tag link
         console.log('Load ' + href + '...');
         var e = document.createElement("link");
@@ -142,6 +150,7 @@ var WLaucher = /** @class */ (function () {
             this.appendScripts(cb);
             return;
         }
+        // Versionamento
         var vx = src.indexOf('?');
         if (vx) {
             var vk = src.substring(vx + 1);

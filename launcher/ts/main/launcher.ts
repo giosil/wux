@@ -106,6 +106,13 @@ class WLaucher {
 			this.appendLinks();
 			return;
 		}
+		// Versionamento
+		let vx = href.indexOf('?');
+		if(vx) {
+			let vk = href.substring(vx + 1);
+			let vv = window[vk];
+			if(vv) href = href.substring(0, vx + 1) + vv;
+		}
 	    // Si procede con la creazione del tag link
 	    console.log('Load ' + href + '...');
 		let e = document.createElement("link");
@@ -144,6 +151,7 @@ class WLaucher {
 			this.appendScripts(cb);
 			return;
 		}
+		// Versionamento
 		let vx = src.indexOf('?');
 		if(vx) {
 			let vk = src.substring(vx + 1);
