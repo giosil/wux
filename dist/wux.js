@@ -1095,7 +1095,6 @@ var WUX;
             if (Array.isArray(a) && !a.length)
                 return true;
             if (typeof a == 'object') {
-                var r = 0;
                 for (var k in a)
                     if (a.hasOwnProperty(k))
                         return false;

@@ -1083,7 +1083,6 @@ namespace WUX {
             if (!a) return true;
             if (Array.isArray(a) && !a.length) return true;
             if (typeof a == 'object') {
-                let r = 0;
                 for (let k in a) if (a.hasOwnProperty(k)) return false;
                 return true;
             }
