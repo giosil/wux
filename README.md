@@ -6,6 +6,7 @@ A Javascript library to build component based user interface.
 
 - `git clone https://github.com/giosil/wux.git`
 - `npm install typescript -g`
+- `npm install uglify-js -g`
 - `npm run build`
 
 ## Example
