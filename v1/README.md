@@ -1,4 +1,4 @@
-# WUX - Wrapped User Experience ver. 2.0.0
+# WUX - Wrapped User Experience ver. 1.0.0
 
 A Javascript library to build component based user interface.
 
@@ -6,6 +6,7 @@ A Javascript library to build component based user interface.
 
 - `git clone https://github.com/giosil/wux.git`
 - `npm install typescript -g`
+- `cd v1`
 - `npm run build`
 
 ## Example
@@ -26,11 +27,12 @@ namespace APP {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WUX ver. 2.0.0</title>
+    <title>WUX ver. 1.0.0</title>
   </head>
   <body>
     <div id="view-root"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script src="dist/wux.min.js"></script>
     <script src="dist/app.min.js"></script>
     <script type="text/javascript">
@@ -39,23 +41,6 @@ namespace APP {
   </body>
 </html>
 ```
-
-## SVG Logo
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 82 72" xmlns="http://www.w3.org/2000/svg">
-  <text style="fill: rgb(0, 0, 0); font-family: Consolas; font-size: 50px;" x="0" y="40">{&#x00B5;}</text>
-  <text style="fill: rgb(0, 0, 0); font-family: Consolas; font-size: 14px;" x="7" y="65">micro-wux</text>
-</svg>
-```
-
-<table>
-  <tr>
-    <td><img src="wux-black.svg" width="300" height="300"></td>
-    <td><img src="wux-white.svg" width="300" height="300"></td>
-  </tr>
-</table>
 
 ## License
 
