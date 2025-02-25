@@ -1,0 +1,17 @@
+{
+  "name": "launcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/launcher.js",
+  "type": "module",
+  "scripts": {
+    "compile": "tsc --declaration --project ./ts/launcher/tsconfig.json",
+    "minify": "uglifyjs -c -o ./dist/launcher.min.js -m -- ./dist/launcher.js",
+    "build": "npm run compile && npm run minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
