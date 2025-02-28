@@ -5155,12 +5155,11 @@ var WUX;
             co.label = labelCheck;
             return this._add(id, label, co, 'boolean', opts);
         };
-        WForm.prototype.addBlankField = function (label, classStyle, style, opts) {
-            var f0 = opts ? opts : {};
+        WForm.prototype.addBlankField = function (label, classStyle, style, e) {
             var co = new WContainer('', classStyle, style);
-            if (f0.element)
-                co.add(f0.element);
-            return this._add('', label, co, 'blank', opts);
+            if (e)
+                co.add(e);
+            return this._add('', label, co, 'blank', {});
         };
         WForm.prototype.addCaption = function (text, icon, classStyle, style, opts) {
             if (!text)

@@ -2136,11 +2136,10 @@ namespace WUX {
 			return this._add(id, label, co, 'boolean', opts);
 		}
 
-		addBlankField(label?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this {
-			let f0 = opts ? opts : {};
+		addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this {
 			let co = new WContainer('', classStyle, style);
-			if(f0.element) co.add(f0.element);
-			return this._add('', label, co, 'blank', opts);
+			if(e) co.add(e);
+			return this._add('', label, co, 'blank', {});
 		}
 
 		addCaption(text: string, icon?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this {

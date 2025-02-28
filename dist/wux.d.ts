@@ -793,7 +793,7 @@ declare namespace WUX {
         addRadioField(fieldId: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
         addBooleanField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this;
         addToggleField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this;
-        addBlankField(label?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this;
+        addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this;
         addCaption(text: string, icon?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this;
         addHiddenField(fieldId: string, value?: any): this;
         addInternalField(fieldId: string, value?: any): this;
