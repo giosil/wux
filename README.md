@@ -2,32 +2,33 @@
 
 A Javascript library to build component based user interface.
 
-The project was born from a long experience in the development of portals in the public administration, particularly in the Italian market where the *Bootstrap Italia* theme is recommended by *AGID*.
+The project was born from a long experience in the development of portals in the public administration, particularly in the Italian market where the **Bootstrap Italia** theme is recommended by **AGID**.
+The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more lightweight, flexible and easy-to-use.
+It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/).
+For microfrontends see the [micro-wux](https://github.com/giosil/micro-wux) repository.
+The methods that can be implemented in **WUX**, as in React, to control the behavior of components are listed below.
 
-The *WUX* library is inspired by React for component lifecycle management, but is designed to be more lightweight, flexible and easy-to-use.
-In particular, the methods that can be implemented in WUX, as in React, to control the behavior of components are listed below.
-
-The *constructor()* method is called when the component is first created. 
+The **constructor()** method is called when the component is first created. 
 You use it to initialize the component's state and bind methods to the component's instance.
 
-The *render()* method is responsible for generating the component's DOM representation based on its current props and state. 
+The **render()** method is responsible for generating the component's DOM representation based on its current props and state. 
 It is called every time the component needs to be re-rendered, either because its props or state have changed, or because a parent component has been re-rendered.
 
-The *componentDidMount()* method is called once the component has been mounted into the DOM. 
+The **componentDidMount()** method is called once the component has been mounted into the DOM. 
 It is typically used to set up any necessary event listeners or timers, perform any necessary API calls or data fetching, and perform other initialization tasks that require access to the browser's DOM API.
 
-The *shouldComponentUpdate()* method is called before a component is updated. 
+The **shouldComponentUpdate()** method is called before a component is updated. 
 It takes two arguments: nextProps and nextState. 
 This method returns a boolean value that determines whether the component should update or not. 
 If this method returns true, the component will update, and if it returns false, the component will not update.
 
-The *componentWillUpdate()* method is called just before a component's update cycle starts. 
+The **componentWillUpdate()** method is called just before a component's update cycle starts. 
 It receives the next prop and state as arguments and allows you to perform any necessary actions before the component updates.
 
-The *componentDidUpdate()* method is called after a component has been updated and re-rendered. 
+The **componentDidUpdate()** method is called after a component has been updated and re-rendered. 
 It is useful for performing side effects or additional operations when the component's props or state have changed.
 
-The *componentWillUnmount()* method is called just before the component is removed from the DOM. 
+The **componentWillUnmount()** method is called just before the component is removed from the DOM. 
 It allows you to perform any necessary cleanup or clearing any data structures that were set up during the mounting phase.
 
 ## Build
