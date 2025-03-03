@@ -15,15 +15,14 @@ The **render()** method is responsible for generating the component's DOM repres
 It is called every time the component needs to be re-rendered, either because its props or state have changed, or because a parent component has been re-rendered.
 
 The **componentDidMount()** method is called once the component has been mounted into the DOM. 
-It is typically used to set up any necessary event listeners or timers, perform any necessary API calls or data fetching, and perform other initialization tasks that require access to the browser's DOM API.
+It is typically used to set up any necessary event listeners and perform other initialization tasks that require access to the browser's DOM API.
 
 The **shouldComponentUpdate()** method is called before a component is updated. 
-It takes two arguments: nextProps and nextState. 
 This method returns a boolean value that determines whether the component should update or not. 
 If this method returns true, the component will update, and if it returns false, the component will not update.
 
 The **componentWillUpdate()** method is called just before a component's update cycle starts. 
-It receives the next prop and state as arguments and allows you to perform any necessary actions before the component updates.
+It allows you to perform any necessary actions before the component updates.
 
 The **componentDidUpdate()** method is called after a component has been updated and re-rendered. 
 It is useful for performing side effects or additional operations when the component's props or state have changed.
