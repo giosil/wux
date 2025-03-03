@@ -3,9 +3,9 @@
 A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public administration, particularly in the Italian market where the **Bootstrap Italia** theme is recommended by **AGID**.
+
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more lightweight, flexible and easy-to-use.
-It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/).
-For microfrontends see the [micro-wux](https://github.com/giosil/micro-wux) repository.
+It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/) (see the [micro-wux](https://github.com/giosil/micro-wux) repository).
 The methods that can be implemented in **WUX**, as in React, to control the behavior of components are listed below.
 
 The **constructor()** method is called when the component is first created. 
