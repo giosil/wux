@@ -4,10 +4,14 @@ A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public administration, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
-The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more lightweight, flexible and easy-to-use.
+The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
+ - [x] **lightweight**, 
+ - [x] **flexible** and 
+ - [x] **easy-to-use**.
 It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/) (see the [micro-wux](https://github.com/giosil/micro-wux) repository).
 The methods that can be implemented in **WUX**, as in React, to control the behavior of components are listed below.
 
+|---|
 |The **constructor()** method is called when the component is first created. You use it to initialize the component's state and bind methods to the component's instance.|
 |The **render()** method is responsible for generating the component's DOM representation based on its current props and state. It is called every time the component needs to be re-rendered, either because its props or state have changed, or because a parent component has been re-rendered.|
 |The **componentDidMount()** method is called once the component has been mounted into the DOM. It is typically used to set up any necessary event listeners and perform other initialization tasks that require access to the browser's DOM API.|
@@ -15,6 +19,7 @@ The methods that can be implemented in **WUX**, as in React, to control the beha
 |The **componentWillUpdate()** method is called just before a component's update cycle starts. It allows you to perform any necessary actions before the component updates.|
 |The **componentDidUpdate()** method is called after a component has been updated and re-rendered. It is useful for performing side effects or additional operations when the component's props or state have changed.|
 |The **componentWillUnmount()** method is called just before the component is removed from the DOM. It allows you to perform any necessary cleanup or clearing any data structures that were set up during the mounting phase.|
+|---|
 
 ## Build
 
