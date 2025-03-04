@@ -3524,6 +3524,11 @@ var WUX;
                     addAttributes += ' ';
                 addAttributes += 'target="' + this._target + '"';
             }
+            if (this._tooltip) {
+                if (addAttributes)
+                    addAttributes += ' ';
+                addAttributes += 'title="' + this._tooltip + '"';
+            }
             var html = '';
             if (this.state) {
                 html += WUX.buildIcon(this.icon, '', ' ') + this.state;
@@ -3533,9 +3538,10 @@ var WUX;
             }
             return this.build(this.rootTag, html, addAttributes);
         };
-        WLink.prototype.componentDidMount = function () {
-            if (this._tooltip)
-                this.root.setAttribute('title', this._tooltip);
+        WLink.prototype.setState = function (nextState, force, callback) {
+            if (this.lock)
+                return this;
+            return _super.prototype.setState.call(this, nextState, force, callback);
         };
         WLink.prototype.componentWillUpdate = function (nextProps, nextState) {
             var html = '';
@@ -5269,10 +5275,10 @@ var WUX;
                     }
                     if (g) {
                         if (f.type == 'select') {
-                            this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER }, f.labelComp, f.component);
+                            this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: this.groupStyle }, f.labelComp, f.component);
                         }
                         else {
-                            this.main.addGroup({ classStyle: WUX.CSS.FORM_GROUP }, f.labelComp, f.component);
+                            this.main.addGroup({ classStyle: WUX.CSS.FORM_GROUP, style: this.groupStyle }, f.labelComp, f.component);
                         }
                     }
                     else {

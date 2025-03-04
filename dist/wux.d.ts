@@ -579,6 +579,7 @@ declare namespace WUX {
     class WLink extends WComponent<string, string> {
         protected _href: string;
         protected _target: string;
+        lock: boolean;
         constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, href?: string, target?: string);
         get icon(): string;
         set icon(s: string);
@@ -587,7 +588,7 @@ declare namespace WUX {
         get target(): string;
         set target(s: string);
         protected render(): string;
-        protected componentDidMount(): void;
+        setState(nextState: string, force?: boolean, callback?: () => any): this;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
     class WLabel extends WComponent<string, string> {
@@ -763,6 +764,7 @@ declare namespace WUX {
         captions: WComponent[];
         mainClass: string;
         mainStyle: string | WStyle;
+        groupStyle: string | WStyle;
         constructor(id?: string, title?: string, action?: string);
         get enabled(): boolean;
         set enabled(b: boolean);

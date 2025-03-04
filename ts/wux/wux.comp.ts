@@ -549,6 +549,7 @@ namespace WUX {
 	export class WLink extends WComponent<string, string> {
 		protected _href: string;
 		protected _target: string;
+		lock: boolean;
 
 		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, href?: string, target?: string) {
 			// WComponent init
@@ -604,6 +605,10 @@ namespace WUX {
 				if (addAttributes) addAttributes += ' ';
 				addAttributes += 'target="' + this._target + '"';
 			}
+			if (this._tooltip) {
+				if (addAttributes) addAttributes += ' ';
+				addAttributes += 'title="' + this._tooltip + '"';
+			}
 			let html = '';
 			if (this.state) {
 				html += WUX.buildIcon(this.icon, '', ' ') + this.state;
@@ -614,8 +619,9 @@ namespace WUX {
 			return this.build(this.rootTag, html, addAttributes);
 		}
 
-		protected componentDidMount(): void {
-			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
+		setState(nextState: string, force?: boolean, callback?: () => any): this {
+			if (this.lock) return this;
+			return super.setState(nextState, force, callback);
 		}
 
 		protected componentWillUpdate(nextProps: any, nextState: any): void {
@@ -1838,6 +1844,7 @@ namespace WUX {
 		captions: WComponent[];
 		mainClass: string;
 		mainStyle: string | WStyle;
+		groupStyle: string | WStyle;
 
 		constructor(id?: string, title?: string, action?: string) {
 			// WComponent init
@@ -2252,10 +2259,10 @@ namespace WUX {
 					
 					if (g) {
 						if (f.type == 'select') {
-							this.main.addGroup({classStyle: CSS.SEL_WRAPPER}, f.labelComp, f.component);
+							this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: this.groupStyle}, f.labelComp, f.component);
 						}
 						else {
-							this.main.addGroup({classStyle: CSS.FORM_GROUP}, f.labelComp, f.component);
+							this.main.addGroup({classStyle: CSS.FORM_GROUP, style: this.groupStyle}, f.labelComp, f.component);
 						}
 					}
 					else {
