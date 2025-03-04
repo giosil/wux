@@ -1,5 +1,5 @@
 namespace APP {
-	
+
 	export class Breadcrumb extends WUX.WComponent<string, string[]> {
 		home: string;
 		lhtm: string;
@@ -105,10 +105,10 @@ namespace APP {
 		
 		protected componentDidMount(): void {
 			if(this.props < 1) {
-				this.root.innerHTML = '<nav id="' + this.id+ '" class="pagination-wrapper" aria-label="Paginazione"></nav>';
+				this.root.innerHTML = '<nav id="' + this.id+ '" class="pagination-wrapper" aria-label="Pagination"></nav>';
 				return;
 			}
-			let r: string = '<nav id="' + this.id+ '" class="pagination-wrapper" aria-label="Paginazione">';
+			let r: string = '<nav id="' + this.id+ '" class="pagination-wrapper" aria-label="Pagination">';
 			r += '<ul class="pagination">';
 			if(this.state == 1) {
 				r += '<li class="page-item disabled">' + this.getBtnPrev() + '</li>';
@@ -179,8 +179,8 @@ namespace APP {
 		
 		getPageItem(i: number, a?: boolean, t?: string) {
 			if(!t) t = '' + i;
-			if(a) return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button aria-current="true" class="page-link" title="Pagina ' + i + '">' + t + '</button></i>';
-			return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button class="page-link" title="Pagina ' + i + '">' + t + '</button></i>';
+			if(a) return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button aria-current="true" class="page-link" title="Page ' + i + '">' + t + '</button></i>';
+			return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button class="page-link" title="Page ' + i + '">' + t + '</button></i>';
 		}
 	}
 	
@@ -214,10 +214,10 @@ namespace APP {
 			
 			let items = '';
 			for(let i = 1; i <= this.props; i++) {
-				items += '<li><a id="' + this.id + '-' + i + '" class="list-item" style="cursor:pointer;">Pagina ' + i + '</a></li>';
+				items += '<li><a id="' + this.id + '-' + i + '" class="list-item" style="cursor:pointer;">Page ' + i + '</a></li>';
 			}
 			let r = '<div id="' + this.id + '" class="page-dropdown dropdown">';
-			r += dropdownBtn(this.id, 'Pagina ' + this.state + ' di ' + this.props, items);
+			r += dropdownBtn(this.id, 'Page ' + this.state + ' di ' + this.props, items);
 			r += '</div>';
 			return r;
 		}

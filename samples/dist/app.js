@@ -631,10 +631,10 @@ var APP;
         ResPages.prototype.componentDidMount = function () {
             var _this = this;
             if (this.props < 1) {
-                this.root.innerHTML = '<nav id="' + this.id + '" class="pagination-wrapper" aria-label="Paginazione"></nav>';
+                this.root.innerHTML = '<nav id="' + this.id + '" class="pagination-wrapper" aria-label="Pagination"></nav>';
                 return;
             }
-            var r = '<nav id="' + this.id + '" class="pagination-wrapper" aria-label="Paginazione">';
+            var r = '<nav id="' + this.id + '" class="pagination-wrapper" aria-label="Pagination">';
             r += '<ul class="pagination">';
             if (this.state == 1) {
                 r += '<li class="page-item disabled">' + this.getBtnPrev() + '</li>';
@@ -710,8 +710,8 @@ var APP;
             if (!t)
                 t = '' + i;
             if (a)
-                return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button aria-current="true" class="page-link" title="Pagina ' + i + '">' + t + '</button></i>';
-            return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button class="page-link" title="Pagina ' + i + '">' + t + '</button></i>';
+                return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button aria-current="true" class="page-link" title="Page ' + i + '">' + t + '</button></i>';
+            return '<li id="' + this.id + '-' + i + '" class="page-item" style="cursor:pointer;"><button class="page-link" title="Page ' + i + '">' + t + '</button></i>';
         };
         return ResPages;
     }(WUX.WComponent));
@@ -746,10 +746,10 @@ var APP;
                 this.state = 1;
             var items = '';
             for (var i = 1; i <= this.props; i++) {
-                items += '<li><a id="' + this.id + '-' + i + '" class="list-item" style="cursor:pointer;">Pagina ' + i + '</a></li>';
+                items += '<li><a id="' + this.id + '-' + i + '" class="list-item" style="cursor:pointer;">Page ' + i + '</a></li>';
             }
             var r = '<div id="' + this.id + '" class="page-dropdown dropdown">';
-            r += APP.dropdownBtn(this.id, 'Pagina ' + this.state + ' di ' + this.props, items);
+            r += APP.dropdownBtn(this.id, 'Page ' + this.state + ' di ' + this.props, items);
             r += '</div>';
             return r;
         };
