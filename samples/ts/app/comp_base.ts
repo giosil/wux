@@ -251,7 +251,7 @@ namespace APP {
 			let items = '';
 			for(let i = 0; i < this.IPP.length; i++) {
 				let v = this.IPP[i];
-				items += '<li><a id="' + this.id + '-' + v + '" class="list-item" style="cursor:pointer;">' + v + ' elementi</a></li>';
+				items += '<li><a id="' + this.id + '-' + v + '" class="list-item" style="cursor:pointer;">' + v + ' items</a></li>';
 			}
 			let r = '<div class="page-dropdown dropdown">';
 			r += dropdownBtn(this.id, 'Items per page', items);

@@ -62,7 +62,7 @@ namespace APP {
 </html>
 ```
 
-[See more real world examples.](samples/README.md)
+[See more real world examples.](samples/)
 
 ## SVG Logo
 

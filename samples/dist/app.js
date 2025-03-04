@@ -39,7 +39,7 @@ var APP;
     APP.confirm = confirm;
     function dropdownBtn(id, t, items, cls) {
         if (cls === void 0) { cls = 'btn btn-outline-primary'; }
-        var r = '<button id="' + id + '-b" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle ' + cls + '">' + t + ' <i class="fa fa-caret-down"></i></button>';
+        var r = '<button id="' + id + '-b" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle ' + cls + '">' + t + '</i></button>';
         var a = ' tabindex="-1"';
         var s = ' style="max-height:180px;overflow-y:auto;"';
         r += '<div id="' + id + '-m"' + a + ' role="menu" aria-hidden="true" class="dropdown-menu"' + s + '>';
@@ -790,7 +790,7 @@ var APP;
             var items = '';
             for (var i = 0; i < this.IPP.length; i++) {
                 var v = this.IPP[i];
-                items += '<li><a id="' + this.id + '-' + v + '" class="list-item" style="cursor:pointer;">' + v + ' elementi</a></li>';
+                items += '<li><a id="' + this.id + '-' + v + '" class="list-item" style="cursor:pointer;">' + v + ' items</a></li>';
             }
             var r = '<div class="page-dropdown dropdown">';
             r += APP.dropdownBtn(this.id, 'Items per page', items);

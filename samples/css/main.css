@@ -3,7 +3,6 @@
 
 input:read-only{background-color:#f1f1f1;}
 .form-control:disabled{background-color:#f1f1f1;}
-.form-row{padding:1rem 0;}
 
 .breadcrumb-container{margin-top: 20px !important;padding-left: 0 !important;}
 .breadcrumb-container .breadcrumb{padding: 0.5em 0;border-radius: 0;}
@@ -55,3 +54,8 @@ svg.icon image{width:inherit;}
 /* app */
 .waitpls{display:none;position:fixed;z-index:2000;top:0;left:0;height:100%;width:100%;background:rgba(255,255,255,.8) url('../images/wait.gif') 50% 50% no-repeat;}
 body.loading .waitpls{overflow:hidden;display:block;}
+/* samples */
+.form-row{padding:1rem 0;}
+.dropdown-menu .link-list{margin-bottom:0;}
+.link-list-wrapper ul{padding:0;list-style-type:none;}
+.link-list-wrapper ul li a{font-size:1rem;line-height:2rem;display:block;padding:.25rem 16px;text-decoration:none;position:relative;}
