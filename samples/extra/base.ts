@@ -14,13 +14,8 @@ namespace APP {
 	export function getPageComponent(): WUX.WComponent {
 		let p = WUX.WUtil.getParam('test');
 		switch(window.location.pathname) {
-			case '/app-adc':  return new GUIText('Aree di competenza', 'In fase di sviluppo.');
-			case '/app-cco':  return new GUICompetenze('Competenze comportamentali', 'C_COM');
-			case '/app-ctp':  return new GUICompetenze('Competenze Tecnico Professionali', 'C_TP');
-			case '/app-cts':  return new GUICompetenze('Competenze Tecnico Specialistiche', 'C_TS');
 			case '/app-demo': return new GUIDemo();
 			case '/app-test': return p == 'bs' ? new GUIEntities() : new GUIEntitiesDX();
-			case '/app-mrat': return new GUIRating();
 		}
 		return null;
 	}

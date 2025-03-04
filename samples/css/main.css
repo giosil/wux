@@ -1,0 +1,57 @@
+.modal-fullscreen{height:97%;margin:1rem 0 0 0 !important;}
+.toggles label input[type=checkbox]+.lever{margin: 1rem -2.5rem 0 0;}
+
+input:read-only{background-color:#f1f1f1;}
+.form-control:disabled{background-color:#f1f1f1;}
+.form-row{padding:1rem 0;}
+
+.breadcrumb-container{margin-top: 20px !important;padding-left: 0 !important;}
+.breadcrumb-container .breadcrumb{padding: 0.5em 0;border-radius: 0;}
+.breadcrumb-container .breadcrumb .breadcrumb-item{padding-left: 0;}
+.breadcrumb-container .breadcrumb .breadcrumb-item + .breadcrumb-item:before{display: none;}
+.breadcrumb-container .breadcrumb .breadcrumb-item i{padding-right: 0.5em;}
+.breadcrumb-container .breadcrumb .breadcrumb-item span.separator{display: inline-block;padding: 0 0.5em;}
+.breadcrumb {display:flex;flex-wrap:wrap;padding:0.75rem 1rem;margin-bottom:1rem;list-style:none;background-color:transparent;border-radius:0;}
+.breadcrumb-item + .breadcrumb-item {padding-left: 0.5rem;}
+.breadcrumb-item + .breadcrumb-item::before{float: left;padding-right: 0.5rem; content: "/";}
+ol.breadcrumb li a{color:#000 !important}
+ol.breadcrumb li:last-child a{cursor:default;pointer-events:none;text-decoration:none !important}
+
+.icon {width:32px;height:32px;vertical-align:middle;}
+svg {overflow:hidden;vertical-align:middle;}
+svg.icon image{width:inherit;}
+
+.notification{width:100%;padding:1.5rem;padding-right:4rem;box-shadow:0 -0.5rem 1rem rgba(0,0,0,0.15);background:hsl(0deg,0%,100%);position:fixed;bottom:0;right:0;display:none;border-top:4px solid hsl(210deg,16.9590643275%,43.605%);}
+.notification h5{text-transform:uppercase;color:hsl(210deg,53.8461538462%,19.5%);letter-spacing:0;margin:0;position:relative;line-height:1em;font-weight:700;}
+.notification p{margin:1.5rem 0 0 0;color:hsl(210deg,16.9590643275%,43.605%);}
+.notification.with-icon{border-top:4px solid hsl(210deg,16.9590643275%,43.605%);}
+.notification.with-icon h5 .icon{position:absolute;top:-8px;left:-38px;}
+.notification.with-icon h5,.notification.with-icon p{margin-left:2rem;}
+.notification.with-icon.success{border-color:hsl(159deg,100%,26.5%);}
+.notification.with-icon.success .icon{fill:hsl(159deg,100%,26.5%);}
+.notification.with-icon.error{border-color:hsl(351deg,68%,53.125%);}
+.notification.with-icon.error .icon{fill:hsl(351deg,68%,53.125%);}
+.notification.with-icon.info{border-color:hsl(208deg,58.7301587302%,16.38%);}
+.notification.with-icon.info .icon{fill:hsl(208deg,58.7301587302%,16.38%);}
+.notification.with-icon.warning{border-color:hsl(36deg,100%,32.5%);}
+.notification.with-icon.warning .icon{fill:hsl(36deg,100%,32.5%);}
+.notification.dismissable .notification-close{position:absolute;right:20px;top:15px;display:block;width:32px;height:32px;padding:0;background:none;}
+.notification.dismissable .notification-close .icon{fill:hsl(210deg,53.8461538462%,19.5%);}
+.notification.dismissable .notification-close:hover .icon{fill:hsl(208deg,58.7301587302%,16.38%);}
+.notification.dismissable .notification-close:active{box-shadow:none;}
+@media (min-width:576px){.notification{padding:1.333rem;padding-right:3.556rem;}
+.notification h5{font-size:0.833rem;}
+.notification p{font-size:0.778rem;margin:1.333rem 0 0 0;}
+.notification.with-icon h5,.notification.with-icon p{margin-left:1.778rem;}}
+@media (min-width:768px){.notification{width:376px;bottom:16px;right:16px;border-radius:4px;border-top:none;box-shadow:0 0 1rem rgba(0,0,0,0.15);}
+.notification.with-icon{border-left:4px solid hsl(210deg,16.9590643275%,43.605%);border-top:none;}
+.notification.top-fix{border-top-left-radius:0;border-top-right-radius:0;top:0;left:50%;transform:translateX(-50%);bottom:auto;right:auto;}
+.notification.bottom-fix{border-bottom-left-radius:0;border-bottom-right-radius:0;left:50%;transform:translateX(-50%);bottom:0;right:auto;}
+.notification.left-fix{border-top-left-radius:0;border-bottom-left-radius:0;border-left:none;border-right-style:solid;border-right-width:4px;left:0;right:auto;top:50%;bottom:auto;transform:translateY(-50%);}
+.notification.right-fix{border-top-right-radius:0;border-bottom-right-radius:0;right:0;top:50%;bottom:auto;transform:translateY(-50%);}}
+#notification-center{position:fixed;right:0;bottom:0;}
+#notification-center .notification{position:relative;}
+#notification-center{z-index:99999999;}
+/* app */
+.waitpls{display:none;position:fixed;z-index:2000;top:0;left:0;height:100%;width:100%;background:rgba(255,255,255,.8) url('../images/wait.gif') 50% 50% no-repeat;}
+body.loading .waitpls{overflow:hidden;display:block;}

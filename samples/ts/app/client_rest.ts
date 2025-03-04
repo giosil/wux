@@ -7,7 +7,7 @@ namespace APP {
 		if(!h || h.indexOf('localhost') >= 0) return "http://localhost:8081";
 		let s = h.indexOf('.');
 		if(s < 1) return "http://localhost:8081";
-		return p + '//hcm-services' + h.substring(s);
+		return p + '//api' + h.substring(s);
 	}
 	
 	export class HttpClient {

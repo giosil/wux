@@ -195,7 +195,7 @@ namespace APP {
 			this.table = new WUX.WDXTable(this.subId('tapp'), h, k);
 			this.table.selectionMode = 'single';
 			this.table.filter = true;
-			this.table.exportFile = "competenze";
+			this.table.exportFile = "entities";
 			this.table.types = ['s', 's'];
 			this.table.paging = true;
 			this.table.pageSize = 5;
@@ -469,7 +469,7 @@ namespace APP {
 				this.dlg.setState(s[x]);
 				this.dlg.show(this);
 			});
-			this.table.onDoubleClick((e: {element?: Element; rowElement?: Element; data?: Competenza; rowIndex?: number; }) => {
+			this.table.onDoubleClick((e: {element?: Element; rowElement?: Element; data?: any; rowIndex?: number; }) => {
 				this.dlg.setProps('view');
 				this.dlg.setState(e.data);
 				this.dlg.show(this);

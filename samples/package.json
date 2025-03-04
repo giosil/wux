@@ -1,0 +1,21 @@
+{
+  "name": "wux-samples",
+  "version": "2.0.0",
+  "description": "",
+  "main": "./dist/app.js",
+  "type": "module",
+  "scripts": {
+    "compile:wux": "tsc --declaration --project ./ts/wux/tsconfig.json",
+    "compile:app": "tsc --declaration --project ./ts/app/tsconfig.json",
+    "minify:wux": "uglifyjs -c -o ./dist/wux.dx.min.js -m -- ./dist/wux.dx.js",
+    "minify:app": "uglifyjs -c -o ./dist/app.min.js -m -- ./dist/app.js",
+    "build": "npm run compile:wux && npm run compile:app && npm run minify:wux && npm run minify:app",
+    "build_app": "npm run compile:app && npm run minify:app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}

@@ -37,7 +37,7 @@ namespace APP {
 		btnDw: WUX.WButton;
 
 		dlg: DlgRatingLevel;
-		
+
 		constructor(id: string) {
 			super(id, 'DlgRating');
 

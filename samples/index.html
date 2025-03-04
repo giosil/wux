@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Spring-samples</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="container" id="single-spa-application">
+      <h1>WUX samples</h1>
+      <div id="view-root"></div>
+    </div>
+    
+    <div id="notification-center"></div>
+    <div id="wux-waitpls" class="waitpls"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="js/portal-config.js?"></script>
+    
+    <script src="../dist/wux.js"></script>
+    <script src="./dist/app.js"></script>
+    
+    <script>
+      WuxDOM.render(new APP.GUIEntities(), 'view-root');
+    </script>
+  </body>
+</html>

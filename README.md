@@ -2,7 +2,7 @@
 
 A Javascript library to build component based user interface.
 
-The project was born from a long experience in the development of portals in the public administration, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
+The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
 - **lightweight**, 
@@ -61,6 +61,8 @@ namespace APP {
   </body>
 </html>
 ```
+
+[See more real world examples.](samples/README.md)
 
 ## SVG Logo
 

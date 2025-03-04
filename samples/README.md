@@ -1,6 +1,12 @@
-# WUX - Wrapped User Experience
+# WUX - Wrapped User Experience - Samples
 
 Here are a few examples.
+
+## Build
+
+- `npm run build`
+
+Open `index.html`.
 
 ## License
 
