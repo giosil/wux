@@ -1,6 +1,6 @@
 # WUX - Wrapped User Experience - Samples
 
-Here are a few examples.
+Here is an example application written in Typescript based on WUX.
 
 ## Build
 
@@ -8,7 +8,7 @@ Here are a few examples.
 
 Open `index.html`.
 
-## Main source
+## Main class source
 
 ```typescript
 namespace APP {
@@ -24,13 +24,13 @@ namespace APP {
     main: WUX.WContainer;
     brcr: Breadcrumb;
     form: WUX.WForm;
-    btnFind: WUX.WButton;
+    btnFind:  WUX.WButton;
     btnReset: WUX.WButton;
     btnNew: WUX.WButton;
-    table: WUX.WTable;
-    respg: ResPages;
-    btnpg: BtnPages;
-    btnip: BtnItems;
+    table:  WUX.WTable;
+    respg:  ResPages;
+    btnpg:  BtnPages;
+    btnip:  BtnItems;
 
     // Data
     mock: Mock;
@@ -103,17 +103,17 @@ namespace APP {
       this.brcr = new Breadcrumb();
       this.brcr.add('Entities');
 
+      // Filter form
       this.form = new WUX.WForm(this.subId('form'));
       this.form
         .addRow()
           .addTextField('code', 'Code')
           .addTextField('name', 'Name', {"span": 2});
 
+      // Buttons
       this.btnFind = new WUX.WButton(this.subId('btnFind'), 'Search', 'fa-search', 'btn-icon btn btn-primary', 'margin-right: 0.5rem;');
       this.btnFind.on('click', (e: PointerEvent) => {
-        
         this.doFind();
-        
       });
       this.btnReset = new WUX.WButton(this.subId('btnReset'), 'Cancel', 'fa-undo', 'btn-icon btn btn-secondary');
       this.btnReset.on('click', (e: PointerEvent) => {
@@ -129,6 +129,7 @@ namespace APP {
         this.dlg.show(this);
       });
 
+      // Result table
       let h = ['Code', 'Name', 'View', 'Edit', 'Delete'];
       let k = ['code', 'name', '_v',   '_m',   '_d'];
       this.table = new WUX.WTable(this.subId('tapp'), h, k);
@@ -194,6 +195,7 @@ namespace APP {
         this.refresh(true);
       });
 
+      // Main container
       this.main = new WUX.WContainer();
       this.main
         .before(this.brcr)
@@ -244,8 +246,8 @@ namespace APP {
 
     addActions(r: any): any {
       if(!r) return r;
-      r["_v"] = action('view', r["id"], 'fa-search');
-      r["_m"] = action('edit', r["id"], 'fa-edit');
+      r["_v"] = action('view',   r["id"], 'fa-search');
+      r["_m"] = action('edit',   r["id"], 'fa-edit');
       r["_d"] = action('delete', r["id"], 'fa-trash');
       return r;
     }

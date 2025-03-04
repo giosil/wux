@@ -2,6 +2,8 @@
 
 A Javascript library to build component based user interface.
 
+This first version used was based on JQuery. In the new version JQuery is not required, but is supported.
+
 ## Build
 
 - `git clone https://github.com/giosil/wux.git`
