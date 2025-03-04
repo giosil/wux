@@ -314,6 +314,7 @@ namespace APP {
 
 	export class LookupDip extends LookupField {
 		dlg: DlgDipendenti;
+		auto: boolean;
 
 		constructor(id?: string) {
 			super(id ? id : '*', 'LookupDip');
@@ -323,6 +324,7 @@ namespace APP {
 			this.icon = 'fa-user';
 			this.hint = 'Ricerca dipendente...';
 			this.onSearch((e: WUX.WEvent) => {
+				if (!this.enabled) return;
 				if (!this.readonly) {
 					this.dlg.filter = this.getFilter();
 				}
@@ -366,6 +368,25 @@ namespace APP {
 				}
 			}
 			return { cognome: t };
+		}
+
+		protected componentDidMount(): void {
+			super.componentDidMount();
+
+			if (!this.auto) return;
+			let u = window['__user'] as string;
+			if(!u) return;
+			let r = window['__role'] as string;
+			if(!r) return;
+			if(u && u.length == 16) {
+				// Verifica ruolo
+				if (r == 'dipendente') {
+					this.setText(u, true);
+					this.setState(u);
+					// Non si consente ulteriore ricerca
+					this.enabled = false;
+				}
+			}
 		}
 	}
 }
