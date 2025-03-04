@@ -123,9 +123,9 @@ namespace APP {
 			this.dlg.onHiddenModal((e: JQueryEventObject) => {
 				if (!this.dlg.ok) return;
 				
-				// Azione
+				// Action
 				let a = this.dlg.getProps();
-				// Valori
+				// Data
 				let s = this.dlg.getState();
 				if(!a || !s) return;
 				console.log('dlg action,state', a, s);
@@ -156,7 +156,7 @@ namespace APP {
 				}
 			});
 		}
-		
+
 		override render() {
 			this.brcr = new Breadcrumb();
 			this.brcr.add('Entities');
@@ -200,7 +200,7 @@ namespace APP {
 				console.log('click a=', a);
 				if(!a || !a.ref) return;
 				if(a.name == 'sort') return;
-				
+
 				let s = this.table.getState();
 				let x = WUtil.indexOf(s, 'id', a.ref);
 				if(x < 0) return;
@@ -221,7 +221,7 @@ namespace APP {
 					});
 					return;
 				}
-				
+
 				this.dlg.setProps(a.name);
 				this.dlg.setState(s[x]);
 				this.dlg.show(this);
@@ -232,20 +232,20 @@ namespace APP {
 				this.dlg.show(this);
  			});
 
-			// Componenti di paginazione
-			// Selezione pagina da link
+			// Pagination components
+			// Link to page
 			this.respg = new ResPages(this.subId('respg'));
 			this.respg.on('statechange', (e: WUX.WEvent) => {
 				this.table.page = this.respg.getState();
 				this.refresh(true);
 			});
-			// Selezione pagina da select
+			// Page selection
 			this.btnpg = new BtnPages(this.subId('btnpg'));
 			this.btnpg.on('statechange', (e: WUX.WEvent) => {
 				this.table.page = this.btnpg.getState();
 				this.refresh(true);
 			});
-			// Numero elementi per pagina
+			// Items per page
 			this.btnip = new BtnItems(this.subId('btnip'));
 			this.btnip.on('statechange', (e: WUX.WEvent) => {
 				this.table.page = 1;
@@ -279,13 +279,13 @@ namespace APP {
 		}
 
 		doFind() {
-			// Validazione
+			// Validation
 			let m = this.form.checkMandatory(true, true, true);
 			if(m) {
 				showWarning('Check: ' + m);
 				return;
 			}
-			// Ricerca
+			// Search
 			let filter = this.form.getState();
 			http.get('entities/find', filter, (data: Entity[]) => {
 				if(!data) data = [];
@@ -308,7 +308,7 @@ namespace APP {
 			r["_d"] = action('delete', r["id"], 'fa-trash');
 			return r;
 		}
-		
+
 		refresh(updTable: boolean = false) {
 			if(updTable) this.table.forceUpdate();
 			let data = this.table.getState();
