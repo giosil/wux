@@ -284,13 +284,14 @@ namespace APP {
 
 	export class DlgConfirm extends WUX.WDialog<string, boolean> {
 		_msg: string;
+		readonly DEF_MSG = 'Do you want to proceed with the operation?';
 
 		constructor(id?: string, msg?: string) {
 			super(id ? id : '*', 'DlgConfirm');
 			
 			this.title = "Confirm";
 			this._msg = msg;
-			if(!this._msg) this._msg = "Do you want to proceed with the operation?";
+			if(!this._msg) this._msg = this.DEF_MSG;
 			
 			this.body.addRow().addCol('12').add(this._msg);
 		}
@@ -300,7 +301,7 @@ namespace APP {
 		}
 		set message(s: string) {
 			this._msg = s;
-			if(!this._msg) this._msg = "Do you want to proceed with the operation?";
+			if(!this._msg) this._msg = this.DEF_MSG;
 			let em = this.body.getElement(0, 0);
 			if(em) em.innerText = this._msg;
 		}

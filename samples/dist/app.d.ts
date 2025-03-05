@@ -100,6 +100,7 @@ declare namespace APP {
     }
     class DlgConfirm extends WUX.WDialog<string, boolean> {
         _msg: string;
+        readonly DEF_MSG = "Do you want to proceed with the operation?";
         constructor(id?: string, msg?: string);
         get message(): string;
         set message(s: string);
@@ -114,7 +115,7 @@ declare namespace APP {
         name?: string;
     }
     class DlgEntity extends WUX.WDialog<string, Entity> {
-        fp: WUX.WForm;
+        form: WUX.WForm;
         constructor(id: string);
         updateState(nextState: Entity): void;
         getState(): Entity;

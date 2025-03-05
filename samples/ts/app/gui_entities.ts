@@ -11,44 +11,44 @@ namespace APP {
 	}
 
 	export class DlgEntity extends WUX.WDialog<string, Entity> {
-		fp: WUX.WForm;
+		form: WUX.WForm;
 
 		constructor(id: string) {
 			super(id, 'DlgEntity');
 			
 			this.title = 'Entity';
 
-			this.fp = new WUX.WForm(this.subId('fp'));
-			this.fp.addRow();
-			this.fp.addTextField('code', 'Code');
-			this.fp.addRow();
-			this.fp.addTextField('name', 'Name');
-			this.fp.addInternalField('id');
+			this.form = new WUX.WForm(this.subId('form'));
+			this.form.addRow();
+			this.form.addTextField('code', 'Code');
+			this.form.addRow();
+			this.form.addTextField('name', 'Name');
+			this.form.addInternalField('id');
 
-			this.fp.setMandatory('code', 'name')
+			this.form.setMandatory('code', 'name')
 			
 			this.body
 				.addRow()
 					.addCol('col-md-12')
-						.add(this.fp);
+						.add(this.form);
 		}
 
 		override updateState(nextState: Entity): void {
 			this.state = nextState;
-			if(this.fp) {
-				this.fp.clear();
-				this.fp.setState(this.state);
+			if(this.form) {
+				this.form.clear();
+				this.form.setState(this.state);
 			}
 		}
 
 		override getState(): Entity {
-			if(this.fp) this.state = this.fp.getState();
+			if(this.form) this.state = this.form.getState();
 			return this.state;
 		}
 
 		override onClickOk(): boolean {
 			if(this.props == 'new' || this.props == 'edit') {
-				let m = this.fp.checkMandatory(true, true);
+				let m = this.form.checkMandatory(true, true);
 				if(m) {
 					showWarning('Check: ' + m);
 					return false;
@@ -59,19 +59,19 @@ namespace APP {
 
 		protected onShown() {
 			if(this.props == 'view') {
-				this.fp.enabled = false;
+				this.form.enabled = false;
 				this.updButtons('Close', '');
 			}
 			else {
-				this.fp.enabled = true;
+				this.form.enabled = true;
 				this.updButtons('Save');
 				if(this.props == 'edit') {
-					this.fp.setReadOnly('code', true);
-					setTimeout(() => { this.fp.focusOn('name'); });
+					this.form.setReadOnly('code', true);
+					setTimeout(() => { this.form.focusOn('name'); });
 				}
 				else {
-					this.fp.setReadOnly('code', false);
-					setTimeout(() => { this.fp.focusOn('code'); });
+					this.form.setReadOnly('code', false);
+					setTimeout(() => { this.form.focusOn('code'); });
 				}
 			}
 		}

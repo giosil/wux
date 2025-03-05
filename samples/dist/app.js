@@ -833,10 +833,11 @@ var APP;
         __extends(DlgConfirm, _super);
         function DlgConfirm(id, msg) {
             var _this = _super.call(this, id ? id : '*', 'DlgConfirm') || this;
+            _this.DEF_MSG = 'Do you want to proceed with the operation?';
             _this.title = "Confirm";
             _this._msg = msg;
             if (!_this._msg)
-                _this._msg = "Do you want to proceed with the operation?";
+                _this._msg = _this.DEF_MSG;
             _this.body.addRow().addCol('12').add(_this._msg);
             return _this;
         }
@@ -847,7 +848,7 @@ var APP;
             set: function (s) {
                 this._msg = s;
                 if (!this._msg)
-                    this._msg = "Do you want to proceed with the operation?";
+                    this._msg = this.DEF_MSG;
                 var em = this.body.getElement(0, 0);
                 if (em)
                     em.innerText = this._msg;
@@ -875,34 +876,34 @@ var APP;
         function DlgEntity(id) {
             var _this = _super.call(this, id, 'DlgEntity') || this;
             _this.title = 'Entity';
-            _this.fp = new WUX.WForm(_this.subId('fp'));
-            _this.fp.addRow();
-            _this.fp.addTextField('code', 'Code');
-            _this.fp.addRow();
-            _this.fp.addTextField('name', 'Name');
-            _this.fp.addInternalField('id');
-            _this.fp.setMandatory('code', 'name');
+            _this.form = new WUX.WForm(_this.subId('form'));
+            _this.form.addRow();
+            _this.form.addTextField('code', 'Code');
+            _this.form.addRow();
+            _this.form.addTextField('name', 'Name');
+            _this.form.addInternalField('id');
+            _this.form.setMandatory('code', 'name');
             _this.body
                 .addRow()
                 .addCol('col-md-12')
-                .add(_this.fp);
+                .add(_this.form);
             return _this;
         }
         DlgEntity.prototype.updateState = function (nextState) {
             this.state = nextState;
-            if (this.fp) {
-                this.fp.clear();
-                this.fp.setState(this.state);
+            if (this.form) {
+                this.form.clear();
+                this.form.setState(this.state);
             }
         };
         DlgEntity.prototype.getState = function () {
-            if (this.fp)
-                this.state = this.fp.getState();
+            if (this.form)
+                this.state = this.form.getState();
             return this.state;
         };
         DlgEntity.prototype.onClickOk = function () {
             if (this.props == 'new' || this.props == 'edit') {
-                var m = this.fp.checkMandatory(true, true);
+                var m = this.form.checkMandatory(true, true);
                 if (m) {
                     APP.showWarning('Check: ' + m);
                     return false;
@@ -913,19 +914,19 @@ var APP;
         DlgEntity.prototype.onShown = function () {
             var _this = this;
             if (this.props == 'view') {
-                this.fp.enabled = false;
+                this.form.enabled = false;
                 this.updButtons('Close', '');
             }
             else {
-                this.fp.enabled = true;
+                this.form.enabled = true;
                 this.updButtons('Save');
                 if (this.props == 'edit') {
-                    this.fp.setReadOnly('code', true);
-                    setTimeout(function () { _this.fp.focusOn('name'); });
+                    this.form.setReadOnly('code', true);
+                    setTimeout(function () { _this.form.focusOn('name'); });
                 }
                 else {
-                    this.fp.setReadOnly('code', false);
-                    setTimeout(function () { _this.fp.focusOn('code'); });
+                    this.form.setReadOnly('code', false);
+                    setTimeout(function () { _this.form.focusOn('code'); });
                 }
             }
         };
@@ -958,9 +959,9 @@ var APP;
             _this.dlg.onHiddenModal(function (e) {
                 if (!_this.dlg.ok)
                     return;
-                // Azione
+                // Action
                 var a = _this.dlg.getProps();
-                // Valori
+                // Data
                 var s = _this.dlg.getState();
                 if (!a || !s)
                     return;
@@ -1064,20 +1065,20 @@ var APP;
                 _this.dlg.setState(e.data);
                 _this.dlg.show(_this);
             });
-            // Componenti di paginazione
-            // Selezione pagina da link
+            // Pagination components
+            // Link to page
             this.respg = new APP.ResPages(this.subId('respg'));
             this.respg.on('statechange', function (e) {
                 _this.table.page = _this.respg.getState();
                 _this.refresh(true);
             });
-            // Selezione pagina da select
+            // Page selection
             this.btnpg = new APP.BtnPages(this.subId('btnpg'));
             this.btnpg.on('statechange', function (e) {
                 _this.table.page = _this.btnpg.getState();
                 _this.refresh(true);
             });
-            // Numero elementi per pagina
+            // Items per page
             this.btnip = new APP.BtnItems(this.subId('btnip'));
             this.btnip.on('statechange', function (e) {
                 _this.table.page = 1;
@@ -1109,13 +1110,13 @@ var APP;
         };
         GUIEntities.prototype.doFind = function () {
             var _this = this;
-            // Validazione
+            // Validation
             var m = this.form.checkMandatory(true, true, true);
             if (m) {
                 APP.showWarning('Check: ' + m);
                 return;
             }
-            // Ricerca
+            // Search
             var filter = this.form.getState();
             APP.http.get('entities/find', filter, function (data) {
                 if (!data)
