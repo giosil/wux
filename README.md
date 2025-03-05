@@ -95,6 +95,12 @@ this.main
 **WForm** allows you to implement an HTML form.
 
 ```typescript
+let options: WUX.WEntity[] = [
+  {id: 'N', text: ''},
+  {id: 'M', text: 'Male'}, 
+  {id: 'F', text: 'Female'}
+];
+
 this.form = new WUX.WForm(this.subId('form'));
 this.form
   .addRow()
@@ -108,12 +114,12 @@ this.form
 // Validation
 this.form.setMandatory('name', 'gender');
 
-let returnLabels = true;
-let focusOn = true;
-let atLeastOne = false;
-let m = this.form.checkMandatory(returnLabels, focusOn, atLeastOne);
-if(m) {
-  alert('Check: ' + m);
+let returnLabels  = true;
+let focusOn       = true;
+let atLeastOne    = false;
+let invalidFields = this.form.checkMandatory(returnLabels, focusOn, atLeastOne);
+if(invalidFields) {
+  alert('Check: ' + invalidFields);
   return;
 }
 ```
@@ -123,7 +129,13 @@ if(m) {
 **WButton** allows you to implement an HTML button and handle related events.
 
 ```typescript
-this.btnFind = new WUX.WButton(this.subId('btnFind'), 'Search', 'fa-search', 'btn-icon btn btn-primary', 'margin-right: 0.5rem;');
+this.btnFind = new WUX.WButton(
+  this.subId('btnFind'), 
+  'Esegui ricerca', 
+  'fa-search', 
+  'btn-icon btn btn-primary', 
+  'margin-right: 0.5rem;'
+);
 this.btnFind.on('click', (e: PointerEvent) => {
   // Perform operation
 });
@@ -220,7 +232,7 @@ this.pages.show(0);
 
 ```typescript
 export interface Entity {
-  id: number;
+  id:    number;
   code?: string;
   name?: string;
 }
