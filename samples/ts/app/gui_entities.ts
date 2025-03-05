@@ -230,7 +230,7 @@ namespace APP {
 				this.dlg.setProps('view');
 				this.dlg.setState(e.data);
 				this.dlg.show(this);
- 			});
+			});
 
 			// Pagination components
 			// Link to page

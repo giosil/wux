@@ -66,7 +66,7 @@ The methods that can be implemented in **WUX**, as in React, to control the beha
 
 ## Components
 
-In addition to the development model, WUX offers some ready-to-use components that are frequently used in web applications.
+In addition to the development model, WUX offers some ready-to-use components that are frequently used in modern web applications.
 
 Below are some of the more relevant components.
 
@@ -130,15 +130,63 @@ if(invalidFields) {
 
 ```typescript
 this.btnFind = new WUX.WButton(
-  this.subId('btnFind'), 
-  'Esegui ricerca', 
-  'fa-search', 
-  'btn-icon btn btn-primary', 
-  'margin-right: 0.5rem;'
+  this.subId('btnFind'),       // Element id
+  'Search',                    // Caption
+  'fa-search',                 // Icon
+  'btn-icon btn btn-primary',  // Style class
+  'margin-right: 0.5rem;'      // Inline style
 );
 this.btnFind.on('click', (e: PointerEvent) => {
   // Perform operation
 });
+
+this.btnReset = new WUX.WButton(
+  this.subId('btnReset'),      // Element id
+  'Cancel',                    // Caption
+  'fa-undo',                   // Icon
+  'btn-icon btn btn-secondary' // Style class
+);
+this.btnReset.on('click', (e: PointerEvent) => {
+  this.form.clear();
+  this.form.focus();
+  this.table.setState([]);
+});
+```
+
+### WUX.WLink
+
+**WLink** allows you to implement an HTML link and handle related events.
+
+```typescript
+let fid  = 5;
+let link = new WUX.WLink(
+  this.subId('file-' + fid), // Element id
+  'Link to file',            // Caption
+  'fa-file',                 // Icon
+  'text-primary',            // Style class
+  'cursor:pointer;'          // Inline style
+);
+link.lock = true; // Inhibits state change (Caption)
+link.tooltip = 'Download file';
+link.on('click', (e: MouseEvent) => {
+  let cid = WUX.getId(e.currentTarget);
+  let fid = WUtil.toNumber(WUX.lastSub(cid));
+  // Perform operation
+});
+```
+
+### WUX.WLabel
+
+**WLink** allows you to implement an HTML span or label (if "for" attribute setted).
+
+```typescript
+let label = new WUX.WLabel(
+  this.subId('label'),    // Element id
+  'Text',                 // Text
+  'fa-circle-info',       // Icon
+  'text-primary',         // Style class
+  'margin-right: 0.5rem;' // Inline style
+);
 ```
 
 ### WUX.WTable
@@ -146,13 +194,16 @@ this.btnFind.on('click', (e: PointerEvent) => {
 **WTable** allows you to implement an HTML table.
 
 ```typescript
+// Header captions
 let h = ['Code', 'Name', 'View', 'Edit', 'Delete'];
+// Header symbols
 let k = ['code', 'name', '_v',   '_m',   '_d'];
 this.table = new WUX.WTable(this.subId('tapp'), h, k);
 this.table.selectionMode = 'single';
 this.table.div = 'table-responsive';
 this.table.types = ['s', 's', 'w', 'w', 'w'];
 this.table.sortable = [0, 1];
+// Click event
 this.table.on('click', (e: PointerEvent) => {
   let a = WUX.getAction(e, this);
   if(!a || !a.ref) return;
@@ -162,8 +213,22 @@ this.table.on('click', (e: PointerEvent) => {
   if(x < 0) return;
   // Perform operation
 });
+// DoubleClick event
 this.table.onDoubleClick((e: {element?: Element; rowElement?: Element; data?: any; rowIndex?: number; }) => {
   // Perform operation
+});
+// Selection event
+this.table.onSelectionChanged((e: {element?: Element, selectedRowsData?: any[]}) => {
+  let srs = this.table.getSelectedRows();     // array of selected indexes
+  let srd = this.table.getSelectedRowsData(); // array of selected data
+  // Perform operation
+});
+// RowPrepared event 
+this.table.onRowPrepared((e: {element?: Element, rowElement?: Element, data?: any, rowIndex?: number}) => {
+  let mark = e.data['mark'];
+  if (mark) {
+    WUX.setCss(e.rowElement, 'background-color: #ffffee');
+  }
 });
 
 // Let "data" be an array containing the records to be displayed in the table
@@ -302,6 +367,24 @@ export class DlgEntity extends WUX.WDialog<string, Entity> {
       }
     }
   }
+}
+
+// The Dialog is typically created in the constructor of component that manages it.
+constructor() {
+  super();
+  this.dlg = new DlgEntity(this.subId('dlg'));
+  // this.dlg.fullscreen = true;
+  this.dlg.onHiddenModal((e: JQueryEventObject) => {
+    if (!this.dlg.ok) return;
+    // Perform operation
+  }
+}
+
+showDialog() {
+  // To show dialog
+  this.dlg.setProps(props);
+  this.dlg.setState(state);
+  this.dlg.show(this);
 }
 ```
 
