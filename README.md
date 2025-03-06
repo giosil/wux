@@ -64,6 +64,8 @@ The methods that can be implemented in **WUX**, as in React, to control the beha
 <tr><td>The <strong>componentWillUnmount()</strong> method is called just before the component is removed from the DOM. It allows you to perform any necessary cleanup or clearing any data structures that were set up during the mounting phase.</td></tr>
 </table>
 
+![WUX Lifecycle](WUX_lifecycle.png)
+
 ## Components
 
 In addition to the development model, WUX offers some ready-to-use components that are frequently used in modern web applications.
