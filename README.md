@@ -122,6 +122,26 @@ if(invalidFields) {
   alert('Check: ' + invalidFields);
   return;
 }
+
+// Utilities
+
+// Clear all fields
+this.form.clear();
+
+// Enable / Disable a field
+this.form.setEnabled('date', false);
+
+// Set focus on a field
+this.form.focusOn('name');
+
+// Find option by text
+this.form.findOption('gender', 'Male');
+
+// Load options later
+this.form.setOptions('gender', options);
+
+// Set nested value
+this.form.setValueOf('name', booking, 'person.name');
 ```
 
 ### WUX.WButton
@@ -173,6 +193,42 @@ link.on('click', (e: MouseEvent) => {
   let fid = WUtil.toNumber(WUX.lastSub(cid));
   // Perform operation
 });
+```
+
+### WUX.WInput
+
+**WInput** allows you to implement an HTML input and handle related events.
+
+```typescript
+let input = new WUX.WInput(this.subId('inp'), 'text', 20);
+input.placeHolder = 'Search...';
+input.readonly = false;
+input.enabled = true;
+input.autofocus = true;
+input.onEnter((e: KeyboardEvent) => {
+  // Perform operation
+});
+```
+
+### WUX.WSelect
+
+**WSelect** allows you to implement an HTML select and handle related events.
+
+```typescript
+let options: WUX.WEntity[] = [
+  {id: 'N', text: ''},
+  {id: 'M', text: 'Male'}, 
+  {id: 'F', text: 'Female'}
+];
+
+let select = new WUX.WSelect(this.subId('sel'));
+select.setOptions(options);
+select.on('statechange', (e: WUX.WEvent) => {
+  console.log('sel statechange', e);
+});
+
+// Find option by text
+let optM = select.findOption('Male');
 ```
 
 ### WUX.WLabel
@@ -380,12 +436,10 @@ constructor() {
   }
 }
 
-showDialog() {
-  // To show dialog
-  this.dlg.setProps(props);
-  this.dlg.setState(state);
-  this.dlg.show(this);
-}
+// To show dialog
+this.dlg.setProps(props);
+this.dlg.setState(state);
+this.dlg.show(this);
 ```
 
 ## SVG Logo
