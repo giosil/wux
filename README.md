@@ -4,10 +4,14 @@ A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
+The main idea was to support the development of modern web applications based on the preferred theme and components in some cases imposed by the guidelines without using more difficult to customize frameworks.
+
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
 - **lightweight**, 
 - **flexible**, 
 - **easy-to-use**.
+
+By installing Typescript globally there are no additional direct dependencies. In other words, **you no longer have to deal with large node_modules directories**.
 
 It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/) (see the [micro-wux](https://github.com/giosil/micro-wux) repository).
 
@@ -20,7 +24,9 @@ It is also suitable for writing microfrontends with [single-spa](https://single-
 - `npm install uglify-js -g`
 - `npm run build`
 
-## Example
+## Examples
+
+The simplest example of WUX.WComponent is as follows:
 
 ```typescript
 namespace APP {
@@ -31,6 +37,36 @@ namespace APP {
   }
 }
 ```
+
+The **render()** method can also return an HTML element.
+
+```typescript
+namespace APP {
+  export class Main extends WUX.WComponent {
+    protected render() {
+      let element = document.createElement('div');
+      element.textContent = 'Hello World!'
+      return element;
+    }
+  }
+}
+```
+
+Finally, the **render()** method can also return an instance of WUX.WComponent.
+
+```typescript
+namespace APP {
+  export class Main extends WUX.WComponent {
+    protected render() {
+      return new WUX.Wrapp('Hello World!', 'div');
+    }
+  }
+}
+```
+
+This way you can develop a view by composing strings, elements and instances of WUX.WComponent.
+
+To mount a view, simply write:
 
 ```html
 <!DOCTYPE html>
@@ -62,15 +98,19 @@ The methods that can be implemented in **WUX**, as in React, to control the beha
 <tr><td>The <strong>componentWillUpdate()</strong> method is called just before a component's update cycle starts. It allows you to perform any necessary actions before the component updates.</td></tr>
 <tr><td>The <strong>componentDidUpdate()</strong> method is called after a component has been updated and re-rendered. It is useful for performing side effects or additional operations when the component's props or state have changed.</td></tr>
 <tr><td>The <strong>componentWillUnmount()</strong> method is called just before the component is removed from the DOM. It allows you to perform any necessary cleanup or clearing any data structures that were set up during the mounting phase.</td></tr>
+<tr><td>The <strong>updateState(nextState: S)</strong> method is called when the <strong>state</strong> needs to be updated.</td></tr>
+<tr><td>The <strong>updateProps(nextProps: P)</strong> method is called when the <strong>props</strong> needs to be updated.</td></tr>
 </table>
 
 ![WUX Lifecycle](WUX.png)
 
-## Components
+## Wrapper like components
 
-In addition to the development model, WUX offers some ready-to-use components that are frequently used in modern web applications.
+In WUX a component is effectively a wrapper.
 
-Below are some of the more relevant components.
+In addition to the development model, WUX offers some ready-to-use wrappers that are frequently used in web applications.
+
+Below are some of the more relevant wrappers.
 
 ### WUX.WContainer
 
