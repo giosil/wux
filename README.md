@@ -110,10 +110,10 @@ Additional methods and properties are listed below.
 <tr><td>The <strong>updateState(nextState: S)</strong> method is called when the <strong>state</strong> needs to be updated.</td></tr>
 <tr><td>The <strong>updateProps(nextProps: P)</strong> method is called when the <strong>props</strong> needs to be updated.</td></tr>
 <tr><td>The <strong>buildRoot, build, make</strong> methods are called in **render** default implementation.</td></tr>
-<tr><td>The <strong>on, off, trigger</strong> methods allow you to handle events provided by the DOM or custom events.</td></tr>
+<tr><td>The <strong>on, off, trigger</strong> methods allow you to handle events provided by the DOM or custom events (the event name begins with an underscore).</td></tr>
 <tr><td>The <strong>style, classStyle, attributes</strong> properties allow you to characterize the component in terms of presentation.</td></tr>
 <tr><td>The <strong>visible, enabled</strong> properties allow you to respectively make the component visible or not and enable or disable it.</td></tr>
-<tr><td>The <strong>focus, blur</strong> methods allow you to handle the focus on the component.</td></tr>
+<tr><td>The <strong>focus(), blur()</strong> methods allow you to handle the focus on the component.</td></tr>
 <tr><td>The <strong>forceUpdate()</strong> method forces the component to update.</td></tr>
 <tr><td>The <strong>getRoot()</strong> method returns the root element of the component.</td></tr>
 <tr><td>The <strong>getContext()</strong> method returns the element on which the component was mounted.</td></tr>
