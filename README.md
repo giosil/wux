@@ -13,6 +13,8 @@ The **WUX** library is inspired by [React](https://react.dev) for component life
 
 By installing Typescript globally there are no additional direct dependencies. In other words, **you no longer have to deal with large node_modules directories**.
 
+**JQuery** is supported, but NOT required.
+
 It is also suitable for writing microfrontends with [single-spa](https://single-spa.js.org/) (see the [micro-wux](https://github.com/giosil/micro-wux) repository).
 
 [See a sample application.](samples/)
@@ -44,9 +46,9 @@ The **render()** method can also return an HTML element.
 namespace APP {
   export class Main extends WUX.WComponent {
     protected render() {
-      let element = document.createElement('div');
-      element.textContent = 'Hello World!'
-      return element;
+      let ele = document.createElement('div');
+      ele.textContent = 'Hello World!'
+      return ele;
     }
   }
 }
@@ -98,11 +100,24 @@ The methods that can be implemented in **WUX**, as in React, to control the beha
 <tr><td>The <strong>componentWillUpdate()</strong> method is called just before a component's update cycle starts. It allows you to perform any necessary actions before the component updates.</td></tr>
 <tr><td>The <strong>componentDidUpdate()</strong> method is called after a component has been updated and re-rendered. It is useful for performing side effects or additional operations when the component's props or state have changed.</td></tr>
 <tr><td>The <strong>componentWillUnmount()</strong> method is called just before the component is removed from the DOM. It allows you to perform any necessary cleanup or clearing any data structures that were set up during the mounting phase.</td></tr>
-<tr><td>The <strong>updateState(nextState: S)</strong> method is called when the <strong>state</strong> needs to be updated.</td></tr>
-<tr><td>The <strong>updateProps(nextProps: P)</strong> method is called when the <strong>props</strong> needs to be updated.</td></tr>
 </table>
 
 ![WUX Lifecycle](WUX.png)
+
+Additional methods and properties are listed below.
+
+<table>
+<tr><td>The <strong>updateState(nextState: S)</strong> method is called when the <strong>state</strong> needs to be updated.</td></tr>
+<tr><td>The <strong>updateProps(nextProps: P)</strong> method is called when the <strong>props</strong> needs to be updated.</td></tr>
+<tr><td>The <strong>buildRoot, build, make</strong> methods are called in **render** default implementation.</td></tr>
+<tr><td>The <strong>on, off, trigger</strong> methods allow you to handle events provided by the DOM or custom events.</td></tr>
+<tr><td>The <strong>style, classStyle, attributes</strong> properties allow you to characterize the component in terms of presentation.</td></tr>
+<tr><td>The <strong>visible, enabled</strong> properties allow you to respectively make the component visible or not and enable or disable it.</td></tr>
+<tr><td>The <strong>focus, blur</strong> methods allow you to handle the focus on the component.</td></tr>
+<tr><td>The <strong>forceUpdate()</strong> method forces the component to update.</td></tr>
+<tr><td>The <strong>getRoot()</strong> method returns the root element of the component.</td></tr>
+<tr><td>The <strong>getContext()</strong> method returns the element on which the component was mounted.</td></tr>
+</table>
 
 ## Wrapper like components
 
@@ -184,6 +199,12 @@ this.form.setOptions('gender', options);
 
 // Set nested value
 this.form.setValueOf('name', booking, 'person.name');
+
+// Set single value
+this.form.setValue('name', 'Jhon');
+
+// Get single value
+let name = this.form.getValue('name');
 ```
 
 ### WUX.WButton
