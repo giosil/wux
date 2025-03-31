@@ -1,5 +1,5 @@
 ﻿/** 
-	Micro WRAPPED USER EXPERIENCE - WUX
+	WRAPPED USER EXPERIENCE - WUX
 */
 class WuxDOM {
 	public static components: { [id: string]: WUX.WComponent } = {};
