@@ -869,6 +869,622 @@ var APP;
 var APP;
 (function (APP) {
     var WUtil = WUX.WUtil;
+    var WCalendar = /** @class */ (function (_super) {
+        __extends(WCalendar, _super);
+        function WCalendar(id, classStyle, style, attributes) {
+            var _this = 
+            // WComponent init
+            _super.call(this, id ? id : '*', 'WCalendar', 1, classStyle, style, attributes) || this;
+            // Array of marker
+            _this.am = [];
+            // Map date - title
+            _this.mt = {};
+            // Prev month
+            _this.pm = 'Mese precedente';
+            // Next month
+            _this.nm = 'Mese successivo';
+            // Class table
+            _this.ct = 'table table-sm';
+            // Class div table
+            _this.cd = 'table-responsive';
+            // Style previous
+            _this.sp = 'padding:1rem;text-align:center;font-weight:bold;background-color:#eeeeee;';
+            // Style month
+            _this.sm = _this.sp;
+            // Style next
+            _this.sn = _this.sp;
+            // Row (<tr>) style
+            _this.tr = 'height:3rem;';
+            // Style week day
+            _this.sw = 'text-align:center;';
+            // Style day
+            _this.sd = 'text-align:center;vertical-align:middle;';
+            // Style day over
+            _this.so = 'text-align:center;vertical-align:middle;background-color:#f6f6f6;cursor:pointer;';
+            // Style day selected (table-primary)
+            _this.ss = 'text-align:center;vertical-align:middle;background-color:#b8d4f1;';
+            // Style day marked (table-warning)
+            _this.sk = 'text-align:center;vertical-align:middle;background-color:#ffeebc;';
+            // Style empty
+            _this.se = 'background-color:#f0f0f0;';
+            // Style today
+            _this.st = 'font-weight:bold;';
+            // Today
+            _this.td = _this.str(new Date());
+            return _this;
+        }
+        WCalendar.prototype.onDoubleClick = function (handler) {
+            if (!this.handlers['_doubleclick'])
+                this.handlers['_doubleclick'] = [];
+            this.handlers['_doubleclick'].push(handler);
+        };
+        WCalendar.prototype.updateState = function (nextState) {
+            this.state = nextState;
+            if (!this.state)
+                this.state = new Date();
+            var d = this.state.getDate();
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            this.ls = (y * 10000 + (m + 1) * 100 + d) + '';
+        };
+        WCalendar.prototype.render = function () {
+            if (!this.state)
+                this.state = new Date();
+            // Build table
+            var t = '<table id="' + this.subId('t') + '" class="' + this.ct + '"><thead><tr>';
+            for (var x = 0; x < 7; x++) {
+                var k_1 = x == 6 ? 0 : x + 1;
+                t += '<th id="' + this.subId(k_1 + '') + '" style="' + this.sw + '">' + WUX.formatDay(k_1, false) + '</th>';
+            }
+            t += '</tr></thead><tbody id="' + this.subId('b') + '">';
+            t += this.body();
+            t += '</tbody></table>';
+            // Build component
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            var k = y * 100 + m + 1;
+            var p = '<a id="' + this.subId('p') + '" title="' + this.pm + '"><i class="fa fa-arrow-circle-left"></i></a>';
+            var n = '<a id="' + this.subId('n') + '" title="' + this.nm + '"><i class="fa fa-arrow-circle-right"></i></a>';
+            var i = '<div class="row"><div class="col-2" style="' + this.sp + '">' + p + '</div><div id="' + this.subId('m') + '" class="col-8" style="' + this.sm + '">' + WUX.formatMonth(k, true, true) + '</div><div class="col-2" style="' + this.sn + '">' + n + '</div></div>';
+            if (this.cd) {
+                i += '<div class="row"><div class="' + this.cd + '">' + t + '</div></div>';
+            }
+            else {
+                i += '<div class="row"><div class="col-12">' + t + '</div></div>';
+            }
+            return this.buildRoot(this.rootTag, i);
+        };
+        WCalendar.prototype.add = function (a) {
+            if (!this.state)
+                this.state = new Date();
+            var d = this.state.getDate();
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            var r = m + a;
+            var n = new Date(y, r, d);
+            var nm = n.getMonth();
+            if (nm != r) {
+                n = new Date(y, r + 1, 0);
+                nm = n.getMonth();
+            }
+            var ny = n.getFullYear();
+            // Invocare prima del metodo body
+            this.setState(n);
+            if (this.eb) {
+                this.eb.innerHTML = this.body();
+            }
+            if (this.em) {
+                var w = ny * 100 + nm + 1;
+                this.em.innerText = WUX.formatMonth(w, true, true);
+            }
+            return n;
+        };
+        WCalendar.prototype.mark = function () {
+            var p = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                p[_i] = arguments[_i];
+            }
+            if (!p || !p.length)
+                return this;
+            for (var _a = 0, p_1 = p; _a < p_1.length; _a++) {
+                var o = p_1[_a];
+                var dt = WUtil.toDate(o);
+                if (!dt)
+                    continue;
+                var k = this.str(dt);
+                this.am.push(k);
+                if (k == this.ls)
+                    continue;
+                var e = document.getElementById(this.subId(k));
+                if (e)
+                    e.setAttribute('style', this.sk);
+            }
+            return this;
+        };
+        WCalendar.prototype.unmark = function () {
+            var p = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                p[_i] = arguments[_i];
+            }
+            if (!p || !p.length)
+                return this;
+            for (var _a = 0, p_2 = p; _a < p_2.length; _a++) {
+                var o = p_2[_a];
+                var dt = WUtil.toDate(o);
+                if (!dt)
+                    continue;
+                var k = this.str(dt);
+                this.unm(this.am.indexOf(k));
+            }
+            return this;
+        };
+        WCalendar.prototype.title = function (d, t) {
+            var dt = WUtil.toDate(d);
+            if (!dt)
+                return this;
+            var k = this.str(dt);
+            this.mt[k] = t;
+            var e = document.getElementById(this.subId(k));
+            if (e)
+                e.setAttribute('title', t);
+            return this;
+        };
+        WCalendar.prototype.unm = function (i, r) {
+            if (r === void 0) { r = true; }
+            if (i < 0)
+                return;
+            var k = this.am[i];
+            if (!k)
+                return;
+            if (r)
+                this.am.splice(i, 1);
+            var e = document.getElementById(this.subId(k));
+            if (e) {
+                var s = this.str(this.state);
+                if (s == k) {
+                    e.setAttribute('style', this.ss);
+                }
+                else {
+                    e.setAttribute('style', this.sd);
+                }
+            }
+        };
+        WCalendar.prototype.clear = function () {
+            if (this.am && this.am.length) {
+                for (var i = 0; i < this.am.length; i++) {
+                    this.unm(i, false);
+                }
+                this.am = [];
+            }
+            if (this.mt) {
+                for (var k in this.mt) {
+                    var e = document.getElementById(this.subId(k));
+                    if (e)
+                        e.setAttribute('title', null);
+                }
+                this.mt = {};
+            }
+            return this;
+        };
+        WCalendar.prototype.prev = function () {
+            return this.add(-1);
+        };
+        WCalendar.prototype.next = function () {
+            return this.add(1);
+        };
+        WCalendar.prototype.ele = function (dt) {
+            if (!dt)
+                return null;
+            return document.getElementById(this.subId(this.str(dt)));
+        };
+        WCalendar.prototype.str = function (dt) {
+            if (!dt)
+                return null;
+            return (dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate()) + '';
+        };
+        WCalendar.prototype.from = function () {
+            if (!this.state)
+                this.state = new Date();
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            return (y * 10000 + (m + 1) * 100 + 1) + '';
+        };
+        WCalendar.prototype.to = function () {
+            if (!this.state)
+                this.state = new Date();
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            // Last day
+            var n = new Date(y, m + 1, 0);
+            var d = n.getDate();
+            return (y * 10000 + (m + 1) * 100 + d) + '';
+        };
+        WCalendar.prototype.body = function () {
+            if (!this.state)
+                this.state = new Date();
+            var b = '';
+            // Current state
+            var d = this.state.getDate();
+            var m = this.state.getMonth();
+            var y = this.state.getFullYear();
+            this.ls = (y * 10000 + (m + 1) * 100 + d) + '';
+            // First day of month
+            var h = new Date(y, m, 1);
+            var w = h.getDay();
+            if (w == 0)
+                w = 7;
+            // Last day of month
+            var j = new Date(y, m + 1, 0);
+            var l = j.getDate();
+            var z = 1;
+            for (var r = 1; r <= 6; r++) {
+                if (this.tr) {
+                    b += '<tr style="' + this.tr + '">';
+                }
+                else {
+                    b += '<tr>';
+                }
+                // rows
+                for (var c = 1; c <= 7; c++) {
+                    // cols
+                    if (r == 1 && c < w) {
+                        // empty cell in first row
+                        b += '<td style="' + this.se + '"></td>';
+                    }
+                    else if (z > l) {
+                        // empty cell in last row
+                        b += '<td style="' + this.se + '"></td>';
+                    }
+                    else {
+                        var k = (y * 10000 + (m + 1) * 100 + z) + '';
+                        var t = k == this.td ? this.st : '';
+                        var a = this.mt[k];
+                        a = a ? ' title="' + a + '"' : '';
+                        if (k == this.ls) {
+                            b += '<td id="' + this.subId(k) + '" style="' + this.ss + t + '"' + a + '>' + z + '</td>';
+                        }
+                        else {
+                            if (this.am.indexOf(k) >= 0) {
+                                b += '<td id="' + this.subId(k) + '" style="' + this.sk + t + '"' + a + '>' + z + '</td>';
+                            }
+                            else {
+                                b += '<td id="' + this.subId(k) + '" style="' + this.sd + t + '"' + a + '>' + z + '</td>';
+                            }
+                        }
+                        z++;
+                    }
+                }
+                b += '</tr>';
+                if (z > l)
+                    break;
+            }
+            return b;
+        };
+        WCalendar.prototype.componentDidMount = function () {
+            var _this = this;
+            this.ep = document.getElementById(this.subId('p'));
+            this.em = document.getElementById(this.subId('m'));
+            this.en = document.getElementById(this.subId('n'));
+            this.et = document.getElementById(this.subId('t'));
+            this.eb = document.getElementById(this.subId('b'));
+            if (this.ep) {
+                this.ep.addEventListener('click', function (e) {
+                    _this.prev();
+                });
+            }
+            if (this.en) {
+                this.en.addEventListener('click', function (e) {
+                    _this.next();
+                });
+            }
+            this.root.addEventListener('click', function (e) {
+                var s = WUX.lastSub(e.target);
+                if (!s)
+                    return;
+                if (s.length == 8) {
+                    var n = parseInt(s);
+                    var t = s == _this.td ? _this.st : '';
+                    // Date
+                    var se = _this.ele(_this.state);
+                    if (se) {
+                        var p = _this.str(_this.state);
+                        var q = p == _this.td ? _this.st : '';
+                        if (_this.am.indexOf(p) >= 0) {
+                            se.setAttribute('style', _this.sk + q);
+                        }
+                        else {
+                            se.setAttribute('style', _this.sd + q);
+                        }
+                    }
+                    e.target['style'] = _this.ss + t;
+                    if (_this.ls == s)
+                        return;
+                    _this.setState(new Date(n / 10000, ((n % 10000) / 100) - 1, (n % 10000) % 100));
+                }
+            });
+            this.root.addEventListener('dblclick', function (e) {
+                var s = WUX.lastSub(e.target);
+                if (!s)
+                    return;
+                if (s.length == 8) {
+                    _this.trigger('_doubleclick', s);
+                }
+            });
+            this.root.addEventListener('mouseover', function (e) {
+                var s = WUX.lastSub(e.target);
+                if (!s)
+                    return;
+                if (s.length == 8) {
+                    var t = s == _this.td ? _this.st : '';
+                    // Over date
+                    e.target['style'] = _this.so + t;
+                }
+            });
+            this.root.addEventListener('mouseout', function (e) {
+                var s = WUX.lastSub(e.target);
+                if (!s)
+                    return;
+                if (s.length == 8) {
+                    var t = s == _this.td ? _this.st : '';
+                    var i = _this.str(_this.state);
+                    if (s == i) {
+                        // Selected date
+                        e.target['style'] = _this.ss + t;
+                    }
+                    else {
+                        if (_this.am.indexOf(s) >= 0) {
+                            // Marked date
+                            e.target['style'] = _this.sk + t;
+                        }
+                        else {
+                            // Normal date
+                            e.target['style'] = _this.sd + t;
+                        }
+                    }
+                }
+            });
+        };
+        return WCalendar;
+    }(WUX.WComponent));
+    APP.WCalendar = WCalendar;
+})(APP || (APP = {}));
+var APP;
+(function (APP) {
+    /**
+        Chart Component.
+        P: string - Chart type (bar, line)
+        S: WChartData - Chart data
+    */
+    var WChart = /** @class */ (function (_super) {
+        __extends(WChart, _super);
+        function WChart(id, type, classStyle, style) {
+            var _this = _super.call(this, id ? id : '*', 'WChart', type, classStyle, style) || this;
+            _this.rootTag = 'canvas';
+            _this.forceOnChange = true;
+            var iw = window.innerWidth;
+            _this._w = 750;
+            _this._h = 370;
+            if (iw < 900 || iw > 1920) {
+                _this._w = Math.round(750 * iw / 1400);
+                _this._h = Math.round(370 * _this._w / 750);
+            }
+            _this._attributes = 'width="' + _this._w + '" height="' + _this._h + '"';
+            _this.fontSize = 14;
+            _this.fontName = 'Arial';
+            _this.axis = '#808080';
+            _this.grid = '#a0a0a0';
+            _this.line = '#e23222';
+            _this.offx = 30;
+            _this.offy = 30;
+            _this.barw = 16;
+            return _this;
+        }
+        WChart.prototype.size = function (width, height) {
+            this._w = width;
+            this._h = height;
+            if (this._w < 40)
+                this._w = 40;
+            if (this._h < 40)
+                this._h = 40;
+            this._attributes = 'width="' + this._w + '" height="' + this._h + '"';
+            return this;
+        };
+        Object.defineProperty(WChart.prototype, "width", {
+            get: function () {
+                return this._w;
+            },
+            set: function (v) {
+                this._w = v;
+                if (this._w < 40)
+                    this._w = 40;
+                this._attributes = 'width="' + this._w + '" height="' + this._h + '"';
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(WChart.prototype, "height", {
+            get: function () {
+                return this._h;
+            },
+            set: function (v) {
+                this._h = v;
+                if (this._h < 40)
+                    this._h = 40;
+                this._attributes = 'width="' + this._w + '" height="' + this._h + '"';
+            },
+            enumerable: false,
+            configurable: true
+        });
+        WChart.prototype.componentDidMount = function () {
+            // Get data
+            if (!this.state)
+                return;
+            var s = this.state.series;
+            if (!s || !s.length)
+                return;
+            var d0 = s[0];
+            if (!d0 || d0.length < 2)
+                return;
+            var cs = this.state.styles;
+            // Get Context
+            var r = this.root;
+            var ctx = r.getContext('2d');
+            if (!ctx)
+                return;
+            // Check labels (arguments)
+            var labels = this.state.labels;
+            var pady = 0;
+            var padx = 0;
+            var drawL = false;
+            if (labels && labels.length == d0.length) {
+                var t0 = labels[0];
+                var l0 = t0 ? t0.length : 0;
+                var dl = l0 > 4 ? Math.ceil(l0 / 2) : 2;
+                pady = this.fontSize * dl + 4;
+                padx = this.fontSize * 2 + 4;
+                drawL = true;
+            }
+            // Boundary
+            var cw = r.width - this.offx - padx;
+            var ch = r.height - this.offy - pady;
+            var bw = cw / (d0.length - 1);
+            // Max Y
+            var my = Math.max.apply(Math, d0);
+            if (!my)
+                my = 4;
+            if (this.maxy && this.maxy > my) {
+                my = this.maxy;
+            }
+            // Intermediate Y
+            var iy = [Math.round(my / 4), Math.round(my / 2), Math.round(my * 3 / 4)];
+            // Step Y
+            var sy = ch / my;
+            // Axis
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = this.axis;
+            // Origin
+            ctx.moveTo(this.offx, this.offy);
+            // Y
+            ctx.lineTo(this.offx, r.height - pady);
+            // X
+            ctx.lineTo(r.width - padx, r.height - pady);
+            ctx.stroke();
+            // Grid
+            ctx.beginPath();
+            ctx.setLineDash([4, 8]);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = this.grid;
+            for (var i = 1; i < d0.length; i++) {
+                var x = this.offx + i * bw;
+                // X
+                ctx.moveTo(x, this.offy);
+                ctx.lineTo(x, r.height - pady);
+            }
+            // Max Y
+            ctx.moveTo(this.offx, this.offy);
+            ctx.lineTo(r.width - padx, this.offy);
+            // Intermediate Y
+            for (var _i = 0, iy_1 = iy; _i < iy_1.length; _i++) {
+                var vy = iy_1[_i];
+                ctx.moveTo(this.offx, r.height - pady - (vy * sy));
+                ctx.lineTo(r.width - padx, r.height - pady - (vy * sy));
+            }
+            ctx.stroke();
+            // Labels
+            ctx.fillStyle = this.axis;
+            ctx.font = this.fontSize + 'px ' + this.fontName;
+            ctx.fillText('0', 0, r.height - pady);
+            for (var _a = 0, iy_2 = iy; _a < iy_2.length; _a++) {
+                var vy = iy_2[_a];
+                ctx.fillText('' + vy, 0, r.height - pady - (vy * sy));
+            }
+            ctx.fillText('' + my, 0, this.offy);
+            if (drawL) {
+                for (var i = 0; i < labels.length; i++) {
+                    var x = this.offx + i * bw;
+                    // Etichetta inclinata sull'asse X
+                    ctx.save();
+                    ctx.translate(x - this.fontSize, r.height);
+                    ctx.rotate(-Math.PI / 3);
+                    ctx.fillStyle = this.axis;
+                    ctx.fillText(labels[i], 0, 0);
+                    ctx.restore();
+                }
+            }
+            // Chart
+            var type = this.props;
+            if (!type)
+                type = this.state.type;
+            if (!type)
+                type = 'line';
+            if (type != 'bar') {
+                ctx.setLineDash([]);
+                for (var j = 0; j < s.length; j++) {
+                    var dj = s[j];
+                    // Mind this: < d0.length
+                    if (!dj || dj.length < d0.length)
+                        return;
+                    var sl = this.line;
+                    if (cs && cs.length > j) {
+                        sl = cs[j];
+                        if (!sl)
+                            sl = this.line;
+                    }
+                    ctx.beginPath();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = sl;
+                    ctx.moveTo(this.offx, r.height - pady - (dj[0] * sy));
+                    // Mind this: < d0.length
+                    for (var i = 1; i < d0.length; i++) {
+                        var x = this.offx + i * bw;
+                        var y = r.height - pady - (dj[i] * sy);
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                }
+            }
+            else {
+                if (this.barw < 4)
+                    this.barw = 4;
+                for (var j = 0; j < s.length; j++) {
+                    var dj = s[j];
+                    // Mind this: < d0.length
+                    if (!dj || dj.length < d0.length)
+                        return;
+                    var sl = this.line;
+                    if (cs && cs.length > j) {
+                        sl = cs[j];
+                        if (!sl)
+                            sl = this.line;
+                    }
+                    ctx.fillStyle = sl;
+                    var sx = j * (this.barw + 1);
+                    // Mind this: < d0.length
+                    for (var i = 0; i < d0.length; i++) {
+                        var x = this.offx + i * bw;
+                        var y = r.height - pady - (dj[i] * sy);
+                        if (i == 0) {
+                            // Review first bar drawing!
+                            ctx.fillRect(x + sx, y, this.barw, dj[i] * sy);
+                        }
+                        else if (s.length < 3) {
+                            ctx.fillRect(x + sx - (this.barw / 2), y, this.barw, dj[i] * sy);
+                        }
+                        else {
+                            ctx.fillRect(x + sx - (this.barw / 2) - ((this.barw + 1) * (s.length - 2)), y, this.barw, dj[i] * sy);
+                        }
+                    }
+                }
+            }
+        };
+        return WChart;
+    }(WUX.WComponent));
+    APP.WChart = WChart;
+})(APP || (APP = {}));
+var APP;
+(function (APP) {
+    var WUtil = WUX.WUtil;
     var action = WUX.action;
     var getAction = WUX.getAction;
     var DlgEntity = /** @class */ (function (_super) {

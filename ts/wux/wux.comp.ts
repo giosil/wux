@@ -738,6 +738,7 @@ namespace WUX {
 			if(this.root) {
 				this.state = this.root['value'];
 			}
+			if(this.state) this.state = this.state.trim();
 			return this.state;
 		}
 
@@ -2347,6 +2348,24 @@ namespace WUX {
 			if (!f) return null;
 			if (f.component) return f.component.getState();
 			return f.value;
+		}
+
+		isBlank(fid?: string): boolean {
+			if(fid) {
+				let f = this.getField(fid);
+				if (!f) return false;
+				let v = f.component ? f.component.getState() : f.value;
+				return !v;
+			}
+			else {
+				for (let r of this.rows) {
+					for (let f of r) {
+						let v = f.component ? f.component.getState() : f.value;
+						if (v) return false;
+					}
+				}
+				return true;
+			}
 		}
 
 		getFile(fid: string, onload: (f: File, b64: string) => any): File;

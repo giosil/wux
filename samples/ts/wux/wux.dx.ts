@@ -3,6 +3,8 @@ namespace WUX {
 	export type DxComponentType = 'dxAccordion' | 'dxActionSheet' | 'dxAutocomplete' | 'dxBox' | 'dxButton' | 'dxButtonGroup' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxContextMenu' | 'dxDataGrid' | 'dxDateBox' | 'dxDeferRendering' | 'dxDiagram' | 'dxDraggable' | 'dxDrawer' | 'dxDropDownBox' | 'dxDropDownButton' | 'dxFileManager' | 'dxFileUploader' | 'dxFilterBuilder' | 'dxForm' | 'dxGallery' | 'dxGantt' | 'dxHtmlEditor' | 'dxList' | 'dxLoadIndicator' | 'dxLoadPanel' | 'dxLookup' | 'dxMap' | 'dxMenu' | 'dxMultiView' | 'dxNavBar' | 'dxNumberBox' | 'dxPivotGrid' | 'dxPivotGridFieldChooser' | 'dxPopover' | 'dxPopup' | 'dxProgressBar' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxRecurrenceEditor' | 'dxResizable' | 'dxResponsiveBox' | 'dxScheduler' | 'dxScrollView' | 'dxSelectBox' | 'dxSlideOut' | 'dxSlideOutView' | 'dxSlider' | 'dxSortable' | 'dxSpeedDialAction' | 'dxSwitch' | 'dxTabPanel' | 'dxTabs' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox' | 'dxTileView' | 'dxToast' | 'dxToolbar' | 'dxTooltip' | 'dxTreeList' | 'dxTreeView' | 'dxValidationGroup' | 'dxValidationSummary' | 'dxValidator' | 'dxBarGauge' | 'dxBullet' | 'dxChart' | 'dxCircularGauge' | 'dxFunnel' | 'dxLinearGauge' | 'dxPieChart' | 'dxPolarChart' | 'dxRangeSelector' | 'dxSankey' | 'dxSparkline' | 'dxTreeMap' | 'dxVectorMap';
 	
 	export let dxTableDidMount: (c: WDXTable) => any;
+	export let dxTreeDidMount: (c: WDxTreeView) => any;
+	export let dxCompDidMount: (c: WDX) => any;
 
 	export function initDX(callback: () => any) {
 		if (debug) console.log('[WUX] initDX...');
@@ -21,23 +23,6 @@ namespace WUX {
 		.catch(error => {
 			console.error('[WUX] initDX loading ' + u + ' failed', error);
 		});
-	}
-
-	export function dx(e: WElement, t: DxComponentType, o?: any, c?: (i: any) => void): any {
-		if (!e || !t) return null;
-		let j = (e instanceof WComponent) ? JQ(e.getRoot()) : JQ(e);
-		if (!j) return null;
-		try {
-			let r = o ? j[t](o) : j[t]();
-			r = o == 'instance' ? r : j[t]('instance');
-			if (!r) return null;
-			if (c) c(r);
-			return r;
-		}
-		catch(x) {
-			console.error('dx(' + e + ',' + t + ',' + o + ',' + c + ') error', x);
-		}
-		return null;
 	}
 
 	export class WDX extends WComponent<DxComponentType, any> {
@@ -65,6 +50,7 @@ namespace WUX {
 				this.$r[this.props]();
 			}
 			this.$i = this.$r[this.props]('instance') as DevExpress.ui.Widget;
+			if(dxCompDidMount) dxCompDidMount(this);
 		}
 
 		override updateState(nextState: any): void {
@@ -1216,6 +1202,8 @@ namespace WUX {
 			if(this.props) {
 				t.option('searchMode', this.props);
 			}
+
+			if(dxTreeDidMount) dxTreeDidMount(this);
 		}
 	}
 }

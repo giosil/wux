@@ -807,6 +807,7 @@ declare namespace WUX {
         setValue(fid: string, v: any, updState?: boolean): this;
         setValueOf(fid: string, v: any, k: string, updState?: boolean): this;
         getValue(fid: string | WField): any;
+        isBlank(fid?: string): boolean;
         getFile(fid: string, onload: (f: File, b64: string) => any): File;
         getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File;
         setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this;
@@ -824,13 +825,6 @@ declare namespace WUX {
 declare namespace WUX {
     let BS_VER: number;
     let BS_DLG_X: string | WWrapper;
-    interface WChartData {
-        labels?: string[];
-        titles?: string[];
-        series?: number[][];
-        styles?: string[];
-        type?: string;
-    }
     function JQ(e: any): JQuery;
     function setJQCss(e: WComponent | JQuery, ...a: (string | WStyle)[]): WComponent | JQuery;
     class WDialog<P = any, S = any> extends WUX.WComponent<P, S> {
@@ -911,76 +905,5 @@ declare namespace WUX {
         protected componentDidUpdate(prevProps: any, prevState: any): void;
         protected componentDidMount(): void;
         componentWillUnmount(): void;
-    }
-    class WCalendar extends WComponent<number, Date> {
-        ep: HTMLElement;
-        em: HTMLElement;
-        en: HTMLElement;
-        pm: string;
-        nm: string;
-        et: HTMLElement;
-        eb: HTMLElement;
-        ct: string;
-        cd: string;
-        sp: string;
-        sm: string;
-        sn: string;
-        tr: string;
-        sw: string;
-        sd: string;
-        so: string;
-        ss: string;
-        sk: string;
-        se: string;
-        st: string;
-        td: string;
-        am: string[];
-        mt: {
-            [k: string]: string;
-        };
-        ls: string;
-        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        onDoubleClick(handler: (e: WEvent) => any): void;
-        protected updateState(nextState: Date): void;
-        protected render(): string;
-        add(a: number): Date;
-        mark(...p: any[]): this;
-        unmark(...p: any[]): this;
-        title(d: any, t: string): this;
-        unm(i: number, r?: boolean): void;
-        clear(): this;
-        prev(): Date;
-        next(): Date;
-        ele(dt: Date): HTMLElement;
-        str(dt: Date): string;
-        from(): string;
-        to(): string;
-        protected body(): string;
-        protected componentDidMount(): void;
-    }
-    /**
-        Chart Component.
-        P: string - Chart type (bar, line)
-        S: WChartData - Chart data
-    */
-    class WChart extends WUX.WComponent<string, WChartData> {
-        fontName: string;
-        fontSize: number;
-        axis: string;
-        grid: string;
-        line: string;
-        offx: number;
-        offy: number;
-        maxy: number;
-        barw: number;
-        _w: number;
-        _h: number;
-        constructor(id?: string, type?: string, classStyle?: string, style?: string | WUX.WStyle);
-        size(width: number, height: number): this;
-        get width(): number;
-        set width(v: number);
-        get height(): number;
-        set height(v: number);
-        protected componentDidMount(): void;
     }
 }

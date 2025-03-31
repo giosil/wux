@@ -37,27 +37,6 @@ var WUX;
         });
     }
     WUX.initDX = initDX;
-    function dx(e, t, o, c) {
-        if (!e || !t)
-            return null;
-        var j = (e instanceof WUX.WComponent) ? WUX.JQ(e.getRoot()) : WUX.JQ(e);
-        if (!j)
-            return null;
-        try {
-            var r = o ? j[t](o) : j[t]();
-            r = o == 'instance' ? r : j[t]('instance');
-            if (!r)
-                return null;
-            if (c)
-                c(r);
-            return r;
-        }
-        catch (x) {
-            console.error('dx(' + e + ',' + t + ',' + o + ',' + c + ') error', x);
-        }
-        return null;
-    }
-    WUX.dx = dx;
     var WDX = /** @class */ (function (_super) {
         __extends(WDX, _super);
         function WDX(props, id, classStyle, style, attributes) {
@@ -84,6 +63,8 @@ var WUX;
                 this.$r[this.props]();
             }
             this.$i = this.$r[this.props]('instance');
+            if (WUX.dxCompDidMount)
+                WUX.dxCompDidMount(this);
         };
         WDX.prototype.updateState = function (nextState) {
             this.state = nextState;
@@ -1254,6 +1235,8 @@ var WUX;
             if (this.props) {
                 t.option('searchMode', this.props);
             }
+            if (WUX.dxTreeDidMount)
+                WUX.dxTreeDidMount(this);
         };
         return WDxTreeView;
     }(WUX.WComponent));

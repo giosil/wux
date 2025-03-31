@@ -205,6 +205,16 @@ this.form.setValue('name', 'Jhon');
 
 // Get single value
 let name = this.form.getValue('name');
+
+// Check blank form
+if(this.form.isBlank()) {
+  console.log('The form is blank.');
+}
+
+// Check blank field
+if(this.form.isBlank('name')) {
+  console.log('name is blank.');
+}
 ```
 
 ### WUX.WButton
