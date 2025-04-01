@@ -4,7 +4,7 @@ A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
-The main idea was to support the development of modern web applications based on the preferred theme and components in some cases imposed by the guidelines without using more difficult to customize frameworks.
+The main idea was to support the development of modern web applications based without using more difficult to customize frameworks.
 
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
 - **lightweight**, 
@@ -119,7 +119,7 @@ Additional methods and properties are listed below.
 <tr><td>The <strong>getContext()</strong> method returns the element on which the component was mounted.</td></tr>
 </table>
 
-## Wrapper like components
+## Wrapper like component
 
 In WUX a component is effectively a wrapper.
 
@@ -129,7 +129,7 @@ Below are some of the more relevant wrappers.
 
 ### WUX.WContainer
 
-**WContainer** allows you to implement the layout of a component.
+**WContainer** allows you to implement the layout of a component composed of other components.
 
 ```typescript
 this.main = new WUX.WContainer();
@@ -402,7 +402,7 @@ this.tab.on('statechange', (e: WUX.WEvent) => {
 
 ### WUX.WPages
 
-**WPages** allows you to display one component at a time in a view.
+**WPages** allows you to display one component at a time in a view. The component also allows you to display a Dialog like a page.
 
 ```typescript
 this.pages = new WUX.WPages();
