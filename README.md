@@ -4,7 +4,7 @@ A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
-The main idea was to support the development of modern web applications based without using more difficult to customize frameworks.
+The main idea was to support the development of modern web applications based without using more complicated frameworks.
 
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
 - **lightweight**, 
@@ -513,6 +513,71 @@ constructor() {
 this.dlg.setProps(props);
 this.dlg.setState(state);
 this.dlg.show(this);
+```
+
+### WUX.WUtil
+
+```typescript
+toArray(a: any): any[];
+toArrayNumber(a: any, nz?: boolean): number[];
+toArrayString(a: any, ne?: boolean): string[];
+splitNumbers(a: any, s: string): number[];
+toObject<T>(a: any, d?: T): T;
+toString(a: any, d?: string): string;
+toText(a: any, d?: string): string;
+toNumber(a: any, d?: number): number;
+toInt(a: any, d?: number): number;
+toIntTime(a: any, d?: number): number;
+isNumeric(a: any): a is string | number;
+checkEmail(e: any): string;
+starts(a: any, s: string): boolean;
+ends(a: any, s: string): boolean;
+isEmpty(a: any): boolean;
+toBoolean(a: any, d?: boolean): boolean;
+toDate(a: any, d?: Date): Date;
+getWeek(a?: any): number;
+getParam(name: string, url?: string): string;
+size(a: any): number;
+get(o: any, k?: string): any;
+is(t: "array" | "array0" | "arraynot0" | "bigint" | "boolean" | "date" | "empty" | "function" | "nan" | "notnull" | "null" | "number" | "object" | "string" | "symbol" | "undefined" | "value", o: any, k?: string): boolean;
+setValue(a: any, k: string, v: any): any;
+getValue(a: any, k: string, d?: any): any;
+getItem(a: any, i: number, d?: any): any;
+getFirst(a: any, d?: any): any;
+getLast(a: any, d?: any): any;
+getNumber(a: any, k: string, d?: number): number;
+getInt(a: any, k: string, d?: number): number;
+getString(a: any, k: string, d?: string, f?: string): string;
+getText(a: any, k: string, d?: string): string;
+getBoolean(a: any, k: string, d?: boolean): boolean;
+getDate(a: any, k: string, d?: Date): Date;
+getArray(a: any, k: string): any[];
+getArrayNumber(a: any, k: string, nz?: boolean): number[];
+getArrayString(a: any, k: string, ne?: boolean): string[];
+getObject<T>(a: any, k: string, n?: boolean): T;
+sort(a: any, t?: boolean, k?: string): any[];
+find(a: any, k: any, v: any): any;
+indexOf(a: any, k: any, v: any): number;
+isSameDate(a: Date, b: Date): boolean;
+indexOfDate(a: Date[], v: Date): number;
+round2(a: any): number;
+floor2(a: any): number;
+ceil2(a: any): number;
+compare2(a: any, b: any): number;
+compare5(a: any, b: any): number;
+getCurrDate(d?: number, m?: number, y?: number, f?: boolean, l?: boolean): Date;
+calcDate(r: Date, d?: number, m?: number, y?: number, f?: boolean, l?: boolean): Date;
+timestamp(dt?: any): string;
+nvl(...v: any[]): any;
+eqValues(o1: object, o2: object, ...keys: any[]): boolean;
+col(tuples: any[], i: number, d?: any): any[];
+getSortedKeys(map: object): any[];
+diffMinutes(ah: any, al: any): number;
+diffHours(ah: any, al: any): number;
+diffDays(ah: any, al: any): number;
+rplObj(o: any, f: string, k: string, a: any): any;
+rplVal(o: any, f: string, k: string): any;
+map(src: any, dst: any, ks: string[], kd: string[], t?: string[], d?: any[]): any;
 ```
 
 ## SVG Logo
