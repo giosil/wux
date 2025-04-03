@@ -4,7 +4,7 @@ A Javascript library to build component based user interface.
 
 The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
 
-The main idea was to support the development of modern web applications based without using more complicated frameworks.
+The main idea was to support the development of modern web applications without using more complicated frameworks.
 
 The **WUX** library is inspired by [React](https://react.dev) for component lifecycle management, but is designed to be more 
 - **lightweight**, 
@@ -525,7 +525,10 @@ namespace APP {
   import WUtil = WUX.WUtil;
   
   export function samples() {
-    let n: number = WUtil.toNumber('1');
+    // es. http://localhost?name=Jhon
+    let pn = WUtil.getParam('name');
+    
+    let n  = WUtil.toNumber('1');
     
     let array = [{"id": 7, "name": 'Jhon'};];
     let x = WUtil.indexOf(array, 'id', 7);
@@ -534,6 +537,22 @@ namespace APP {
     let name = WUtil.getString(obj, 'name', 'default');
     let age  = WUtil.getNumber(obj, 'age',  0);
     let flg  = WUtil.getBoolean(obj, 'flag');
+    
+    let pg = 3.14159;
+    let p2 = WUtil.round2(pg);
+    
+    let t = 'a > b';
+    let h = WUtil.toText(t); // a &gt; b
+    
+    let d1 = new Date();
+    let d2 = new Date();
+    if(WUtil.isSameDate(d1, d2)) {
+      console.log('Same date');
+    }
+    
+    if (WUtil.is('number', obj, 'age')) {
+      console.log('age is number');
+    }
     
     if (WUtil.isEmpty(array)) {
       console.log('empty');
