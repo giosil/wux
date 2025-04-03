@@ -517,7 +517,7 @@ this.dlg.show(this);
 
 ### WUX.WUtil
 
-Some utilities in data manipulation.
+**WUtil** collects utilities for data manipulation.
 
 ```typescript
 namespace APP {
