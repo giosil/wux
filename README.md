@@ -538,6 +538,8 @@ namespace APP {
     let age  = WUtil.getNumber(obj, 'age',  0);
     let flg  = WUtil.getBoolean(obj, 'flag');
     
+    let city = WUtil.get(obj, 'person.address.city');
+    
     let pg = 3.14159;
     let p2 = WUtil.round2(pg);
     
@@ -546,7 +548,7 @@ namespace APP {
     
     let d1 = new Date();
     let d2 = new Date();
-    if(WUtil.isSameDate(d1, d2)) {
+    if (WUtil.isSameDate(d1, d2)) {
       console.log('Same date');
     }
     
