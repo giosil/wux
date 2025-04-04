@@ -11,7 +11,7 @@ The **WUX** library is inspired by [React](https://react.dev) for component life
 - **flexible**, 
 - **easy-to-use**.
 
-By installing Typescript globally there are no additional direct dependencies. In other words, **you no longer have to deal with large node_modules directories**.
+By installing Typescript globally there are no additional direct dependencies. In other words, **you no longer have to deal with large node_modules directories**. :sunglasses:
 
 **JQuery** is supported, but NOT required.
 
@@ -584,7 +584,7 @@ namespace APP {
 
 ### WuxDOM
 
-WuxDOM allows you to render WUX components.
+**WuxDOM** allows you to render WUX components.
 
 ```html
 <script type="text/javascript">
