@@ -19,7 +19,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 /**
-    Micro WRAPPED USER EXPERIENCE - WUX
+    WRAPPED USER EXPERIENCE - WUX
 */
 var WuxDOM = /** @class */ (function () {
     function WuxDOM() {
@@ -177,7 +177,7 @@ var WuxDOM = /** @class */ (function () {
                 node.innerHTML = '';
         }
         if (!node)
-            node = document.getElementById('#view-root');
+            node = document.getElementById('view-root');
         if (!node) {
             console.error('WuxDOM.replace ' + WUX.str(node) + ' -> node unavailable');
             return;

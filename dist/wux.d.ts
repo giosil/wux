@@ -1,5 +1,5 @@
 /**
-    Micro WRAPPED USER EXPERIENCE - WUX
+    WRAPPED USER EXPERIENCE - WUX
 */
 declare class WuxDOM {
     static components: {

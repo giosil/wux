@@ -137,7 +137,7 @@ class WuxDOM {
 			node = o.parentElement;
 			if (node) node.innerHTML = '';
 		}
-		if (!node) node = document.getElementById('#view-root');
+		if (!node) node = document.getElementById('view-root');
 		if (!node) {
 			console.error('WuxDOM.replace ' + WUX.str(node) + ' -> node unavailable');
 			return;
