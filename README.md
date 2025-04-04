@@ -582,6 +582,31 @@ namespace APP {
 }
 ```
 
+### WuxDOM
+
+WuxDOM allows you to render WUX components.
+
+```html
+<script type="text/javascript">
+  // Render APP.Main component on view-root node
+  WuxDOM.render(new APP.Main(), 'view-root');
+  
+  // Unmount component and remove view-root node
+  WuxDOM.unmount('view-root');
+  
+  // Create view-root node on body
+  WuxDOM.create(document.body, 'div', 'view-root', 'container', 'margin: 2px');
+  
+  // Render APP.Main component on view-root node
+  let c = new APP.Main();
+  WuxDOM.render(c, 'view-root');
+  
+  // Replace component
+  WuxDOM.replace(c, new WUX.Wrapp('Hello World 2!', 'div'));
+</script>
+
+```
+
 ## SVG Logo
 
 ```xml
