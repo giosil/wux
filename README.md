@@ -586,6 +586,7 @@ namespace APP {
 
 **WuxDOM** allows you to render WUX components.
 
+```
 ```html
 <script type="text/javascript">
   // Render APP.Main component on view-root node
@@ -605,6 +606,54 @@ namespace APP {
   WuxDOM.replace(c, new WUX.Wrapp('Hello World 2!', 'div'));
 </script>
 
+```
+
+### WUX ###
+
+The **WUX** namespace also contains some useful functions for creating your own components.
+
+```typescript
+let i = WUX.newInstance("APP.Main");
+// -> new instance of WComponent APP.Main
+
+let f = WUX.getComponent("w620572380-form");
+// -> WComponent instance with id="w620572380-form"
+
+let ls = WUX.lastSub(f);
+// -> form
+
+let id = WUX.getId(f);
+// -> w620572380-form
+
+let s = WUX.style({"mt": 4, "pb": 8, a: "center", c: "#ffff00", "h": 100, "minh": 100});
+// -> 'margin-top:4px;padding-bottom:8px;text-align:center;color:#ffff00;height:100px;min-height:100px;'
+
+let c = WUX.buildCss('text-center', {"mt": 4, "pb": 8});
+// -> ' class="text-center" style="margin-top:4px;padding-bottom:8px;"'
+
+WUX.setCss(document.body, 'text-center', {"mt": 4, "pb": 8});
+// sets class and style of an element
+
+let ac1 = WUX.addClass('text-center', 'text-red');
+// -> 'text-center text-red'
+// see also WUX.addClassOf(e: Element, name: string) 
+
+let ac2 = WUX.addClass('text-center', 'text-center');
+// -> 'text-center'
+
+let rc = WUX.removeClass('text-center text-red', 'text-red');
+// -> 'text-center'
+// see also WUX.removeClassOf(e: Element, name: string)
+
+let tc1 = WUX.toggleClass('text-center', 'text-red');
+// -> 'text-center text-red'
+// see also WUX.toggleClassOf(e: Element, name: string)
+
+let tc2 = WUX.toggleClass('text-center text-red', 'text-red');
+// -> 'text-center'
+
+let b = WUX.build('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye', 'text-center');
+// -> '<div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>'
 ```
 
 ## SVG Logo
