@@ -586,7 +586,6 @@ namespace APP {
 
 **WuxDOM** allows you to render WUX components.
 
-```
 ```html
 <script type="text/javascript">
   // Render APP.Main component on view-root node
@@ -605,7 +604,6 @@ namespace APP {
   // Replace component
   WuxDOM.replace(c, new WUX.Wrapp('Hello World 2!', 'div'));
 </script>
-
 ```
 
 ### WUX ###
