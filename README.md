@@ -139,9 +139,14 @@ this.main
       .add(this.form)
   .addRow()
     .addCol('col-md-8')
-      .addGroup({"classStyle": "form-row"}, this.btnFind, this.btnReset)
+      .addGroup(
+        {"classStyle": "form-row"}, 
+        this.btnFind, 
+        this.btnReset)
     .addCol('col-md-4', {a : 'right'})
-      .addGroup({"classStyle": "form-row"}, this.btnNew)
+      .addGroup(
+        {"classStyle": "form-row"}, 
+        this.btnNew)
   .addRow()
     .addCol('col-md-12', 'padding-top: 1rem;')
       .add(this.table);
@@ -198,7 +203,20 @@ this.form.findOption('gender', 'Male');
 this.form.setOptions('gender', options);
 
 // Set nested value
-this.form.setValueOf('name', booking, 'person.name');
+let updState = false;
+this.form.setValueOf('name', booking, 'person.name', updState);
+
+// Set nested value with check option
+this.form.setValueOf('gender', booking, 'person.gender', updState, 
+  (c: WUX.WComponent, v: any) => {
+    // Function called when the value is not present in the options
+    // Load options
+    let opts = this.loadGenderOptions();
+    this.fp.setOptions('gender', opts);
+    // Set selected option
+    setTimeout(() => { this.fp.setValue('gender', v); }, 100);
+  }
+);
 
 // Set single value
 this.form.setValue('name', 'Jhon');
