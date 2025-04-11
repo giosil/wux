@@ -670,7 +670,10 @@ declare namespace WUX {
         set tooltip(s: string);
         select(i: number): this;
         getProps(): string;
+        findOption(text: string, d?: any): any;
         setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
+        addOption(e: string | WEntity, sel?: boolean): this;
+        indexOption(e: string | WEntity): number;
         protected updateState(nextState: any): void;
         protected render(): string;
         protected componentDidMount(): void;
@@ -686,6 +689,7 @@ declare namespace WUX {
         select(i: number): this;
         addOption(e: string | WEntity, sel?: boolean): this;
         remOption(e: string | WEntity): this;
+        indexOption(e: string | WEntity): number;
         setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
         protected updateState(nextState: any): void;
         protected render(): string;
@@ -779,6 +783,8 @@ declare namespace WUX {
         onField(fid: string, events: 'click' | 'dblclick' | 'mouseenter' | 'mouseleave' | 'keypress' | 'keydown' | 'keyup' | 'submit' | 'change' | 'focus' | 'blur' | 'resize', handler: (e: Event) => any): this;
         onField(fid: string, events: string, handler: (e: any) => any): this;
         findOption(fid: string, text: string, d?: any): any;
+        indexOption(fid: string, e: string | WEntity): number;
+        addOption(fid: string, e: string | WEntity, sel?: boolean): this;
         setOptionValue(fid: string, text: string, d?: any): this;
         addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type?: string): this;
         protected _add(id: string, label: string, co: WComponent, type: string, opts?: WField): this;
@@ -804,8 +810,8 @@ declare namespace WUX {
         protected componentDidMount(): void;
         componentWillUnmount(): void;
         clear(): this;
-        setValue(fid: string, v: any, updState?: boolean): this;
-        setValueOf(fid: string, v: any, k: string, updState?: boolean): this;
+        setValue(fid: string, v: any, updState?: boolean, cbNoOpt?: (cmp: WComponent, val: any) => any): this;
+        setValueOf(fid: string, v: any, k: string, updState?: boolean, cbNoOpt?: (cmp: WComponent, val: any) => any): this;
         getValue(fid: string | WField): any;
         isBlank(fid?: string): boolean;
         getFile(fid: string, onload: (f: File, b64: string) => any): File;

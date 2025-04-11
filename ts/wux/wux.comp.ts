@@ -1121,6 +1121,20 @@ namespace WUX {
 			return WUtil.toString(this.state);
 		}
 
+		findOption(text: string, d: any = null): any {
+			if (!this.options) return d;
+			if (!text) text = '';
+			for(let o of this.options) {
+				if(typeof o == 'string') {
+					if(o == text) return o;
+				}
+				else {
+					if(o.text == text) return o.id;
+				}
+			}
+			return d;
+		}
+
 		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
 			this.options = options;
 			if (!this.mounted) return this;
@@ -1135,6 +1149,56 @@ namespace WUX {
 			}
 			this.componentDidMount();
 			return this;
+		}
+
+		addOption(e: string | WEntity, sel?: boolean): this {
+			if (!e) return this;
+			if (!this.options) this.options = [];
+			this.options.push(e);
+			if (!this.mounted) return this;
+			let o = this.buildOptions();
+			this.root.innerHTML = o;
+			if (sel) this.updateState(e);
+			return this;
+		}
+
+		indexOption(e: string | WEntity): number {
+			if (!e) return -2;
+			if (!this.options) return -1;
+			let x = -1;
+			for (let i = 0; i < this.options.length; i++) {
+				let s = this.options[i];
+				if (!s) continue;
+				if (typeof e == 'string') {
+					if (typeof s == 'string') {
+						if (s == e) {
+							x = i;
+							break;
+						}
+					}
+					else {
+						if (s.id == e) {
+							x = i;
+							break;
+						}
+					}
+				}
+				else {
+					if (typeof s == 'string') {
+						if (s == e.id) {
+							x = i;
+							break;
+						}
+					}
+					else {
+						if (s.id == e.id) {
+							x = i;
+							break;
+						}
+					}
+				}
+			}
+			return x;
 		}
 
 		protected updateState(nextState: any) {
@@ -1291,7 +1355,18 @@ namespace WUX {
 		}
 
 		remOption(e: string | WEntity): this {
-			if (!e || !this.options) return this;
+			let x = this.indexOption(e);
+			if (x < 0) return this;
+			this.options.splice(x, 1);
+			if (!this.mounted) return this;
+			let o = this.buildOptions();
+			this.root.innerHTML = o;
+			return this;
+		}
+
+		indexOption(e: string | WEntity): number {
+			if (!e) return -2;
+			if (!this.options) return -1;
 			let x = -1;
 			for (let i = 0; i < this.options.length; i++) {
 				let s = this.options[i];
@@ -1325,13 +1400,7 @@ namespace WUX {
 					}
 				}
 			}
-			if (x >= 0) {
-				this.options.splice(x, 1);
-				if (!this.mounted) return this;
-				let o = this.buildOptions();
-				this.root.innerHTML = o;
-			}
-			return this;
+			return x;
 		}
 
 		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
@@ -1991,7 +2060,34 @@ namespace WUX {
 			if(c instanceof WSelect) {
 				return c.findOption(text, d);
 			}
+			else if (c instanceof WUX.WRadio) {
+				return c.findOption(text, d);
+			}
 			return d;
+		}
+
+		indexOption(fid: string, e: string | WEntity): number {
+			let c = this.getComponent(fid);
+			if(!c) return -3;
+			if(c instanceof WSelect) {
+				return c.indexOption(e);
+			}
+			else if (c instanceof WUX.WRadio) {
+				return c.indexOption(e);
+			}
+			return -4;
+		}
+
+		addOption(fid: string, e: string | WEntity, sel?: boolean): this {
+			let c = this.getComponent(fid);
+			if(!c) return this;
+			if(c instanceof WSelect) {
+				c.addOption(e, sel);
+			}
+			else if (c instanceof WUX.WRadio) {
+				c.addOption(e, sel);
+			}
+			return this;
 		}
 
 		setOptionValue(fid: string, text: string, d: any = null): this {
@@ -2306,12 +2402,32 @@ namespace WUX {
 			return this;
 		}
 
-		setValue(fid: string, v: any, updState: boolean = true): this {
+		setValue(fid: string, v: any, updState: boolean = true, cbNoOpt?: (cmp: WComponent, val: any) => any): this {
 			let f = this.getField(fid);
 			if (!f) return this;
 			if (f.type == 'date') v = isoDate(v);
 			if (f.type == 'time') v = formatTime(v, false);
-			if (f.component) f.component.setState(v);
+			let c = f.component;
+			if (c) {
+				if (v && cbNoOpt) {
+					let i = -3;
+					if (c instanceof WSelect) {
+						i = c.indexOption(v);
+					}
+					else if (c instanceof WUX.WRadio) {
+						i = c.indexOption(v);
+					}
+					if (i == -1) {
+						cbNoOpt(c, v);
+					}
+					else {
+						c.setState(v);
+					}
+				}
+				else {
+					c.setState(v);
+				}
+			}
 			f.value = v;
 			if (updState) {
 				if (!this.state) this.state = {};
@@ -2320,13 +2436,13 @@ namespace WUX {
 			return this;
 		}
 
-		setValueOf(fid: string, v: any, k: string, updState: boolean = true): this {
+		setValueOf(fid: string, v: any, k: string, updState: boolean = true, cbNoOpt?: (cmp: WComponent, val: any) => any): this {
 			let f = this.getField(fid);
 			if (!f) return this;
 			let w = v;
-			let x = k ? k.indexOf('.') : -1;
+			let x = k ? k.lastIndexOf('.') : -1;
 			if (w != null && x > 0) {
-				w = w[k.substring(0, x)];
+				w = WUtil.get(w, k.substring(0, x));
 				k = k.substring(x + 1);
 			}
 			if (w != null && typeof w == 'object') {
@@ -2334,7 +2450,27 @@ namespace WUX {
 			}
 			if (f.type == 'date') w = isoDate(w);
 			if (f.type == 'time') w = formatTime(w, false);
-			if (f.component) f.component.setState(w);
+			let c = f.component;
+			if (c)  {
+				if (w && cbNoOpt) {
+					let i = -3;
+					if (c instanceof WSelect) {
+						i = c.indexOption(w);
+					}
+					else if (c instanceof WUX.WRadio) {
+						i = c.indexOption(w);
+					}
+					if (i == -1) {
+						cbNoOpt(c, w);
+					}
+					else {
+						c.setState(w);
+					}
+				}
+				else {
+					c.setState(w);
+				}
+			}
 			f.value = w;
 			if (updState) {
 				if (!this.state) this.state = {};

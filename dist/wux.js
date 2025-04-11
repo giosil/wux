@@ -4089,6 +4089,25 @@ var WUX;
             }
             return WUX.WUtil.toString(this.state);
         };
+        WRadio.prototype.findOption = function (text, d) {
+            if (d === void 0) { d = null; }
+            if (!this.options)
+                return d;
+            if (!text)
+                text = '';
+            for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
+                var o = _a[_i];
+                if (typeof o == 'string') {
+                    if (o == text)
+                        return o;
+                }
+                else {
+                    if (o.text == text)
+                        return o.id;
+                }
+            }
+            return d;
+        };
         WRadio.prototype.setOptions = function (options, prevVal) {
             this.options = options;
             if (!this.mounted)
@@ -4104,6 +4123,61 @@ var WUX;
             }
             this.componentDidMount();
             return this;
+        };
+        WRadio.prototype.addOption = function (e, sel) {
+            if (!e)
+                return this;
+            if (!this.options)
+                this.options = [];
+            this.options.push(e);
+            if (!this.mounted)
+                return this;
+            var o = this.buildOptions();
+            this.root.innerHTML = o;
+            if (sel)
+                this.updateState(e);
+            return this;
+        };
+        WRadio.prototype.indexOption = function (e) {
+            if (!e)
+                return -2;
+            if (!this.options)
+                return -1;
+            var x = -1;
+            for (var i = 0; i < this.options.length; i++) {
+                var s = this.options[i];
+                if (!s)
+                    continue;
+                if (typeof e == 'string') {
+                    if (typeof s == 'string') {
+                        if (s == e) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    else {
+                        if (s.id == e) {
+                            x = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    if (typeof s == 'string') {
+                        if (s == e.id) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    else {
+                        if (s.id == e.id) {
+                            x = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            return x;
         };
         WRadio.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
@@ -4277,8 +4351,21 @@ var WUX;
             return this;
         };
         WSelect.prototype.remOption = function (e) {
-            if (!e || !this.options)
+            var x = this.indexOption(e);
+            if (x < 0)
                 return this;
+            this.options.splice(x, 1);
+            if (!this.mounted)
+                return this;
+            var o = this.buildOptions();
+            this.root.innerHTML = o;
+            return this;
+        };
+        WSelect.prototype.indexOption = function (e) {
+            if (!e)
+                return -2;
+            if (!this.options)
+                return -1;
             var x = -1;
             for (var i = 0; i < this.options.length; i++) {
                 var s = this.options[i];
@@ -4313,14 +4400,7 @@ var WUX;
                     }
                 }
             }
-            if (x >= 0) {
-                this.options.splice(x, 1);
-                if (!this.mounted)
-                    return this;
-                var o = this.buildOptions();
-                this.root.innerHTML = o;
-            }
-            return this;
+            return x;
         };
         WSelect.prototype.setOptions = function (options, prevVal) {
             this.options = options;
@@ -5014,7 +5094,34 @@ var WUX;
             if (c instanceof WSelect) {
                 return c.findOption(text, d);
             }
+            else if (c instanceof WUX.WRadio) {
+                return c.findOption(text, d);
+            }
             return d;
+        };
+        WForm.prototype.indexOption = function (fid, e) {
+            var c = this.getComponent(fid);
+            if (!c)
+                return -3;
+            if (c instanceof WSelect) {
+                return c.indexOption(e);
+            }
+            else if (c instanceof WUX.WRadio) {
+                return c.indexOption(e);
+            }
+            return -4;
+        };
+        WForm.prototype.addOption = function (fid, e, sel) {
+            var c = this.getComponent(fid);
+            if (!c)
+                return this;
+            if (c instanceof WSelect) {
+                c.addOption(e, sel);
+            }
+            else if (c instanceof WUX.WRadio) {
+                c.addOption(e, sel);
+            }
+            return this;
         };
         WForm.prototype.setOptionValue = function (fid, text, d) {
             if (d === void 0) { d = null; }
@@ -5328,7 +5435,7 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.setValue = function (fid, v, updState) {
+        WForm.prototype.setValue = function (fid, v, updState, cbNoOpt) {
             if (updState === void 0) { updState = true; }
             var f = this.getField(fid);
             if (!f)
@@ -5337,8 +5444,27 @@ var WUX;
                 v = WUX.isoDate(v);
             if (f.type == 'time')
                 v = WUX.formatTime(v, false);
-            if (f.component)
-                f.component.setState(v);
+            var c = f.component;
+            if (c) {
+                if (v && cbNoOpt) {
+                    var i = -3;
+                    if (c instanceof WSelect) {
+                        i = c.indexOption(v);
+                    }
+                    else if (c instanceof WUX.WRadio) {
+                        i = c.indexOption(v);
+                    }
+                    if (i == -1) {
+                        cbNoOpt(c, v);
+                    }
+                    else {
+                        c.setState(v);
+                    }
+                }
+                else {
+                    c.setState(v);
+                }
+            }
             f.value = v;
             if (updState) {
                 if (!this.state)
@@ -5347,15 +5473,15 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.setValueOf = function (fid, v, k, updState) {
+        WForm.prototype.setValueOf = function (fid, v, k, updState, cbNoOpt) {
             if (updState === void 0) { updState = true; }
             var f = this.getField(fid);
             if (!f)
                 return this;
             var w = v;
-            var x = k ? k.indexOf('.') : -1;
+            var x = k ? k.lastIndexOf('.') : -1;
             if (w != null && x > 0) {
-                w = w[k.substring(0, x)];
+                w = WUX.WUtil.get(w, k.substring(0, x));
                 k = k.substring(x + 1);
             }
             if (w != null && typeof w == 'object') {
@@ -5366,8 +5492,27 @@ var WUX;
                 w = WUX.isoDate(w);
             if (f.type == 'time')
                 w = WUX.formatTime(w, false);
-            if (f.component)
-                f.component.setState(w);
+            var c = f.component;
+            if (c) {
+                if (w && cbNoOpt) {
+                    var i = -3;
+                    if (c instanceof WSelect) {
+                        i = c.indexOption(w);
+                    }
+                    else if (c instanceof WUX.WRadio) {
+                        i = c.indexOption(w);
+                    }
+                    if (i == -1) {
+                        cbNoOpt(c, w);
+                    }
+                    else {
+                        c.setState(w);
+                    }
+                }
+                else {
+                    c.setState(w);
+                }
+            }
             f.value = w;
             if (updState) {
                 if (!this.state)
