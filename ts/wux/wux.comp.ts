@@ -1051,6 +1051,7 @@ namespace WUX {
 				this.root.addEventListener("change", (e: Event) => {
 					this.props = !!this.root['checked'];
 					this.state = this.props ? this.value : undefined;
+					this.trigger('statechange', this.state);
 				});
 			}
 		}

@@ -4008,6 +4008,7 @@ var WUX;
                 this.root.addEventListener("change", function (e) {
                     _this.props = !!_this.root['checked'];
                     _this.state = _this.props ? _this.value : undefined;
+                    _this.trigger('statechange', _this.state);
                 });
             }
         };
