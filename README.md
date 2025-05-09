@@ -202,6 +202,11 @@ this.form.findOption('gender', 'Male');
 // Load options later
 this.form.setOptions('gender', options);
 
+// Register an event handler on a specific field
+this.form.onField('gender', 'statechange', (e: WUX.WEvent) => {
+  console.log('gender statechange', e);
+});
+
 // Set nested value
 let updState = false;
 this.form.setValueOf('name', booking, 'person.name', updState);

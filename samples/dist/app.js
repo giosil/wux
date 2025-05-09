@@ -567,7 +567,7 @@ var APP;
                 for (var i = 0; i < l; i++) {
                     var e = this.state[i];
                     var s_1 = i < l - 1 ? '<span class="separator">/</span>' : '';
-                    if (l[0] == '<') {
+                    if (e[0] == '<') {
                         r += '<li class="breadcrumb-item" id="' + this.id + '-' + i + '">' + e + s_1 + '</li>';
                     }
                     else {

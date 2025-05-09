@@ -38,7 +38,7 @@ namespace APP {
 				for(let i = 0; i < l; i++) {
 					let e = this.state[i];
 					let s = i < l - 1 ? '<span class="separator">/</span>' : '';
-					if(l[0] == '<') {
+					if(e[0] == '<') {
 						r += '<li class="breadcrumb-item" id="' + this.id + '-' + i + '">' + e + s + '</li>';
 					}
 					else {
