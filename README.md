@@ -19,6 +19,8 @@ It is also suitable for writing microfrontends with [single-spa](https://single-
 
 [See a sample application.](samples/)
 
+To check the accessibility of your web application see [MAUVE++](https://mauve.isti.cnr.it) based on the Web Content Accessibility Guidelines - [WCAG](https://www.w3.org/TR/WCAG21/).
+
 ## Build
 
 - `git clone https://github.com/giosil/wux.git`
@@ -171,7 +173,10 @@ this.form
   .addRow()
     .addDateField('date', 'Date')
     .addTimeField('time', 'Time')
-    .addBooleanField('flag', 'Flag');
+    .addBooleanField('flag', 'Flag')
+    .addToggleField('toggle', 'Active')
+  .addInternalField('id')
+  .addToFooter('<em>(*) Mandatory field</em>');
 
 // Validation
 this.form.setMandatory('name', 'gender');
@@ -237,6 +242,11 @@ if(this.form.isBlank()) {
 // Check blank field
 if(this.form.isBlank('name')) {
   console.log('name is blank.');
+}
+
+// Load file
+let f = this.form.getFile('file', (f: File, b64: string) => {
+  console.log('file, content', f, b64);
 }
 ```
 
