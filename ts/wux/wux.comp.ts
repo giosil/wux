@@ -1,5 +1,7 @@
 namespace WUX {
 
+	export let formWillMount: (c: WForm) => any;
+
 	export class Wrapp extends WComponent<WElement, any> {
 		isText: boolean;
 		constructor(props: WElement, tag?: string, id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
@@ -1163,6 +1165,16 @@ namespace WUX {
 			return this;
 		}
 
+		remOption(e: string | WEntity): this {
+			let x = this.indexOption(e);
+			if (x < 0) return this;
+			this.options.splice(x, 1);
+			if (!this.mounted) return this;
+			let o = this.buildOptions();
+			this.root.innerHTML = o;
+			return this;
+		}
+
 		indexOption(e: string | WEntity): number {
 			if (!e) return -2;
 			if (!this.options) return -1;
@@ -1916,6 +1928,7 @@ namespace WUX {
 		mainClass: string;
 		mainStyle: string | WStyle;
 		groupStyle: string | WStyle;
+		leg: Element;
 
 		constructor(id?: string, title?: string, action?: string) {
 			// WComponent init
@@ -1964,6 +1977,16 @@ namespace WUX {
 			this.footer = [];
 			this.captions = [];
 			this.addRow();
+			return this;
+		}
+
+		legend(inner: string, cls?: string, css?: string | WStyle, attr?: string | object): this {
+			if (inner) {
+				this.leg = WUX.create('legend', inner, css, attr, '', cls);
+			}
+			else {
+				this.leg = null;
+			}
 			return this;
 		}
 
@@ -2061,7 +2084,7 @@ namespace WUX {
 			if(c instanceof WSelect) {
 				return c.findOption(text, d);
 			}
-			else if (c instanceof WUX.WRadio) {
+			else if (c instanceof WRadio) {
 				return c.findOption(text, d);
 			}
 			return d;
@@ -2073,7 +2096,7 @@ namespace WUX {
 			if(c instanceof WSelect) {
 				return c.indexOption(e);
 			}
-			else if (c instanceof WUX.WRadio) {
+			else if (c instanceof WRadio) {
 				return c.indexOption(e);
 			}
 			return -4;
@@ -2085,8 +2108,20 @@ namespace WUX {
 			if(c instanceof WSelect) {
 				c.addOption(e, sel);
 			}
-			else if (c instanceof WUX.WRadio) {
+			else if (c instanceof WRadio) {
 				c.addOption(e, sel);
+			}
+			return this;
+		}
+
+		remOption(fid: string, e: string | WEntity): this {
+			let c = this.getComponent(fid);
+			if(!c) return this;
+			if(c instanceof WSelect) {
+				c.remOption(e);
+			}
+			else if (c instanceof WRadio) {
+				c.remOption(e);
 			}
 			return this;
 		}
@@ -2279,7 +2314,6 @@ namespace WUX {
 				component.id = '';
 				return this._add('', label, component, 'component', opts);
 			}
-			return this;
 		}
 
 		addToFooter(c: WElement): this {
@@ -2288,9 +2322,17 @@ namespace WUX {
 			return this;
 		}
 
-		protected componentDidMount(): void {
+		override componentWillMount(): void {
+			if(formWillMount) formWillMount(this);
+		}
+
+		override componentDidMount(): void {
 			this.fieldset = document.createElement('fieldset');
-			if(!this._enabled) {
+			if (this.leg) {
+				this.leg.id = this.id + '__l';
+				this.fieldset.appendChild(this.leg);
+			}
+			if (!this._enabled) {
 				this.fieldset.setAttribute('disabled', '');
 			}
 			this.root.appendChild(this.fieldset);
@@ -2415,7 +2457,7 @@ namespace WUX {
 					if (c instanceof WSelect) {
 						i = c.indexOption(v);
 					}
-					else if (c instanceof WUX.WRadio) {
+					else if (c instanceof WRadio) {
 						i = c.indexOption(v);
 					}
 					if (i == -1) {
@@ -2458,7 +2500,7 @@ namespace WUX {
 					if (c instanceof WSelect) {
 						i = c.indexOption(w);
 					}
-					else if (c instanceof WUX.WRadio) {
+					else if (c instanceof WRadio) {
 						i = c.indexOption(w);
 					}
 					if (i == -1) {
@@ -2539,10 +2581,10 @@ namespace WUX {
 			let f = this.getField(fid);
 			if (!f) return this;
 			let c = f.component;
-			if (c instanceof WUX.WSelect) {
+			if (c instanceof WSelect) {
 				c.setOptions(options, prevVal);
 			}
-			else if (c instanceof WUX.WRadio) {
+			else if (c instanceof WRadio) {
 				c.setOptions(options, prevVal);
 			}
 			return this;

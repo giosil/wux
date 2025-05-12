@@ -167,6 +167,7 @@ let options: WUX.WEntity[] = [
 
 this.form = new WUX.WForm(this.subId('form'));
 this.form
+  .legend('Filter')
   .addRow()
     .addTextField('name', 'Name')
     .addOptionsField('gender', 'Gender', options, {"span": 2})

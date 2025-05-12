@@ -163,6 +163,7 @@ namespace APP {
 
 			this.form = new WUX.WForm(this.subId('form'));
 			this.form
+				.legend('Filter')
 				.addRow()
 					.addTextField('code', 'Code')
 					.addTextField('name', 'Name', {"span": 2});

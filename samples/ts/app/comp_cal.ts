@@ -2,6 +2,43 @@ namespace APP {
 
 	import WUtil = WUX.WUtil;
 
+	export function formatDay(d: number, e?: boolean): string {
+		switch (d) {
+			case 0: return e ? 'Domenica' : 'Dom';
+			case 1: return e ? 'Luned&igrave;': 'Lun';
+			case 2: return e ? 'Marted&igrave;': 'Mar';
+			case 3: return e ? 'Mercoled&igrave;': 'Mer';
+			case 4: return e ? 'Giove&igrave;': 'Gio';
+			case 5: return e ? 'Venerd&igrave;': 'Ven';
+			case 6: return e ? 'Sabato': 'Sab';
+		}
+		return '';
+	}
+	
+	export function formatMonth(m: number, e?: boolean, y?: any): string {
+		if (m > 100) {
+			// YYYYMM
+			y = Math.floor(m / 100);
+			m = m % 100;
+		}
+		y = y ? ' ' + y : '';
+		switch (m) {
+			case 1: return e ? 'Gennaio' + y : 'Gen' + y;
+			case 2: return e ? 'Febbraio' + y : 'Feb' + y;
+			case 3: return e ? 'Marzo' + y : 'Mar' + y;
+			case 4: return e ? 'Aprile' + y : 'Apr' + y;
+			case 5: return e ? 'Maggio' + y : 'Mag' + y;
+			case 6: return e ? 'Giugno' + y : 'Giu' + y;
+			case 7: return e ? 'Luglio' + y : 'Lug' + y;
+			case 8: return e ? 'Agosto' + y : 'Ago' + y;
+			case 9: return e ? 'Settembre' + y : 'Set' + y;
+			case 10: return e ? 'Ottobre' + y : 'Ott' + y;
+			case 11: return e ? 'Novembre' + y : 'Nov' + y;
+			case 12: return e ? 'Dicembre' + y : 'Dic' + y;
+		}
+		return '';
+	}
+
 	export class WCalendar extends WUX.WComponent<number, Date> {
 		// Element previous
 		ep: HTMLElement;
@@ -110,7 +147,7 @@ namespace APP {
 			let t = '<table id="' + this.subId('t') + '" class="' + this.ct + '"><thead><tr>';
 			for(let x = 0; x < 7; x++) {
 				let k = x == 6 ? 0 : x + 1;
-				t += '<th id="' + this.subId(k + '') + '" style="' + this.sw + '">' + WUX.formatDay(k, false) + '</th>'; 
+				t += '<th id="' + this.subId(k + '') + '" style="' + this.sw + '">' + formatDay(k, false) + '</th>'; 
 			}
 			t += '</tr></thead><tbody id="' + this.subId('b') + '">';
 			t += this.body();
@@ -121,7 +158,7 @@ namespace APP {
 			let k = y * 100 + m + 1;
 			let p = '<a id="' + this.subId('p') + '" title="' + this.pm + '"><i class="fa fa-arrow-circle-left"></i></a>';
 			let n = '<a id="' + this.subId('n') + '" title="' + this.nm + '"><i class="fa fa-arrow-circle-right"></i></a>';
-			let i = '<div class="row"><div class="col-2" style="' + this.sp + '">' + p + '</div><div id="' + this.subId('m') + '" class="col-8" style="' + this.sm + '">' + WUX.formatMonth(k, true, true) + '</div><div class="col-2" style="' + this.sn + '">' + n + '</div></div>';
+			let i = '<div class="row"><div class="col-2" style="' + this.sp + '">' + p + '</div><div id="' + this.subId('m') + '" class="col-8" style="' + this.sm + '">' + formatMonth(k, true, true) + '</div><div class="col-2" style="' + this.sn + '">' + n + '</div></div>';
 			if(this.cd) {
 				i += '<div class="row"><div class="' + this.cd + '">' + t + '</div></div>';
 			}
@@ -151,7 +188,7 @@ namespace APP {
 			}
 			if(this.em) {
 				let w = ny * 100 + nm + 1;
-				this.em.innerText = WUX.formatMonth(w, true, true);
+				this.em.innerText = formatMonth(w, true, true);
 			}
 			return n;
 		}

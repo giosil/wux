@@ -869,6 +869,43 @@ var APP;
 var APP;
 (function (APP) {
     var WUtil = WUX.WUtil;
+    function formatDay(d, e) {
+        switch (d) {
+            case 0: return e ? 'Domenica' : 'Dom';
+            case 1: return e ? 'Luned&igrave;' : 'Lun';
+            case 2: return e ? 'Marted&igrave;' : 'Mar';
+            case 3: return e ? 'Mercoled&igrave;' : 'Mer';
+            case 4: return e ? 'Giove&igrave;' : 'Gio';
+            case 5: return e ? 'Venerd&igrave;' : 'Ven';
+            case 6: return e ? 'Sabato' : 'Sab';
+        }
+        return '';
+    }
+    APP.formatDay = formatDay;
+    function formatMonth(m, e, y) {
+        if (m > 100) {
+            // YYYYMM
+            y = Math.floor(m / 100);
+            m = m % 100;
+        }
+        y = y ? ' ' + y : '';
+        switch (m) {
+            case 1: return e ? 'Gennaio' + y : 'Gen' + y;
+            case 2: return e ? 'Febbraio' + y : 'Feb' + y;
+            case 3: return e ? 'Marzo' + y : 'Mar' + y;
+            case 4: return e ? 'Aprile' + y : 'Apr' + y;
+            case 5: return e ? 'Maggio' + y : 'Mag' + y;
+            case 6: return e ? 'Giugno' + y : 'Giu' + y;
+            case 7: return e ? 'Luglio' + y : 'Lug' + y;
+            case 8: return e ? 'Agosto' + y : 'Ago' + y;
+            case 9: return e ? 'Settembre' + y : 'Set' + y;
+            case 10: return e ? 'Ottobre' + y : 'Ott' + y;
+            case 11: return e ? 'Novembre' + y : 'Nov' + y;
+            case 12: return e ? 'Dicembre' + y : 'Dic' + y;
+        }
+        return '';
+    }
+    APP.formatMonth = formatMonth;
     var WCalendar = /** @class */ (function (_super) {
         __extends(WCalendar, _super);
         function WCalendar(id, classStyle, style, attributes) {
@@ -934,7 +971,7 @@ var APP;
             var t = '<table id="' + this.subId('t') + '" class="' + this.ct + '"><thead><tr>';
             for (var x = 0; x < 7; x++) {
                 var k_1 = x == 6 ? 0 : x + 1;
-                t += '<th id="' + this.subId(k_1 + '') + '" style="' + this.sw + '">' + WUX.formatDay(k_1, false) + '</th>';
+                t += '<th id="' + this.subId(k_1 + '') + '" style="' + this.sw + '">' + formatDay(k_1, false) + '</th>';
             }
             t += '</tr></thead><tbody id="' + this.subId('b') + '">';
             t += this.body();
@@ -945,7 +982,7 @@ var APP;
             var k = y * 100 + m + 1;
             var p = '<a id="' + this.subId('p') + '" title="' + this.pm + '"><i class="fa fa-arrow-circle-left"></i></a>';
             var n = '<a id="' + this.subId('n') + '" title="' + this.nm + '"><i class="fa fa-arrow-circle-right"></i></a>';
-            var i = '<div class="row"><div class="col-2" style="' + this.sp + '">' + p + '</div><div id="' + this.subId('m') + '" class="col-8" style="' + this.sm + '">' + WUX.formatMonth(k, true, true) + '</div><div class="col-2" style="' + this.sn + '">' + n + '</div></div>';
+            var i = '<div class="row"><div class="col-2" style="' + this.sp + '">' + p + '</div><div id="' + this.subId('m') + '" class="col-8" style="' + this.sm + '">' + formatMonth(k, true, true) + '</div><div class="col-2" style="' + this.sn + '">' + n + '</div></div>';
             if (this.cd) {
                 i += '<div class="row"><div class="' + this.cd + '">' + t + '</div></div>';
             }
@@ -975,7 +1012,7 @@ var APP;
             }
             if (this.em) {
                 var w = ny * 100 + nm + 1;
-                this.em.innerText = WUX.formatMonth(w, true, true);
+                this.em.innerText = formatMonth(w, true, true);
             }
             return n;
         };
@@ -1616,6 +1653,7 @@ var APP;
             this.brcr.add('Entities');
             this.form = new WUX.WForm(this.subId('form'));
             this.form
+                .legend('Filter')
                 .addRow()
                 .addTextField('code', 'Code')
                 .addTextField('name', 'Name', { "span": 2 });

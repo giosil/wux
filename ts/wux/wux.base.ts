@@ -144,7 +144,7 @@ class WuxDOM {
 		}
 		return WuxDOM.mount(e, node);
 	}
-	static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode): Element {
+	static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode, a?: object): Element {
 		if (!tag) tag = 'div';
 		if (id) {
 			let c = document.getElementById(id);
@@ -166,6 +166,13 @@ class WuxDOM {
 		if (id) e.setAttribute('id', id);
 		if (cs) e.setAttribute('class', cs);
 		if (st) e.setAttribute('style', st);
+		if (a) {
+			for (let k in a) {
+				if (a.hasOwnProperty(k)) {
+					e.setAttribute(k, WUX.WUtil.toString(a[k]));
+				}
+			}
+		}
 		if (inner) {
 			if(typeof inner == 'string') {
 				e.innerHTML = inner;
@@ -1340,7 +1347,11 @@ namespace WUX {
 		if (typeof a == 'string') return a;
 		if (typeof a == 'object') {
 			let r = '';
-			for (var k in a) r += k + '="' + a[k] + '" ';
+			for (var k in a) {
+				if (a.hasOwnProperty(k)) {
+					r += k + '="' + WUtil.toString(a[k]) + '" ';
+				}
+			}
 			return r.trim();
 		}
 		return '';
@@ -1438,7 +1449,7 @@ namespace WUX {
 		return before + '<i class="fa ' + icon + ' fa-' + size + 'x' + cls + '"' + t + s + '></i>' + after;
 	}
 
-	export function build(tagName: string, inner?: string, css?: string | WStyle, attributes?: string | object, id?: string, classStyle?: string): string {
+	export function build(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): string {
 		if (!tagName) tagName = 'div';
 		let clsStyle: string;
 		let style: string;
@@ -1454,19 +1465,19 @@ namespace WUX {
 			if (css.n) clsStyle = css.n;
 			style = WUX.style(css);
 		}
-		if (classStyle) {
+		if (cls) {
 			if (clsStyle) {
-				clsStyle += ' ' + classStyle;
+				clsStyle += ' ' + cls;
 			}
 			else {
-				clsStyle = classStyle;
+				clsStyle = cls;
 			}
 		}
 		let r = '<' + tagName;
 		if (id) r += ' id="' + id + '"';
 		if (clsStyle) r += ' class="' + clsStyle + '"';
 		if (style) r += ' style="' + style + '"';
-		let a = WUX.attributes(attributes);
+		let a = WUX.attributes(attr);
 		if (a) r += ' ' + a;
 		r += '>';
 		let bca = divide(inner);
@@ -1474,6 +1485,12 @@ namespace WUX {
 		if (tagName == 'input') return bca[0] + r + bca[2];
 		r += '</' + tagName + '>';
 		return bca[0] + r + bca[2];
+	}
+
+	export function create(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): Element {
+		let t = document.createElement("template");
+		t.innerHTML = build(tagName, inner, css, attr, id, cls);
+		return t.content.firstElementChild;
 	}
 
 	/**
@@ -1833,7 +1850,6 @@ namespace WUX {
 			if (f == 'c5') return WUX.formatCurr5(v);
 			if (f == 'n') return WUX.formatNum(v);
 			if (f == 'n2') return WUX.formatNum2(v);
-			if (f == 'm') return WUX.formatMonth(v);
 			if (f == 'd') return WUX.formatDate(v);
 			if (f == 'dt') return WUX.formatDateTime(v);
 			if (f == 't') return WUX.formatTime(v);

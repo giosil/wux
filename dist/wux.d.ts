@@ -16,7 +16,7 @@ declare class WuxDOM {
     static mount(e: WUX.WElement, node?: WUX.WNode): Element;
     static unmount(node?: WUX.WNode): Element;
     static replace(o: WUX.WElement, e?: WUX.WElement): Element;
-    static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode): Element;
+    static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode, a?: object): Element;
 }
 declare namespace WUX {
     type WElement = string | Element | WComponent;
@@ -365,7 +365,8 @@ declare namespace WUX {
     function toggleClassOf(e: Element, name: string): void;
     function setCss(e: WComponent | Element, ...a: (string | WStyle)[]): WComponent | Element;
     function buildIcon(icon: string, before?: string, after?: string, size?: number, cls?: string, title?: string): string;
-    function build(tagName: string, inner?: string, css?: string | WStyle, attributes?: string | object, id?: string, classStyle?: string): string;
+    function build(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): string;
+    function create(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): Element;
     /**
      * Utilities
      */
@@ -468,13 +469,9 @@ declare namespace WUX {
         static LEVER_STYLE: string;
         static ICON: string;
         static SEL_ROW: string;
-        static PRIMARY: WStyle;
-        static SECONDARY: WStyle;
         static SUCCESS: WStyle;
         static DANGER: WStyle;
         static WARNING: WStyle;
-        static INFO: WStyle;
-        static LIGHT: WStyle;
     }
     class RES {
         static OK: string;
@@ -482,9 +479,9 @@ declare namespace WUX {
         static CANCEL: string;
         static REQ_MARK: string;
     }
-    function formatDate(a: any, withDay?: boolean, e?: boolean): string;
+    function formatDate(a: any): string;
     function isoDate(a: any): string;
-    function formatDateTime(a: any, withSec?: boolean, withDay?: boolean, e?: boolean): string;
+    function formatDateTime(a: any, withSec?: boolean): string;
     function formatTime(a: any, withSec?: boolean): string;
     /**
      * Formatta numero alla 2a cifra decimale SENZA separatore migliaia.
@@ -504,14 +501,13 @@ declare namespace WUX {
     function formatCurr5(a: any, nz?: string, z?: string, neg?: string): string;
     function formatBoolean(a: any): string;
     function format(a: any): string;
-    function formatDay(d: number, e?: boolean): string;
-    function formatMonth(m: number, e?: boolean, y?: any): string;
     function saveFile(base64: string, fileName: string, mimeType?: string): void;
     function viewFile(base64: string, fileName: string, mimeType?: string): void;
     function getAction(ie: string | Event, c?: WUX.WComponent, tag?: string): WAction;
     function action(name: string, ref?: string | number, ele?: string, comp?: WUX.WComponent, inner?: string, cls?: string): string;
 }
 declare namespace WUX {
+    let formWillMount: (c: WForm) => any;
     class Wrapp extends WComponent<WElement, any> {
         isText: boolean;
         constructor(props: WElement, tag?: string, id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
@@ -673,6 +669,7 @@ declare namespace WUX {
         findOption(text: string, d?: any): any;
         setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
         addOption(e: string | WEntity, sel?: boolean): this;
+        remOption(e: string | WEntity): this;
         indexOption(e: string | WEntity): number;
         protected updateState(nextState: any): void;
         protected render(): string;
@@ -769,10 +766,12 @@ declare namespace WUX {
         mainClass: string;
         mainStyle: string | WStyle;
         groupStyle: string | WStyle;
+        leg: Element;
         constructor(id?: string, title?: string, action?: string);
         get enabled(): boolean;
         set enabled(b: boolean);
         init(): this;
+        legend(inner: string, cls?: string, css?: string | WStyle, attr?: string | object): this;
         onEnter(h: (e: KeyboardEvent) => any): this;
         focus(): this;
         first(enabled?: boolean): WField;
@@ -785,6 +784,7 @@ declare namespace WUX {
         findOption(fid: string, text: string, d?: any): any;
         indexOption(fid: string, e: string | WEntity): number;
         addOption(fid: string, e: string | WEntity, sel?: boolean): this;
+        remOption(fid: string, e: string | WEntity): this;
         setOptionValue(fid: string, text: string, d?: any): this;
         addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type?: string): this;
         protected _add(id: string, label: string, co: WComponent, type: string, opts?: WField): this;
@@ -807,7 +807,8 @@ declare namespace WUX {
         addInternalField(fieldId: string, value?: any): this;
         addComponent(fieldId: string, label: string, component: WComponent, opts?: WField): this;
         addToFooter(c: WElement): this;
-        protected componentDidMount(): void;
+        componentWillMount(): void;
+        componentDidMount(): void;
         componentWillUnmount(): void;
         clear(): this;
         setValue(fid: string, v: any, updState?: boolean, cbNoOpt?: (cmp: WComponent, val: any) => any): this;

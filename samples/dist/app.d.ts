@@ -109,6 +109,8 @@ declare namespace APP {
     }
 }
 declare namespace APP {
+    function formatDay(d: number, e?: boolean): string;
+    function formatMonth(m: number, e?: boolean, y?: any): string;
     class WCalendar extends WUX.WComponent<number, Date> {
         ep: HTMLElement;
         em: HTMLElement;

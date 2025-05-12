@@ -184,7 +184,7 @@ var WuxDOM = /** @class */ (function () {
         }
         return WuxDOM.mount(e, node);
     };
-    WuxDOM.create = function (node, tag, id, cs, st, inner) {
+    WuxDOM.create = function (node, tag, id, cs, st, inner, a) {
         if (!tag)
             tag = 'div';
         if (id) {
@@ -212,6 +212,13 @@ var WuxDOM = /** @class */ (function () {
             e.setAttribute('class', cs);
         if (st)
             e.setAttribute('style', st);
+        if (a) {
+            for (var k in a) {
+                if (a.hasOwnProperty(k)) {
+                    e.setAttribute(k, WUX.WUtil.toString(a[k]));
+                }
+            }
+        }
         if (inner) {
             if (typeof inner == 'string') {
                 e.innerHTML = inner;
@@ -1365,8 +1372,11 @@ var WUX;
             return a;
         if (typeof a == 'object') {
             var r = '';
-            for (var k in a)
-                r += k + '="' + a[k] + '" ';
+            for (var k in a) {
+                if (a.hasOwnProperty(k)) {
+                    r += k + '="' + WUtil.toString(a[k]) + '" ';
+                }
+            }
             return r.trim();
         }
         return '';
@@ -1499,7 +1509,7 @@ var WUX;
         return before + '<i class="fa ' + icon + ' fa-' + size + 'x' + cls + '"' + t + s + '></i>' + after;
     }
     WUX.buildIcon = buildIcon;
-    function build(tagName, inner, css, attributes, id, classStyle) {
+    function build(tagName, inner, css, attr, id, cls) {
         if (!tagName)
             tagName = 'div';
         var clsStyle;
@@ -1517,12 +1527,12 @@ var WUX;
                 clsStyle = css.n;
             style = WUX.style(css);
         }
-        if (classStyle) {
+        if (cls) {
             if (clsStyle) {
-                clsStyle += ' ' + classStyle;
+                clsStyle += ' ' + cls;
             }
             else {
-                clsStyle = classStyle;
+                clsStyle = cls;
             }
         }
         var r = '<' + tagName;
@@ -1532,7 +1542,7 @@ var WUX;
             r += ' class="' + clsStyle + '"';
         if (style)
             r += ' style="' + style + '"';
-        var a = WUX.attributes(attributes);
+        var a = WUX.attributes(attr);
         if (a)
             r += ' ' + a;
         r += '>';
@@ -1544,6 +1554,12 @@ var WUX;
         return bca[0] + r + bca[2];
     }
     WUX.build = build;
+    function create(tagName, inner, css, attr, id, cls) {
+        var t = document.createElement("template");
+        t.innerHTML = build(tagName, inner, css, attr, id, cls);
+        return t.content.firstElementChild;
+    }
+    WUX.create = create;
     /**
      * Utilities
      */
@@ -1971,8 +1987,6 @@ var WUX;
                 return WUX.formatNum(v);
             if (f == 'n2')
                 return WUX.formatNum2(v);
-            if (f == 'm')
-                return WUX.formatMonth(v);
             if (f == 'd')
                 return WUX.formatDate(v);
             if (f == 'dt')
@@ -2417,13 +2431,9 @@ var WUX;
         CSS.LEVER_STYLE = '';
         CSS.ICON = 'margin-right:8px;';
         CSS.SEL_ROW = 'primary-bg-a2';
-        CSS.PRIMARY = { bg: '#b8d4f1' };
-        CSS.SECONDARY = { bg: '#d1d7dc' };
         CSS.SUCCESS = { bg: '#b8ddd0' };
         CSS.DANGER = { bg: '#f4c7ce' };
         CSS.WARNING = { bg: '#e6d3b8' };
-        CSS.INFO = { bg: '#e2e2e2' };
-        CSS.LIGHT = { bg: '#f9f8fb' };
         return CSS;
     }());
     WUX.CSS = CSS;
@@ -2438,9 +2448,7 @@ var WUX;
     }());
     WUX.RES = RES;
     // Data format utilities
-    function formatDate(a, withDay, e) {
-        if (withDay === void 0) { withDay = false; }
-        if (e === void 0) { e = false; }
+    function formatDate(a) {
         if (!a)
             return '';
         var d = WUX.WUtil.toDate(a);
@@ -2449,9 +2457,6 @@ var WUX;
         var m = d.getMonth() + 1;
         var sm = m < 10 ? '0' + m : '' + m;
         var sd = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
-        if (withDay) {
-            return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear();
-        }
         return sd + '/' + sm + '/' + d.getFullYear();
     }
     WUX.formatDate = formatDate;
@@ -2467,10 +2472,8 @@ var WUX;
         return d.getFullYear() + '-' + sm + '-' + sd;
     }
     WUX.isoDate = isoDate;
-    function formatDateTime(a, withSec, withDay, e) {
+    function formatDateTime(a, withSec) {
         if (withSec === void 0) { withSec = false; }
-        if (withDay === void 0) { withDay = false; }
-        if (e === void 0) { e = false; }
         if (!a)
             return '';
         var d = WUX.WUtil.toDate(a);
@@ -2483,13 +2486,7 @@ var WUX;
         var sp = d.getMinutes() < 10 ? '0' + d.getMinutes() : '' + d.getMinutes();
         if (withSec) {
             var ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : '' + d.getSeconds();
-            if (withDay) {
-                return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp + ':' + ss;
-            }
             return sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp + ':' + ss;
-        }
-        if (withDay) {
-            return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp;
         }
         return sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp;
     }
@@ -2671,43 +2668,6 @@ var WUX;
         return '' + a;
     }
     WUX.format = format;
-    function formatDay(d, e) {
-        switch (d) {
-            case 0: return e ? 'Domenica' : 'Dom';
-            case 1: return e ? 'Luned&igrave;' : 'Lun';
-            case 2: return e ? 'Marted&igrave;' : 'Mar';
-            case 3: return e ? 'Mercoled&igrave;' : 'Mer';
-            case 4: return e ? 'Giove&igrave;' : 'Gio';
-            case 5: return e ? 'Venerd&igrave;' : 'Ven';
-            case 6: return e ? 'Sabato' : 'Sab';
-        }
-        return '';
-    }
-    WUX.formatDay = formatDay;
-    function formatMonth(m, e, y) {
-        if (m > 100) {
-            // YYYYMM
-            y = Math.floor(m / 100);
-            m = m % 100;
-        }
-        y = y ? ' ' + y : '';
-        switch (m) {
-            case 1: return e ? 'Gennaio' + y : 'Gen' + y;
-            case 2: return e ? 'Febbraio' + y : 'Feb' + y;
-            case 3: return e ? 'Marzo' + y : 'Mar' + y;
-            case 4: return e ? 'Aprile' + y : 'Apr' + y;
-            case 5: return e ? 'Maggio' + y : 'Mag' + y;
-            case 6: return e ? 'Giugno' + y : 'Giu' + y;
-            case 7: return e ? 'Luglio' + y : 'Lug' + y;
-            case 8: return e ? 'Agosto' + y : 'Ago' + y;
-            case 9: return e ? 'Settembre' + y : 'Set' + y;
-            case 10: return e ? 'Ottobre' + y : 'Ott' + y;
-            case 11: return e ? 'Novembre' + y : 'Nov' + y;
-            case 12: return e ? 'Dicembre' + y : 'Dic' + y;
-        }
-        return '';
-    }
-    WUX.formatMonth = formatMonth;
     function saveFile(base64, fileName, mimeType) {
         if (mimeType === void 0) { mimeType = 'application/octet-stream'; }
         var ab = atob(base64);
@@ -4139,6 +4099,17 @@ var WUX;
                 this.updateState(e);
             return this;
         };
+        WRadio.prototype.remOption = function (e) {
+            var x = this.indexOption(e);
+            if (x < 0)
+                return this;
+            this.options.splice(x, 1);
+            if (!this.mounted)
+                return this;
+            var o = this.buildOptions();
+            this.root.innerHTML = o;
+            return this;
+        };
         WRadio.prototype.indexOption = function (e) {
             if (!e)
                 return -2;
@@ -4997,6 +4968,15 @@ var WUX;
             this.addRow();
             return this;
         };
+        WForm.prototype.legend = function (inner, cls, css, attr) {
+            if (inner) {
+                this.leg = WUX.create('legend', inner, css, attr, '', cls);
+            }
+            else {
+                this.leg = null;
+            }
+            return this;
+        };
         WForm.prototype.onEnter = function (h) {
             if (!h)
                 return this;
@@ -5095,7 +5075,7 @@ var WUX;
             if (c instanceof WSelect) {
                 return c.findOption(text, d);
             }
-            else if (c instanceof WUX.WRadio) {
+            else if (c instanceof WRadio) {
                 return c.findOption(text, d);
             }
             return d;
@@ -5107,7 +5087,7 @@ var WUX;
             if (c instanceof WSelect) {
                 return c.indexOption(e);
             }
-            else if (c instanceof WUX.WRadio) {
+            else if (c instanceof WRadio) {
                 return c.indexOption(e);
             }
             return -4;
@@ -5119,8 +5099,20 @@ var WUX;
             if (c instanceof WSelect) {
                 c.addOption(e, sel);
             }
-            else if (c instanceof WUX.WRadio) {
+            else if (c instanceof WRadio) {
                 c.addOption(e, sel);
+            }
+            return this;
+        };
+        WForm.prototype.remOption = function (fid, e) {
+            var c = this.getComponent(fid);
+            if (!c)
+                return this;
+            if (c instanceof WSelect) {
+                c.remOption(e);
+            }
+            else if (c instanceof WRadio) {
+                c.remOption(e);
             }
             return this;
         };
@@ -5309,7 +5301,6 @@ var WUX;
                 component.id = '';
                 return this._add('', label, component, 'component', opts);
             }
-            return this;
         };
         WForm.prototype.addToFooter = function (c) {
             if (!c && !this.footer)
@@ -5317,8 +5308,16 @@ var WUX;
             this.footer.push(c);
             return this;
         };
+        WForm.prototype.componentWillMount = function () {
+            if (WUX.formWillMount)
+                WUX.formWillMount(this);
+        };
         WForm.prototype.componentDidMount = function () {
             this.fieldset = document.createElement('fieldset');
+            if (this.leg) {
+                this.leg.id = this.id + '__l';
+                this.fieldset.appendChild(this.leg);
+            }
             if (!this._enabled) {
                 this.fieldset.setAttribute('disabled', '');
             }
@@ -5452,7 +5451,7 @@ var WUX;
                     if (c instanceof WSelect) {
                         i = c.indexOption(v);
                     }
-                    else if (c instanceof WUX.WRadio) {
+                    else if (c instanceof WRadio) {
                         i = c.indexOption(v);
                     }
                     if (i == -1) {
@@ -5500,7 +5499,7 @@ var WUX;
                     if (c instanceof WSelect) {
                         i = c.indexOption(w);
                     }
-                    else if (c instanceof WUX.WRadio) {
+                    else if (c instanceof WRadio) {
                         i = c.indexOption(w);
                     }
                     if (i == -1) {
@@ -5591,10 +5590,10 @@ var WUX;
             if (!f)
                 return this;
             var c = f.component;
-            if (c instanceof WUX.WSelect) {
+            if (c instanceof WSelect) {
                 c.setOptions(options, prevVal);
             }
-            else if (c instanceof WUX.WRadio) {
+            else if (c instanceof WRadio) {
                 c.setOptions(options, prevVal);
             }
             return this;

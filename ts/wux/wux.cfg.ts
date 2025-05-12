@@ -65,13 +65,9 @@
 		static ICON = 'margin-right:8px;';
 		static SEL_ROW = 'primary-bg-a2';
 
-		static PRIMARY: WStyle = { bg: '#b8d4f1' };
-		static SECONDARY: WStyle = { bg: '#d1d7dc' };
 		static SUCCESS: WStyle = { bg: '#b8ddd0' };
 		static DANGER: WStyle = { bg: '#f4c7ce' };
 		static WARNING: WStyle = { bg: '#e6d3b8' };
-		static INFO: WStyle = { bg: '#e2e2e2' };
-		static LIGHT: WStyle = { bg: '#f9f8fb' };
 	}
 	
 	export class RES {
@@ -83,16 +79,13 @@
 	
 	// Data format utilities
 
-	export function formatDate(a: any, withDay: boolean = false, e: boolean = false): string {
+	export function formatDate(a: any): string {
 		if (!a) return '';
 		let d = WUtil.toDate(a);
 		if (!d) return '';
 		let m = d.getMonth() + 1;
 		let sm = m < 10 ? '0' + m : '' + m;
 		let sd = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
-		if (withDay) {
-			return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear();
-		}
 		return sd + '/' + sm + '/' + d.getFullYear();
 	}
 
@@ -106,7 +99,7 @@
 		return d.getFullYear() + '-' + sm + '-' + sd;
 	}
 
-	export function formatDateTime(a: any, withSec: boolean = false, withDay: boolean = false, e: boolean = false): string {
+	export function formatDateTime(a: any, withSec: boolean = false): string {
 		if (!a) return '';
 		let d = WUtil.toDate(a);
 		if (!d) return '';
@@ -117,13 +110,7 @@
 		let sp = d.getMinutes() < 10 ? '0' + d.getMinutes() : '' + d.getMinutes();
 		if (withSec) {
 			let ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : '' + d.getSeconds();
-			if (withDay) {
-				return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp + ':' + ss;
-			}
 			return sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp + ':' + ss;
-		}
-		if (withDay) {
-			return WUX.formatDay(d.getDay(), e) + ', ' + sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp;
 		}
 		return sd + '/' + sm + '/' + d.getFullYear() + ' ' + sh + ':' + sp;
 	}
@@ -272,43 +259,6 @@
 		return '' + a;
 	}
 
-	export function formatDay(d: number, e?: boolean): string {
-		switch (d) {
-			case 0: return e ? 'Domenica' : 'Dom';
-			case 1: return e ? 'Luned&igrave;': 'Lun';
-			case 2: return e ? 'Marted&igrave;': 'Mar';
-			case 3: return e ? 'Mercoled&igrave;': 'Mer';
-			case 4: return e ? 'Giove&igrave;': 'Gio';
-			case 5: return e ? 'Venerd&igrave;': 'Ven';
-			case 6: return e ? 'Sabato': 'Sab';
-		}
-		return '';
-	}
-	
-	export function formatMonth(m: number, e?: boolean, y?: any): string {
-		if (m > 100) {
-			// YYYYMM
-			y = Math.floor(m / 100);
-			m = m % 100;
-		}
-		y = y ? ' ' + y : '';
-		switch (m) {
-			case 1: return e ? 'Gennaio' + y : 'Gen' + y;
-			case 2: return e ? 'Febbraio' + y : 'Feb' + y;
-			case 3: return e ? 'Marzo' + y : 'Mar' + y;
-			case 4: return e ? 'Aprile' + y : 'Apr' + y;
-			case 5: return e ? 'Maggio' + y : 'Mag' + y;
-			case 6: return e ? 'Giugno' + y : 'Giu' + y;
-			case 7: return e ? 'Luglio' + y : 'Lug' + y;
-			case 8: return e ? 'Agosto' + y : 'Ago' + y;
-			case 9: return e ? 'Settembre' + y : 'Set' + y;
-			case 10: return e ? 'Ottobre' + y : 'Ott' + y;
-			case 11: return e ? 'Novembre' + y : 'Nov' + y;
-			case 12: return e ? 'Dicembre' + y : 'Dic' + y;
-		}
-		return '';
-	}
-	
 	export function saveFile(base64: string, fileName: string, mimeType: string = 'application/octet-stream') {
 		const ab = atob(base64);
 		const an = new Array(ab.length);
@@ -322,7 +272,7 @@
 		link.download = fileName;
 		link.click();
 	}
-	
+
 	export function viewFile(base64: string, fileName: string, mimeType: string = 'application/octet-stream') {
 		const ab = atob(base64);
 		const an = new Array(ab.length);
@@ -340,7 +290,7 @@
 		link.click();
 		setTimeout(() => { URL.revokeObjectURL(url); }, 1000);
 	}
-	
+
 	export function getAction(ie: string | Event, c?: WUX.WComponent, tag?: string): WAction {
 		if(!ie) return null;
 		if(typeof ie == 'string') {
@@ -374,7 +324,7 @@
 			return getAction(i, c, n);
 		}
 	}
-	
+
 	export function action(name: string, ref?: string | number, ele?: string, comp?: WUX.WComponent, inner?: string, cls?: string) : string {
 		if(typeof ref == 'string') ref = ref.replace(/\-/g, '$');
 		if(!ele) ele = 'a';
