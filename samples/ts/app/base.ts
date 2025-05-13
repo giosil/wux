@@ -1,6 +1,10 @@
 WUX.RES.CLOSE  = 'Close';
 WUX.RES.CANCEL = 'Cancel';
 
+WUX.formWillMount = (c: WUX.WForm) => {
+	if(!c.leg) c.legend('Form legend', 'sr-only');
+};
+
 namespace APP {
 
 	import WUtil = WUX.WUtil;

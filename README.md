@@ -686,6 +686,9 @@ let tc2 = WUX.toggleClass('text-center text-red', 'text-red');
 
 let b = WUX.build('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye', 'text-center');
 // -> '<div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>'
+
+let e = WUX.create('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye', 'text-center');
+// -> Element <div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>
 ```
 
 ## SVG Logo

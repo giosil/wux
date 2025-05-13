@@ -1,5 +1,9 @@
 WUX.RES.CLOSE = 'Close';
 WUX.RES.CANCEL = 'Cancel';
+WUX.formWillMount = function (c) {
+    if (!c.leg)
+        c.legend('Form legend', 'sr-only');
+};
 var APP;
 (function (APP) {
     var WUtil = WUX.WUtil;
