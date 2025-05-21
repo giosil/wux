@@ -1977,6 +1977,7 @@ namespace WUX {
 			this.footer = [];
 			this.captions = [];
 			this.addRow();
+			this.leg = null;
 			return this;
 		}
 

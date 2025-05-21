@@ -4966,6 +4966,7 @@ var WUX;
             this.footer = [];
             this.captions = [];
             this.addRow();
+            this.leg = null;
             return this;
         };
         WForm.prototype.legend = function (inner, cls, css, attr) {
