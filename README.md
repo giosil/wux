@@ -691,6 +691,64 @@ let e = WUX.create('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-by
 // -> Element <div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>
 ```
 
+### WUX DX Extension ###
+
+In the `/samples/ts/wux` folder you will find the `wux.dx.ts` extension.
+
+```typescript
+let h = ['Code', 'Name'];
+let k = ['code', 'name'];
+this.table = new WUX.WDXTable(this.subId('tapp'), h, k);
+this.table.selectionMode = 'single';
+this.table.filter = true;
+this.table.exportFile = "entities";
+this.table.types = ['s', 's'];
+this.table.paging = true;
+this.table.pageSize = 5;
+
+this.table.actionsTitle = 'Actions';
+this.table.actionWidth = 140;
+this.table.addActions('id', {
+  id: 'view',
+  classStyle: 'btn btn-link btn-xs',
+  label: 'View',
+  icon: 'fa-search'
+});
+this.table.addActions('id', {
+  id: 'edit',
+  classStyle: 'btn btn-link btn-xs',
+  label: 'Edit',
+  icon: 'fa-edit'
+});
+this.table.addActions('id', {
+  id: 'delete',
+  classStyle: 'btn btn-link btn-xs',
+  label: 'Delete',
+  icon: 'fa-trash'
+});
+this.table.onClickAction((e: JQueryEventObject) => {
+  // Action id
+  let ai = WUX.firstSub(e.currentTarget);
+  if (!ai) return;
+  // Action value
+  let av: number = WUtil.toNumber(WUX.lastSub(e.currentTarget));
+  if (!av) return;
+  console.log('action=' + ai + ',value=' + av);
+  
+  let s = this.table.getState();
+  let x = WUtil.indexOf(s, 'id', av);
+  if(x < 0) return;
+  
+  console.log(ai, s[x]);
+});
+this.table.onDoubleClick((e: { element?: JQuery }) => {
+  let srd = this.table.getSelectedRowsData();
+  if (!srd || !srd.length) return;
+  
+  console.log(srd);
+});
+```
+
 ## SVG Logo
 
 ```xml
