@@ -747,6 +747,32 @@ this.table.onDoubleClick((e: { element?: JQuery }) => {
   
   console.log(srd);
 });
+this.table.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
+  if (!e.data) return;
+  let code = WUtil.getString(e.data, 'code');
+  if(code == '-') {
+    WUX.setJQCss(e.rowElement, WUX.CSS.DANGER);
+  }
+});
+this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: DevExpress.ui.dxDataGridColumn, rowIndex?: number, rowType?: string, row?: DevExpress.ui.dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => {
+  let row = e.row;
+  if (row != null && row.rowType == 'data') {
+    let f = e.column.dataField;
+    if (f == 'name') {
+      e.cellElement.addClass('clickable');
+    }
+  }
+});
+this.tabReg.onCellClick((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: DevExpress.ui.dxDataGridRowObject }) => {
+  let row = e.row;
+  if (row != null && row.rowType == 'data') {
+    let f = e.column.dataField;
+    if (f == 'name') {
+      console.log('click on name', row);
+    }
+  }
+});
+
 ```
 
 ## SVG Logo
