@@ -3,6 +3,12 @@
 
 input:read-only{background-color:#f1f1f1;}
 .form-control:disabled{background-color:#f1f1f1;}
+textarea{border: 1px solid #eeeeee !important;}
+
+.primary-bg-a2 {background-color: hsl(208deg,62.6865671642%,89.28%)!important;}
+
+.clickable{color: rgb(0, 102, 204);cursor: pointer;}
+.clickable:hover{text-decoration: underline;}
 
 .breadcrumb-container{margin-top: 20px !important;padding-left: 0 !important;}
 .breadcrumb-container .breadcrumb{padding: 0.5em 0;border-radius: 0;}

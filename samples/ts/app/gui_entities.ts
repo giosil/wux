@@ -232,6 +232,16 @@ namespace APP {
 				this.dlg.setState(e.data);
 				this.dlg.show(this);
 			});
+			this.table.onRowPrepared((e: {element?: Element, rowElement?: Element, data?: any, rowIndex?: number}) => {
+				let n = WUtil.getString(e.data, 'name');
+				if(n == 'NA') {
+					WUX.setCss(e.rowElement, {bg: '#ffeebc'});
+				}
+			});
+			this.table.onSelectionChanged((e: {element?: Element, selectedRowsData?: any[]}) => {
+				let srd = this.table.getSelectedRowsData();
+				console.log('selection changed', srd);
+			});
 
 			// Pagination components
 			// Link to page

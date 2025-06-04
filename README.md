@@ -405,6 +405,14 @@ for(let r of data) {
 this.table.setState(data);
 ```
 
+Selection add `primary-bg-a2` class to `tr` tag.
+
+```css
+.primary-bg-a2 {
+  background-color: hsl(208deg,62.6865671642%,89.28%)!important;
+}
+```
+
 ### WUX.WTab
 
 **WTab** allows you to implement tabs and handle related events.

@@ -1723,6 +1723,16 @@ var APP;
                 _this.dlg.setState(e.data);
                 _this.dlg.show(_this);
             });
+            this.table.onRowPrepared(function (e) {
+                var n = WUtil.getString(e.data, 'name');
+                if (n == 'NA') {
+                    WUX.setCss(e.rowElement, { bg: '#ffeebc' });
+                }
+            });
+            this.table.onSelectionChanged(function (e) {
+                var srd = _this.table.getSelectedRowsData();
+                console.log('selection changed', srd);
+            });
             // Pagination components
             // Link to page
             this.respg = new APP.ResPages(this.subId('respg'));
