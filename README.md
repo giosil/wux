@@ -405,7 +405,7 @@ for(let r of data) {
 this.table.setState(data);
 ```
 
-Selection add `primary-bg-a2` class to `tr` tag.
+Default CSS class setted in `WUX.CSS.SEL_ROW` is `primary-bg-a2`.
 
 ```css
 .primary-bg-a2 {
