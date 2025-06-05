@@ -102,20 +102,20 @@ var WUX;
             this.$i.dispose();
             return this;
         };
-        WDX.prototype.repaint = function (t, c) {
+        WDX.prototype.exec = function (m, t, c) {
             var _this = this;
             if (t === void 0) { t = -1; }
-            if (!this.$i)
+            if (!this.$i || !m)
                 return this;
             if (t >= 0) {
                 setTimeout(function () {
-                    _this.$i.repaint();
+                    _this.$i[m]();
                     if (c)
                         c(_this.$i);
                 }, t);
             }
             else {
-                this.$i.repaint();
+                this.$i[m]();
                 if (c)
                     c(this.$i);
             }

@@ -88,16 +88,16 @@ namespace WUX {
 			return this
 		}
 
-		repaint(t: number = -1, c?: (i: any) => void): this {
-			if (!this.$i) return this;
+		exec(m: string, t: number = -1, c?: (i: any) => void): this {
+			if (!this.$i || !m) return this;
 			if (t >= 0) {
 				setTimeout(() => { 
-					this.$i.repaint(); 
+					this.$i[m](); 
 					if (c) c(this.$i); 
 				}, t);
 			}
 			else {
-				this.$i.repaint();
+				this.$i[m]();
 				if (c) c(this.$i);
 			}
 			return this;

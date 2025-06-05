@@ -478,8 +478,17 @@ export class DlgEntity extends WUX.WDialog<string, Entity> {
 
   constructor(id: string) {
     super(id, 'DlgEntity');
-    
+
     this.title = 'Entity';
+
+    // Default:
+    // this.mainClass = 'modal-dialog modal-lg';
+
+    // this.fullscreen = true;
+    // this.mainClass = 'modal-dialog modal-fullscreen';
+
+    // Custom modal class:
+    // this.mainClass = 'modal-dialog modal-xl';
 
     this.form = new WUX.WForm(this.subId('form'));
     this.form.addRow();
@@ -703,6 +712,8 @@ let e = WUX.create('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-by
 
 In the `/samples/ts/wux` folder you will find the `wux.dx.ts` extension.
 
+[DevExtreme](https://js.devexpress.com/) library is required.
+
 ```typescript
 let h = ['Code', 'Name'];
 let k = ['code', 'name'];
@@ -781,6 +792,38 @@ this.tabReg.onCellClick((e: { component?: DevExpress.DOMComponent, element?: Dev
   }
 });
 
+// Generic wrapper
+let opt: DevExpress.viz.dxPolarChartOptions = {
+  dataSource: [],
+  useSpiderWeb: true,
+  commonSeriesSettings: {
+    type: "line",
+    argumentField: "arg"
+  },
+  series: [
+    { valueField: "val1", name: "Value 1"},
+    { valueField: "val2", name: "Value 2"}
+  ],
+  title: "Polar chart",
+  tooltip: {
+    enabled: true,
+  },
+  export: {
+    enabled: true
+  },
+  argumentAxis: {
+    label: {
+      overlappingBehavior: "none"
+    }
+  }
+};
+
+// Create wrapper        Component       Id
+let chart = new WUX.WDX('dxPolarChart', 'chart');
+// Set options
+chart.options = opt;
+// Execute a method (t >= 0 timeout, -1 synchronous)
+chart.exec('refresh', 0);
 ```
 
 ## SVG Logo

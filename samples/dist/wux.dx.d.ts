@@ -16,7 +16,7 @@ declare namespace WUX {
         getInstance(c?: (i: any) => void): any;
         focus(): this;
         dispose(): this;
-        repaint(t?: number, c?: (i: any) => void): this;
+        exec(m: string, t?: number, c?: (i: any) => void): this;
         option(n: string, v?: any): any;
         _on(n: string, f: Function): this;
         _off(n: string, f?: Function): this;
