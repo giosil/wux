@@ -64,10 +64,13 @@
 		static LEVER_STYLE = '';
 		static ICON = 'margin-right:8px;';
 		static SEL_ROW = 'primary-bg-a2';
-
-		static SUCCESS: WStyle = { bg: '#b8ddd0' };
-		static DANGER: WStyle = { bg: '#f4c7ce' };
-		static WARNING: WStyle = { bg: '#e6d3b8' };
+		
+		static PRIMARY: WStyle = { bg: '#cce5ff' };
+		static SECONDARY: WStyle = { bg: '#e2e3e5' };
+		static SUCCESS: WStyle = { bg: '#d4edda' };
+		static DANGER: WStyle = { bg: '#f8d7da' };
+		static WARNING: WStyle = { bg: '#fff3cd' };
+		static INFO: WStyle = { bg: '#d1ecf1' };
 	}
 	
 	export class RES {

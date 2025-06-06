@@ -469,9 +469,12 @@ declare namespace WUX {
         static LEVER_STYLE: string;
         static ICON: string;
         static SEL_ROW: string;
+        static PRIMARY: WStyle;
+        static SECONDARY: WStyle;
         static SUCCESS: WStyle;
         static DANGER: WStyle;
         static WARNING: WStyle;
+        static INFO: WStyle;
     }
     class RES {
         static OK: string;
