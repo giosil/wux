@@ -390,7 +390,7 @@ this.table.onSelectionChanged((e: {element?: Element, selectedRowsData?: any[]})
 this.table.onRowPrepared((e: {element?: Element, rowElement?: Element, data?: any, rowIndex?: number}) => {
   let mark = e.data['mark'];
   if (mark) {
-    WUX.setCss(e.rowElement, 'background-color: #ffffee');
+    WUX.setCss(e.rowElement, WUX.CSS.WARNING);
   }
 });
 
@@ -768,9 +768,18 @@ this.table.onDoubleClick((e: { element?: JQuery }) => {
 });
 this.table.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any, rowIndex?: number, isSelected?: boolean }) => {
   if (!e.data) return;
-  let code = WUtil.getString(e.data, 'code');
-  if(code == '-') {
+  let n = WUtil.getString(e.data, 'name');
+  if(n == 'NA') {
+    WUX.setJQCss(e.rowElement, WUX.CSS.WARNING);
+  }
+  else if(n == 'ERR') {
     WUX.setJQCss(e.rowElement, WUX.CSS.DANGER);
+  }
+  else if(n == 'OK') {
+    WUX.setJQCss(e.rowElement, WUX.CSS.SUCCESS);
+  }
+  else if(n == 'INFO') {
+    WUX.setJQCss(e.rowElement, WUX.CSS.INFO);
   }
 });
 this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: DevExpress.ui.dxDataGridColumn, rowIndex?: number, rowType?: string, row?: DevExpress.ui.dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => {

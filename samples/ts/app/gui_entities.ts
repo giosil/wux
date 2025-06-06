@@ -235,7 +235,16 @@ namespace APP {
 			this.table.onRowPrepared((e: {element?: Element, rowElement?: Element, data?: any, rowIndex?: number}) => {
 				let n = WUtil.getString(e.data, 'name');
 				if(n == 'NA') {
-					WUX.setCss(e.rowElement, {bg: '#ffeebc'});
+					WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+				}
+				else if(n == 'ERR') {
+					WUX.setCss(e.rowElement, WUX.CSS.DANGER);
+				}
+				else if(n == 'OK') {
+					WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+				}
+				else if(n == 'INFO') {
+					WUX.setCss(e.rowElement, WUX.CSS.INFO);
 				}
 			});
 			this.table.onSelectionChanged((e: {element?: Element, selectedRowsData?: any[]}) => {

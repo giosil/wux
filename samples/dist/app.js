@@ -1726,7 +1726,16 @@ var APP;
             this.table.onRowPrepared(function (e) {
                 var n = WUtil.getString(e.data, 'name');
                 if (n == 'NA') {
-                    WUX.setCss(e.rowElement, { bg: '#ffeebc' });
+                    WUX.setCss(e.rowElement, WUX.CSS.WARNING);
+                }
+                else if (n == 'ERR') {
+                    WUX.setCss(e.rowElement, WUX.CSS.DANGER);
+                }
+                else if (n == 'OK') {
+                    WUX.setCss(e.rowElement, WUX.CSS.SUCCESS);
+                }
+                else if (n == 'INFO') {
+                    WUX.setCss(e.rowElement, WUX.CSS.INFO);
                 }
             });
             this.table.onSelectionChanged(function (e) {
