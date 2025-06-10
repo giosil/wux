@@ -445,6 +445,9 @@ this.tab.on('statechange', (e: WUX.WEvent) => {
   let index = this.tab.getState();
   // Perform operation
 });
+
+// To disable a tab
+this.tab.setEnabled(1, false);
 ```
 
 ### WUX.WPages
