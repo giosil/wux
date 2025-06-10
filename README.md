@@ -280,6 +280,9 @@ this.btnReset.on('click', (e: PointerEvent) => {
   this.form.focus();
   this.table.setState([]);
 });
+
+// To disable a button
+this.btnFind.enabled = false;
 ```
 
 ### WUX.WLink
