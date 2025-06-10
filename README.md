@@ -136,6 +136,7 @@ Below are some of the more relevant wrappers.
 ```typescript
 this.main = new WUX.WContainer();
 this.main
+  .before('<h1>Title</h1>')
   .addRow()
     .addCol('col-md-12')
       .add(this.form)
@@ -151,7 +152,8 @@ this.main
         this.btnNew)
   .addRow()
     .addCol('col-md-12', 'padding-top: 1rem;')
-      .add(this.table);
+      .add(this.table)
+  .after('<p>Notes</p>');
 ```
 
 ### WUX.WForm
@@ -174,7 +176,7 @@ this.form
   .addRow()
     .addDateField('date', 'Date')
     .addTimeField('time', 'Time')
-    .addBooleanField('flag', 'Flag')
+    .addBooleanField('flag', 'Check')
     .addToggleField('toggle', 'Active')
   .addInternalField('id')
   .addToFooter('<em>(*) Mandatory field</em>');
