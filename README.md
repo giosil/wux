@@ -322,6 +322,27 @@ input.onEnter((e: KeyboardEvent) => {
 });
 ```
 
+### WUX.WRadio
+
+**WRadio** allows you to implement an HTML radio input and handle related events.
+
+```typescript
+let options: WUX.WEntity[] = [
+  {id: 'N', text: ''},
+  {id: 'M', text: 'Male'}, 
+  {id: 'F', text: 'Female'}
+];
+
+let radio = new WUX.WRadio(this.subId('rad'));
+radio.setOptions(options);
+radio.on('statechange', (e: WUX.WEvent) => {
+  console.log('rad statechange', e);
+});
+
+// Find option by text
+let optM = radio.findOption('Male');
+```
+
 ### WUX.WSelect
 
 **WSelect** allows you to implement an HTML select and handle related events.
@@ -345,7 +366,7 @@ let optM = select.findOption('Male');
 
 ### WUX.WLabel
 
-**WLink** allows you to implement an HTML span or label (if "for" attribute setted).
+**WLabel** allows you to implement an HTML span or label (if "for" attribute setted).
 
 ```typescript
 let label = new WUX.WLabel(
@@ -355,6 +376,28 @@ let label = new WUX.WLabel(
   'text-primary',         // Style class
   'margin-right: 0.5rem;' // Inline style
 );
+```
+
+### WUX.Wrapp
+
+**Wrapp** allows you to wrapp an HTML element.
+
+```typescript
+let ele = document.createElement('span');
+ele.id  = 'w1';
+ele.setAttribute('style', 'margin-top: 1rem;');
+ele.className = 'badge bg-primary';
+ele.textContent = 'Hello';
+
+let w1 = new WUX.Wrapp(ele);
+
+let w2 = new WUX.Wrapp('<span id="w2" class="badge bg-primary" style="margin-top: 1rem;">Hello</span>');
+
+let w3 = new WUX.Wrapp('Hello', 
+           'span', 
+           'w3', 
+           'badge bg-primary', 
+           'margin-top: 1rem;');
 ```
 
 ### WUX.WTable
