@@ -343,6 +343,18 @@ radio.on('statechange', (e: WUX.WEvent) => {
 let optM = radio.findOption('Male');
 ```
 
+### WUX.WCheck
+
+**WCheck** allows you to implement an HTML checkbox input and handle related events.
+
+```typescript
+this.ck = new WUX.WCheck(this.subId('ck'));
+this.ck.label = 'Label';
+this.ck.on('statechange', (e: WUX.WEvent) => {
+  console.log('ck statechange: ' + this.ck.getState());
+});
+```
+
 ### WUX.WSelect
 
 **WSelect** allows you to implement an HTML select and handle related events.

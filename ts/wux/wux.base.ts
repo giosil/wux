@@ -670,7 +670,7 @@ namespace WUX {
 						else {
 							let t = document.createElement("template");
 							t.innerHTML = r;
-							this.context.append(t.content.firstElementChild);
+							this.context.appendChild(t.content.cloneNode(true));
 							let lc = this.context.lastChild;
 							if (lc instanceof Element) {
 								this.root = lc as Element;

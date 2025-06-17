@@ -1017,7 +1017,7 @@ namespace WUX {
 			if (this._tooltip) {
 				l += ' title="' + this._tooltip + '"';
 			}
-			l += '>' + this.label;
+			l += '>' + this.label + '</label>';
 			// Wrapper
 			let r0 = '';
 			let r1 = '';
@@ -1041,7 +1041,8 @@ namespace WUX {
 				}
 				r1 += '</div>';
 			}
-			return r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+			let r = r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+			return r;
 		}
 
 		protected componentDidMount(): void {
@@ -1050,6 +1051,9 @@ namespace WUX {
 				this.root = document.getElementById(this.id);
 			}
 			if(this.root) {
+				if (!this._enabled) {
+					this.root.setAttribute('disabled', '');
+				}
 				this.root.addEventListener("change", (e: Event) => {
 					this.props = !!this.root['checked'];
 					this.state = this.props ? this.value : undefined;
@@ -2272,7 +2276,7 @@ namespace WUX {
 			co.divClass = CSS.FORM_CHECK;
 			co.divStyle = CSS.CHECK_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
-			co.leverStyle = CSS.LEVER_STYLE
+			co.leverStyle = CSS.LEVER_STYLE;
 			co.label = labelCheck;
 			return this._add(id, label, co, 'boolean', opts);
 		}

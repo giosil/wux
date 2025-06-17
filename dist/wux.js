@@ -661,7 +661,7 @@ var WUX;
                         else {
                             var t = document.createElement("template");
                             t.innerHTML = r;
-                            this.context.append(t.content.firstElementChild);
+                            this.context.appendChild(t.content.cloneNode(true));
                             var lc = this.context.lastChild;
                             if (lc instanceof Element) {
                                 this.root = lc;
@@ -3933,7 +3933,7 @@ var WUX;
             if (this._tooltip) {
                 l += ' title="' + this._tooltip + '"';
             }
-            l += '>' + this.label;
+            l += '>' + this.label + '</label>';
             // Wrapper
             var r0 = '';
             var r1 = '';
@@ -3959,7 +3959,8 @@ var WUX;
                 }
                 r1 += '</div>';
             }
-            return r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+            var r = r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+            return r;
         };
         WCheck.prototype.componentDidMount = function () {
             var _this = this;
@@ -3968,6 +3969,9 @@ var WUX;
                 this.root = document.getElementById(this.id);
             }
             if (this.root) {
+                if (!this._enabled) {
+                    this.root.setAttribute('disabled', '');
+                }
                 this.root.addEventListener("change", function (e) {
                     _this.props = !!_this.root['checked'];
                     _this.state = _this.props ? _this.value : undefined;
