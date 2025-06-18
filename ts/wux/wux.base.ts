@@ -82,7 +82,7 @@ class WuxDOM {
 		else {
 			let t = document.createElement("template");
 			t.innerHTML = e;
-			ctx.append(t.content.firstElementChild);
+			ctx.append(t.content);
 		}
 		if (WUX.debug) console.log('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' completed.');
 		return ctx;
@@ -670,7 +670,9 @@ namespace WUX {
 						else {
 							let t = document.createElement("template");
 							t.innerHTML = r;
-							this.context.appendChild(t.content.cloneNode(true));
+							// this.context.append(t.content.firstElementChild);
+							// this.context.appendChild(t.content.cloneNode(true));
+							this.context.append(t.content);
 							let lc = this.context.lastChild;
 							if (lc instanceof Element) {
 								this.root = lc as Element;

@@ -348,9 +348,19 @@ let optM = radio.findOption('Male');
 **WCheck** allows you to implement an HTML checkbox input and handle related events.
 
 ```typescript
-let ck = new WUX.WCheck(this.subId('ck'));
-ck.label = 'Label';
-ck.on('statechange', (e: WUX.WEvent) => {
+let check = new WUX.WCheck(this.subId('ck'));
+check.label = 'Label';
+
+// Bootstrap styles 
+check.divClass   = WUX.CSS.FORM_CHECK;
+check.divStyle   = WUX.CSS.CHECK_STYLE;
+check.classStyle = WUX.CSS.FORM_CTRL;
+
+// Toggles
+check.lever      = true;
+check.leverStyle = WUX.CSS.LEVER_STYLE;
+
+check.on('statechange', (e: WUX.WEvent) => {
   console.log('ck statechange', e);
 });
 ```
