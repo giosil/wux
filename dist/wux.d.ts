@@ -542,8 +542,6 @@ declare namespace WUX {
         addContainer(c: WUX.WContainer): WContainer;
         addContainer(w: WWrapper): WContainer;
         addContainer(i: string, classStyle?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer;
-        addDiv(height: number, inner?: string, classStyle?: string): WContainer;
-        addDiv(css: string | WStyle, inner?: string, attributes?: string, id?: string): WContainer;
         end(): WContainer;
         protected componentWillMount(): void;
         protected render(): any;

@@ -137,6 +137,7 @@ Below are some of the more relevant wrappers.
 this.main = new WUX.WContainer();
 this.main
   .before('<h1>Title</h1>')
+  .head('<p>Head</p>')
   .addRow()
     .addCol('col-md-12')
       .add(this.form)
@@ -153,7 +154,8 @@ this.main
   .addRow()
     .addCol('col-md-12', 'padding-top: 1rem;')
       .add(this.table)
-  .after('<p>Notes</p>');
+  .tail('<p>Tail</p>')
+  .after('<p>After</p>');
 ```
 
 ### WUX.WForm

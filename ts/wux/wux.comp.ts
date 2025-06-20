@@ -237,20 +237,6 @@ namespace WUX {
 			return c;
 		}
 
-		addDiv(height: number, inner?: string, classStyle?: string): WContainer;
-		addDiv(css: string | WStyle, inner?: string, attributes?: string, id?: string): WContainer;
-		addDiv(hcss: number | string | WStyle, inner?: string, cls_att?: string, id?: string): WContainer {
-			let d: string;
-			if (typeof hcss == 'number') {
-				if (hcss < 1) return this;
-				d = WUX.build('div', inner, { h: hcss, n: cls_att });
-			}
-			else {
-				d = WUX.build('div', inner, hcss, cls_att, id);
-			}
-			return this.add(d);
-		}
-
 		end(): WContainer {
 			if (this.parent instanceof WContainer) return this.parent.end();
 			this._end = true;

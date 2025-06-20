@@ -3064,18 +3064,6 @@ var WUX;
             }
             return c;
         };
-        WContainer.prototype.addDiv = function (hcss, inner, cls_att, id) {
-            var d;
-            if (typeof hcss == 'number') {
-                if (hcss < 1)
-                    return this;
-                d = WUX.build('div', inner, { h: hcss, n: cls_att });
-            }
-            else {
-                d = WUX.build('div', inner, hcss, cls_att, id);
-            }
-            return this.add(d);
-        };
         WContainer.prototype.end = function () {
             if (this.parent instanceof WContainer)
                 return this.parent.end();
