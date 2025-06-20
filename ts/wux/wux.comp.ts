@@ -866,7 +866,7 @@ namespace WUX {
 
 		protected componentDidMount(): void {
 			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
-			if (this.state) this.root.setAttribute('value', this.state);
+			if (this.state) this.root.textContent = this.state;
 		}
 	}
 	

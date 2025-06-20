@@ -324,6 +324,19 @@ input.onEnter((e: KeyboardEvent) => {
 });
 ```
 
+### WUX.WTextArea
+
+**WTextArea** allows you to implement an HTML textarea and handle related events.
+
+```typescript
+// Create a textarea with 3 rows
+let ta = new WUX.WTextArea(this.subId('ta'), 3);
+ta.readonly = false;
+ta.enabled = true;
+ta.autofocus = true;
+ta.setState('Hello World!");
+```
+
 ### WUX.WRadio
 
 **WRadio** allows you to implement an HTML radio input and handle related events.

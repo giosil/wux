@@ -3777,7 +3777,7 @@ var WUX;
             if (this._tooltip)
                 this.root.setAttribute('title', this._tooltip);
             if (this.state)
-                this.root.setAttribute('value', this.state);
+                this.root.textContent = this.state;
         };
         return WTextArea;
     }(WUX.WComponent));
