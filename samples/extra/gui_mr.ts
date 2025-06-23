@@ -110,9 +110,9 @@ namespace APP {
 							.add(this.tlv)
 						.addCol('col-2')
 							.add(this.btnAdd)
-							.addDiv(4)
+							.add('<div style="height:4px"></div>')
 							.add(this.btnRem)
-							.addDiv(4)
+							.add('<div style="height:4px"></div>')
 							.add(this.btnUp)
 							.add(this.btnDw);
 			
