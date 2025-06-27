@@ -3923,7 +3923,7 @@ var WUX;
             if (this._tooltip) {
                 l += ' title="' + this._tooltip + '"';
             }
-            l += '>' + this.label + '</label>';
+            l += '>' + this.label;
             // Wrapper
             var r0 = '';
             var r1 = '';
@@ -3946,6 +3946,9 @@ var WUX;
                 if (this.lever) {
                     var ls = this.leverStyle ? ' style="' + this.leverStyle + '"' : '';
                     r1 += '<span class="lever"' + ls + '></span></label></div>';
+                }
+                else {
+                    r1 += '</label>';
                 }
                 r1 += '</div>';
             }

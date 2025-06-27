@@ -1003,7 +1003,7 @@ namespace WUX {
 			if (this._tooltip) {
 				l += ' title="' + this._tooltip + '"';
 			}
-			l += '>' + this.label + '</label>';
+			l += '>' + this.label;
 			// Wrapper
 			let r0 = '';
 			let r1 = '';
@@ -1024,6 +1024,9 @@ namespace WUX {
 				if(this.lever) {
 					let ls = this.leverStyle ? ' style="' + this.leverStyle + '"' : '';
 					r1 += '<span class="lever"' + ls + '></span></label></div>';
+				}
+				else {
+					r1 += '</label>';
 				}
 				r1 += '</div>';
 			}
