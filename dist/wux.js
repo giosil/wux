@@ -3645,7 +3645,8 @@ var WUX;
                 addAttributes += this.props ? ' type="' + this.props + '"' : ' type="text"';
                 if (this.size)
                     addAttributes += ' size="' + this.size + '"';
-                if (this.state)
+                // this.state can be zero.
+                if (this.state != null)
                     addAttributes += ' value="' + this.state + '"';
                 if (this.placeHolder)
                     addAttributes += ' placeholder="' + this.placeHolder + '"';
