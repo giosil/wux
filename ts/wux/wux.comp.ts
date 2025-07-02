@@ -714,6 +714,10 @@ namespace WUX {
 			return this;
 		}
 
+		protected shouldComponentUpdate(nextProps: string, nextState: string): boolean {
+			return this.props != nextProps || this.state != WUtil.toString(nextState);
+		}
+
 		protected updateState(nextState: string) {
 			// At runtime nextState can be of any type 
 			nextState = WUtil.toString(nextState);

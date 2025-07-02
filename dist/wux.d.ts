@@ -610,6 +610,7 @@ declare namespace WUX {
         get autofocus(): boolean;
         set autofocus(v: boolean);
         onEnter(h: (e: KeyboardEvent) => any): this;
+        protected shouldComponentUpdate(nextProps: string, nextState: string): boolean;
         protected updateState(nextState: string): void;
         getState(): string;
         protected render(): string;
