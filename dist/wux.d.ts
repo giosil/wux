@@ -554,7 +554,7 @@ declare namespace WUX {
         components: WComponent[];
         cbef: WUX.WComponent;
         caft: WUX.WComponent;
-        sp: number;
+        hs: number[];
         constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any);
         get pages(): number;
         add(c: WComponent): this;

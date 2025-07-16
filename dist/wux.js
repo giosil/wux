@@ -3216,9 +3216,9 @@ var WUX;
             var _this = 
             // WComponent init
             _super.call(this, id ? id : '*', 'WPages', props, classStyle, style, attributes) || this;
-            _this.sp = 0;
             // WPages init
             _this.components = [];
+            _this.hs = [];
             return _this;
         }
         Object.defineProperty(WPages.prototype, "pages", {
@@ -3262,7 +3262,10 @@ var WUX;
             return this;
         };
         WPages.prototype.back = function () {
-            this.setState(this.sp);
+            if (this.hs.length > 1)
+                this.hs.pop();
+            var s = this.hs.length ? this.hs[this.hs.length - 1] : 0;
+            this.setState(s);
             return this;
         };
         WPages.prototype.next = function () {
@@ -3329,7 +3332,7 @@ var WUX;
                 this.state = l + this.state;
             if (this.state < 0)
                 this.state = 0;
-            this.sp = this.state;
+            this.hs = [this.state]; // history
             var r = '<div';
             r += ' id="' + this.id + '"';
             if (this._classStyle)
@@ -3357,7 +3360,6 @@ var WUX;
             return r;
         };
         WPages.prototype.updateState = function (nextState) {
-            this.sp = this.state;
             this.state = nextState;
             var l = this.components.length;
             if (!this.state)
@@ -3366,6 +3368,10 @@ var WUX;
                 this.state = l + this.state;
             if (this.state < 0)
                 this.state = 0;
+            // history
+            if (this.hs[this.hs.length - 1] != this.state) {
+                this.hs.push(this.state);
+            }
             if (!this.mounted)
                 return;
             for (var i = 0; i < l; i++) {

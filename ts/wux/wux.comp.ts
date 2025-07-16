@@ -363,13 +363,14 @@ namespace WUX {
 		components: WComponent[];
 		cbef: WUX.WComponent
 		caft: WUX.WComponent
-		sp: number = 0;
+		hs: number[]; // history
 		
 		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WPages', props, classStyle, style, attributes);
 			// WPages init
 			this.components = [];
+			this.hs = [];
 		}
 
 		get pages(): number {
@@ -414,7 +415,9 @@ namespace WUX {
 		}
 
 		back(): this {
-			this.setState(this.sp);
+			if(this.hs.length > 1) this.hs.pop();
+			let s = this.hs.length ? this.hs[this.hs.length - 1] : 0;
+			this.setState(s);
 			return this;
 		}
 
@@ -467,7 +470,7 @@ namespace WUX {
 			if (!this.state) this.state = 0;
 			if (this.state < 0) this.state = l + this.state;
 			if (this.state < 0) this.state = 0;
-			this.sp = this.state;
+			this.hs = [this.state]; // history
 			let r: string = '<div';
 			r += ' id="' + this.id + '"';
 			if (this._classStyle) r += ' class="' + this._classStyle + '"';
@@ -493,12 +496,15 @@ namespace WUX {
 		}
 
 		protected updateState(nextState: number): void {
-			this.sp = this.state;
 			this.state = nextState;
 			let l = this.components.length;
 			if (!this.state) this.state = 0;
 			if (this.state < 0) this.state = l + this.state;
 			if (this.state < 0) this.state = 0;
+			// history
+			if (this.hs[this.hs.length - 1] != this.state) {
+				this.hs.push(this.state);
+			}
 			if (!this.mounted) return;
 			for (let i = 0; i < l; i++) {
 				let e = document.getElementById(this.id + '-' + i);
