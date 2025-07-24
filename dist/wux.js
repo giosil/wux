@@ -5540,26 +5540,64 @@ var WUX;
                 return f.component.getState();
             return f.value;
         };
-        WForm.prototype.isBlank = function (fid) {
-            if (fid) {
-                var f = this.getField(fid);
-                if (!f)
-                    return false;
-                var v = f.component ? f.component.getState() : f.value;
-                return !v;
+        WForm.prototype.notBlank = function () {
+            var fids = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                fids[_i] = arguments[_i];
+            }
+            var c = 0;
+            if (fids && fids.length) {
+                for (var _a = 0, fids_1 = fids; _a < fids_1.length; _a++) {
+                    var fid = fids_1[_a];
+                    var f = this.getField(fid);
+                    if (!f)
+                        continue;
+                    var v = f.component ? f.component.getState() : f.value;
+                    if (v)
+                        c++;
+                }
             }
             else {
-                for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
-                    var r = _a[_i];
-                    for (var _b = 0, r_3 = r; _b < r_3.length; _b++) {
-                        var f = r_3[_b];
+                for (var _b = 0, _c = this.rows; _b < _c.length; _b++) {
+                    var r = _c[_b];
+                    for (var _d = 0, r_3 = r; _d < r_3.length; _d++) {
+                        var f = r_3[_d];
+                        var v = f.component ? f.component.getState() : f.value;
+                        if (v)
+                            c++;
+                    }
+                }
+            }
+            return c;
+        };
+        WForm.prototype.isBlank = function () {
+            var fids = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                fids[_i] = arguments[_i];
+            }
+            if (fids && fids.length) {
+                for (var _a = 0, fids_2 = fids; _a < fids_2.length; _a++) {
+                    var fid = fids_2[_a];
+                    var f = this.getField(fid);
+                    if (!f)
+                        continue;
+                    var v = f.component ? f.component.getState() : f.value;
+                    if (v)
+                        return false;
+                }
+            }
+            else {
+                for (var _b = 0, _c = this.rows; _b < _c.length; _b++) {
+                    var r = _c[_b];
+                    for (var _d = 0, r_4 = r; _d < r_4.length; _d++) {
+                        var f = r_4[_d];
                         var v = f.component ? f.component.getState() : f.value;
                         if (v)
                             return false;
                     }
                 }
-                return true;
             }
+            return true;
         };
         WForm.prototype.getFile = function (fid, x, onload) {
             var f = this.getField(fid);
@@ -5640,8 +5678,8 @@ var WUX;
             var v = {};
             for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
                 var r = _a[_i];
-                for (var _b = 0, r_4 = r; _b < r_4.length; _b++) {
-                    var f = r_4[_b];
+                for (var _b = 0, r_5 = r; _b < r_5.length; _b++) {
+                    var f = r_5[_b];
                     var k = this.ripId(f.id);
                     if (!k)
                         continue;
@@ -5680,8 +5718,8 @@ var WUX;
             if (!this.rows)
                 return this;
             var sids = [];
-            for (var _a = 0, fids_1 = fids; _a < fids_1.length; _a++) {
-                var fid = fids_1[_a];
+            for (var _a = 0, fids_3 = fids; _a < fids_3.length; _a++) {
+                var fid = fids_3[_a];
                 var sid = fid.indexOf(this.id + '-') == 0 ? fid : this.subId(fid);
                 sids.push(sid);
             }

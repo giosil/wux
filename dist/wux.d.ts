@@ -816,7 +816,8 @@ declare namespace WUX {
         setValue(fid: string, v: any, updState?: boolean, cbNoOpt?: (cmp: WComponent, val: any) => any): this;
         setValueOf(fid: string, v: any, k: string, updState?: boolean, cbNoOpt?: (cmp: WComponent, val: any) => any): this;
         getValue(fid: string | WField): any;
-        isBlank(fid?: string): boolean;
+        notBlank(...fids: string[]): number;
+        isBlank(...fids: string[]): boolean;
         getFile(fid: string, onload: (f: File, b64: string) => any): File;
         getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File;
         setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this;

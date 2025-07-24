@@ -249,6 +249,14 @@ if(this.form.isBlank('name')) {
   console.log('name is blank.');
 }
 
+// Check blank fields
+if(this.form.isBlank('name', 'gender')) {
+  console.log('name and gender are blank.');
+}
+
+// Count not blank fields
+let count = this.form.notBlank('name', 'gender');
+
 // Load file
 let f = this.form.getFile('file', (f: File, b64: string) => {
   console.log('file, content', f, b64);

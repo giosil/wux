@@ -2534,12 +2534,35 @@ namespace WUX {
 			return f.value;
 		}
 
-		isBlank(fid?: string): boolean {
-			if(fid) {
-				let f = this.getField(fid);
-				if (!f) return false;
-				let v = f.component ? f.component.getState() : f.value;
-				return !v;
+		notBlank(...fids: string[]): number {
+			let c = 0;
+			if(fids && fids.length) {
+				for(let fid of fids) {
+					let f = this.getField(fid);
+					if (!f) continue;
+					let v = f.component ? f.component.getState() : f.value;
+					if (v) c++;
+				}
+			}
+			else {
+				for (let r of this.rows) {
+					for (let f of r) {
+						let v = f.component ? f.component.getState() : f.value;
+						if (v) c++;
+					}
+				}
+			}
+			return c;
+		}
+
+		isBlank(...fids: string[]): boolean {
+			if(fids && fids.length) {
+				for(let fid of fids) {
+					let f = this.getField(fid);
+					if (!f) continue;
+					let v = f.component ? f.component.getState() : f.value;
+					if (v) return false;
+				}
 			}
 			else {
 				for (let r of this.rows) {
@@ -2548,8 +2571,8 @@ namespace WUX {
 						if (v) return false;
 					}
 				}
-				return true;
 			}
+			return true;
 		}
 
 		getFile(fid: string, onload: (f: File, b64: string) => any): File;
