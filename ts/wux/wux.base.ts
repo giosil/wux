@@ -1829,11 +1829,11 @@ namespace WUX {
 		}
 
 		static getNumber(a: any, k: string, d?: number): number {
-			return WUtil.toNumber(WUtil.getValue(a, k, d));
+			return WUtil.toNumber(WUtil.getValue(a, k), d);
 		}
 
 		static getInt(a: any, k: string, d?: number): number {
-			return WUtil.toInt(WUtil.getValue(a, k, d));
+			return WUtil.toInt(WUtil.getValue(a, k), d);
 		}
 
 		static getString(a: any, k: string, d?: string, f?: string): string {
@@ -1859,15 +1859,15 @@ namespace WUX {
 		}
 
 		static getText(a: any, k: string, d?: string): string {
-			return WUtil.toText(WUtil.getValue(a, k, d));
+			return WUtil.toText(WUtil.getValue(a, k), d);
 		}
 
 		static getBoolean(a: any, k: string, d?: boolean): boolean {
-			return WUtil.toBoolean(WUtil.getValue(a, k, d));
+			return WUtil.toBoolean(WUtil.getValue(a, k), d);
 		}
 
 		static getDate(a: any, k: string, d?: Date): Date {
-			return WUtil.toDate(WUtil.getValue(a, k, d));
+			return WUtil.toDate(WUtil.getValue(a, k), d);
 		}
 
 		static getArray(a: any, k: string): any[] {

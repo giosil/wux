@@ -1962,10 +1962,10 @@ var WUX;
             return d;
         };
         WUtil.getNumber = function (a, k, d) {
-            return WUtil.toNumber(WUtil.getValue(a, k, d));
+            return WUtil.toNumber(WUtil.getValue(a, k), d);
         };
         WUtil.getInt = function (a, k, d) {
-            return WUtil.toInt(WUtil.getValue(a, k, d));
+            return WUtil.toInt(WUtil.getValue(a, k), d);
         };
         WUtil.getString = function (a, k, d, f) {
             var v = WUtil.getValue(a, k);
@@ -1998,13 +1998,13 @@ var WUX;
             return WUtil.toString(v);
         };
         WUtil.getText = function (a, k, d) {
-            return WUtil.toText(WUtil.getValue(a, k, d));
+            return WUtil.toText(WUtil.getValue(a, k), d);
         };
         WUtil.getBoolean = function (a, k, d) {
-            return WUtil.toBoolean(WUtil.getValue(a, k, d));
+            return WUtil.toBoolean(WUtil.getValue(a, k), d);
         };
         WUtil.getDate = function (a, k, d) {
-            return WUtil.toDate(WUtil.getValue(a, k, d));
+            return WUtil.toDate(WUtil.getValue(a, k), d);
         };
         WUtil.getArray = function (a, k) {
             return WUtil.toArray(WUtil.getValue(a, k));
