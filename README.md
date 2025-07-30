@@ -811,16 +811,22 @@ In the `/samples/ts/wux` folder you will find the `wux.dx.ts` extension.
 [DevExtreme](https://js.devexpress.com/) library is required.
 
 ```typescript
-let h = ['Code', 'Name'];
+// The '_' character will be replaced with a <br> in onCellPrepared (see below)
+let h = ['Code', 'First name_of person'];
 let k = ['code', 'name'];
 this.table = new WUX.WDXTable(this.subId('tapp'), h, k);
 this.table.selectionMode = 'single';
 this.table.filter = true;
 this.table.exportFile = "entities";
 this.table.types = ['s', 's'];
+// Pagination
 this.table.paging = true;
 this.table.pageSize = 5;
 
+// Column width (optional)
+this.table.widths[0] = 100;
+
+// Actions
 this.table.actionsTitle = 'Actions';
 this.table.actionWidth = 140;
 this.table.addActions('id', {
@@ -884,6 +890,13 @@ this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: 
     let f = e.column.dataField;
     if (f == 'name') {
       e.cellElement.addClass('clickable');
+    }
+  }
+  else if(e.rowType == 'header' && e.column.caption) {
+    // Multi row column header
+    let t = e.cellElement.find('.dx-datagrid-text-content');
+    if(t && t.length) {
+      t.html(e.column.caption.replace('_', '<br>'));
     }
   }
 });
