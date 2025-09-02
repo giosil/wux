@@ -911,7 +911,7 @@ namespace WUX {
 							}
 							let cid : any;
 							if (f.key) cid = WUtil.getValue(options.row.data, f.key);
-							if (!cid) cid = '_' + options.row.rowIndex;
+							if (cid == null) cid = '_' + options.row.rowIndex;
 							let s = style(f.labelCss);
 							s = s ? ' style="' + s + '"' : '';
 							let $a = $('<a id="' + f.id + '-' + cid + '" class="' + f.classStyle + '"' + s + '>' + buildIcon(f.icon, '', '', 0, WUX.cls(f.style), f.label) + '</a>');

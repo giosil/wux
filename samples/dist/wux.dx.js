@@ -940,7 +940,7 @@ var WUX;
                             var cid = void 0;
                             if (f.key)
                                 cid = WUX.WUtil.getValue(options.row.data, f.key);
-                            if (!cid)
+                            if (cid == null)
                                 cid = '_' + options.row.rowIndex;
                             var s = WUX.style(f.labelCss);
                             s = s ? ' style="' + s + '"' : '';
