@@ -883,6 +883,13 @@ this.table.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any
   else if(n == 'INFO') {
     WUX.setJQCss(e.rowElement, WUX.CSS.INFO);
   }
+  // Customize or hide actions
+  if(n == 'HIDE') {
+    setTimeout(() => {
+      let av = document.getElementById('view-' + e.data.id);
+      if (av) av.setAttribute('style', 'display:none;');
+    });
+  }
 });
 this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: DevExpress.ui.dxDataGridColumn, rowIndex?: number, rowType?: string, row?: DevExpress.ui.dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => {
   let row = e.row;
