@@ -905,10 +905,6 @@ namespace WUX {
 						}
 						for (let i = 0; i < _self.actions.length; i++) {
 							let f = _self.actions[i];
-							if (f.build) {
-								f.build(container, options.row.data);
-								continue;
-							}
 							let cid : any;
 							if (f.key) cid = WUtil.getValue(options.row.data, f.key);
 							if (cid == null) cid = '_' + options.row.rowIndex;
@@ -920,6 +916,10 @@ namespace WUX {
 								if (!_self.handlers['_clickaction']) return;
 								for (let h of _self.handlers['_clickaction']) h(e);
 							});
+							if (f.onbuild) {
+								f.onbuild($a[0], options.row.data);
+								continue;
+							}
 						}
 					}
 				});

@@ -833,7 +833,14 @@ this.table.addActions('id', {
   id: 'view',
   classStyle: 'btn btn-link btn-xs',
   label: 'View',
-  icon: 'fa-search'
+  icon: 'fa-search',
+  onbuild: (e: Element, data: any) => {
+    // Customize or hide actions dynamically
+    let n = WUtil.getString(data, 'name');
+    if(n == 'HIDE') {
+      e.setAttribute('style', 'display:none;');
+    }
+  }
 });
 this.table.addActions('id', {
   id: 'edit',
@@ -883,11 +890,11 @@ this.table.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any
   else if(n == 'INFO') {
     WUX.setJQCss(e.rowElement, WUX.CSS.INFO);
   }
-  // Customize or hide actions
+  // Another way to customize or hide actions dynamically
   if(n == 'HIDE') {
     setTimeout(() => {
-      let av = document.getElementById('view-' + e.data.id);
-      if (av) av.setAttribute('style', 'display:none;');
+      let ae = document.getElementById('edit-' + e.data.id);
+      if (ae) ae.setAttribute('style', 'display:none;');
     });
   }
 });

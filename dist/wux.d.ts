@@ -81,7 +81,7 @@ declare namespace WUX {
         autofocus?: boolean;
         enabled?: boolean;
         visible?: boolean;
-        build?: (container: any, data: any) => void;
+        onbuild?: (e: Element, data: any) => void;
     }
     /** WEntity interface */
     interface WEntity {

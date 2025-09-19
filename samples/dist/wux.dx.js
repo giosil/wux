@@ -933,10 +933,6 @@ var WUX;
                         }
                         for (var i = 0; i < _self.actions.length; i++) {
                             var f = _self.actions[i];
-                            if (f.build) {
-                                f.build(container, options.row.data);
-                                continue;
-                            }
                             var cid = void 0;
                             if (f.key)
                                 cid = WUX.WUtil.getValue(options.row.data, f.key);
@@ -954,6 +950,10 @@ var WUX;
                                     h(e);
                                 }
                             });
+                            if (f.onbuild) {
+                                f.onbuild($a[0], options.row.data);
+                                continue;
+                            }
                         }
                     }
                 });
