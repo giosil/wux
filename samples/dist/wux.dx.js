@@ -952,7 +952,6 @@ var WUX;
                             });
                             if (f.onbuild) {
                                 f.onbuild($a[0], options.row.data);
-                                continue;
                             }
                         }
                     }
