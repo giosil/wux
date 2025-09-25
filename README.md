@@ -111,7 +111,7 @@ Additional methods and properties are listed below.
 <table>
 <tr><td>The <strong>updateState(nextState: S)</strong> method is called when the <strong>state</strong> needs to be updated.</td></tr>
 <tr><td>The <strong>updateProps(nextProps: P)</strong> method is called when the <strong>props</strong> needs to be updated.</td></tr>
-<tr><td>The <strong>buildRoot, build, make</strong> methods are called in **render** default implementation.</td></tr>
+<tr><td>The <strong>buildRoot, build, make</strong> methods are called in <strong>render</strong> default implementation.</td></tr>
 <tr><td>The <strong>on, off, trigger</strong> methods allow you to handle events provided by the DOM or custom events (the event name begins with an underscore).</td></tr>
 <tr><td>The <strong>style, classStyle, attributes</strong> properties allow you to characterize the component in terms of presentation.</td></tr>
 <tr><td>The <strong>visible, enabled</strong> properties allow you to respectively make the component visible or not and enable or disable it.</td></tr>
