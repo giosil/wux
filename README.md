@@ -206,6 +206,11 @@ this.form.setEnabled('date', false);
 // Set focus on a field
 this.form.focusOn('name');
 
+// Handle focus event on a field
+this.form.onFocus('name', (e: FocusEvent) => {
+  console.log('focus', e);
+});
+
 // Find option by text
 this.form.findOption('gender', 'Male');
 

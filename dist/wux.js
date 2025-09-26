@@ -3070,6 +3070,12 @@ var WUX;
             this._end = true;
             return this;
         };
+        WContainer.prototype.section = function (title, secStyle, legStyle) {
+            var l = WUX.build('span', title, legStyle);
+            var s = WUX.build('div', l, secStyle);
+            this.add(s);
+            return this;
+        };
         WContainer.prototype.componentWillMount = function () {
             // Before the container
             for (var _i = 0, _a = this.cbef; _i < _a.length; _i++) {
@@ -4994,17 +5000,29 @@ var WUX;
             this.handlers['_enter'] = [h];
             return this;
         };
+        WForm.prototype.onFocus = function (fid, h) {
+            var f = this.getField(fid);
+            if (!f)
+                return this;
+            if (f.component) {
+                f.component.on('focus', h);
+            }
+            else if (f.element instanceof HTMLElement) {
+                f.element.addEventListener('focus', h);
+            }
+            return this;
+        };
         WForm.prototype.focus = function () {
             if (!this.mounted)
                 return this;
             var f = this.first(true);
-            if (f) {
-                if (f.component) {
-                    f.component.focus();
-                }
-                else if (f.element instanceof HTMLElement) {
-                    f.element.focus();
-                }
+            if (!f)
+                return this;
+            if (f.component) {
+                f.component.focus();
+            }
+            else if (f.element instanceof HTMLElement) {
+                f.element.focus();
             }
             return this;
         };

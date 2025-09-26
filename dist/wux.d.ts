@@ -543,6 +543,7 @@ declare namespace WUX {
         addContainer(w: WWrapper): WContainer;
         addContainer(i: string, classStyle?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer;
         end(): WContainer;
+        section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle): this;
         protected componentWillMount(): void;
         protected render(): any;
         protected componentDidMount(): void;
@@ -775,6 +776,7 @@ declare namespace WUX {
         init(): this;
         legend(inner: string, cls?: string, css?: string | WStyle, attr?: string | object): this;
         onEnter(h: (e: KeyboardEvent) => any): this;
+        onFocus(fid: string, h: (e: FocusEvent) => any): this;
         focus(): this;
         first(enabled?: boolean): WField;
         focusOn(fieldId: string): this;

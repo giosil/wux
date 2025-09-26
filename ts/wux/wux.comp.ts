@@ -243,6 +243,13 @@ namespace WUX {
 			return this;
 		}
 
+		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle): this {
+			let l = WUX.build('span', title, legStyle);
+			let s = WUX.build('div', l, secStyle);
+			this.add(s);
+			return this;
+		}
+
 		protected componentWillMount(): void {
 			// Before the container
 			for(let c of this.cbef) {
@@ -2001,16 +2008,27 @@ namespace WUX {
 			return this;
 		}
 
+		onFocus(fid: string, h: (e: FocusEvent) => any): this {
+			let f = this.getField(fid);
+			if (!f) return this;
+			if(f.component) {
+				f.component.on('focus', h);
+			}
+			else if(f.element instanceof HTMLElement) {
+				f.element.addEventListener('focus', h);
+			}
+			return this;
+		}
+
 		focus(): this {
 			if (!this.mounted) return this;
 			let f = this.first(true);
-			if (f) {
-				if (f.component) {
-					f.component.focus();
-				}
-				else if (f.element instanceof HTMLElement) {
-					f.element.focus();
-				}
+			if (!f) return this;
+			if (f.component) {
+				f.component.focus();
+			}
+			else if (f.element instanceof HTMLElement) {
+				f.element.focus();
 			}
 			return this;
 		}
