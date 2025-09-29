@@ -59,11 +59,11 @@
 		static FORM_GROUP = 'form-group';
 		static LBL_CLASS = 'active';
 		static SEL_WRAPPER = 'select-wrapper';
+		static SECTION_DIV = 'margin-top:1rem;margin-bottom:1rem;';
+		static SECTION_LEG = 'font-size:120%;font-weight:600;text-transform:uppercase;';
 		static FORM_CTRL = 'form-control';
 		static FORM_CHECK = 'form-check form-check-inline';
 		static CKDIV_STYLE = 'padding-top:1rem;';
-		static SECTION_DIV = 'margin-top:1rem;margin-bottom:1rem;';
-		static SECTION_LEG = 'font-size:120%;font-weight:600;text-transform:uppercase;';
 		static CKBOX_STYLE = '';
 		static LEVER_STYLE = '';
 		static ICON = 'margin-right:8px;';

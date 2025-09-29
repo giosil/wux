@@ -139,7 +139,7 @@ this.main
   .before('<h1>Title</h1>')
   .head('<p>Head</p>')
   .addRow()
-    .addCol('col-md-12')
+    .addCol('col-md-12').section('Title')
       .add(this.form)
   .addRow()
     .addCol('col-md-8')

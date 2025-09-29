@@ -465,11 +465,11 @@ declare namespace WUX {
         static FORM_GROUP: string;
         static LBL_CLASS: string;
         static SEL_WRAPPER: string;
+        static SECTION_DIV: string;
+        static SECTION_LEG: string;
         static FORM_CTRL: string;
         static FORM_CHECK: string;
         static CKDIV_STYLE: string;
-        static SECTION_DIV: string;
-        static SECTION_LEG: string;
         static CKBOX_STYLE: string;
         static LEVER_STYLE: string;
         static ICON: string;
