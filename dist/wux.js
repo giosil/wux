@@ -5238,7 +5238,6 @@ var WUX;
             var at = 'min="' + min + '"';
             if (max != null)
                 at += ' max="' + max + '"';
-            ;
             if (!opts)
                 opts = {};
             if (opts.attributes)

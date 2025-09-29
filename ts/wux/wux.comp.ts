@@ -2228,7 +2228,7 @@ namespace WUX {
 			let id = this.subId(fid);
 			let co = new WInput(id, 'number', 0, CSS.FORM_CTRL);
 			let at = 'min="' + min + '"';
-			if (max != null) at += ' max="' + max + '"';	;
+			if (max != null) at += ' max="' + max + '"';
 			if (!opts) opts = {};
 			if (opts.attributes) opts.attributes += ' ' + at;
 			else opts.attributes = at;
