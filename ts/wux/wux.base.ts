@@ -202,6 +202,8 @@ namespace WUX {
 	export interface WGlobal {
 		/** Locale setting */
 		locale: string;
+		/** Web app root path */
+		rootPath: string;
 		/** Global init function */
 		init(callback: () => any): void;
 		/** Shared data */

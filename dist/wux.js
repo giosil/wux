@@ -2371,6 +2371,7 @@ var WUX;
     var _dccb = {};
     WUX.global = {
         locale: 'it',
+        rootPath: '',
         init: function _init(callback) {
             if (WUX.debug)
                 console.log('[WUX] global.init...');
@@ -2429,10 +2430,15 @@ var WUX;
         CSS.SEL_WRAPPER = 'select-wrapper';
         CSS.FORM_CTRL = 'form-control';
         CSS.FORM_CHECK = 'form-check form-check-inline';
-        CSS.CHECK_STYLE = 'padding-top:1rem;';
+        CSS.CKDIV_STYLE = 'padding-top:1rem;';
+        CSS.SECTION_DIV = 'margin-top:1rem;margin-bottom:1rem;';
+        CSS.SECTION_LEG = 'font-size:120%;font-weight:600;text-transform:uppercase;';
+        CSS.CKBOX_STYLE = '';
         CSS.LEVER_STYLE = '';
         CSS.ICON = 'margin-right:8px;';
         CSS.SEL_ROW = 'primary-bg-a2';
+        CSS.ROW = 'row';
+        CSS.COL = 'col-';
         CSS.PRIMARY = { bg: '#cce5ff' };
         CSS.SECONDARY = { bg: '#e2e3e5' };
         CSS.SUCCESS = { bg: '#d4edda' };
@@ -2844,7 +2850,7 @@ var WUX;
         }
         WContainer.prototype.addRow = function (classStyle, style) {
             if (classStyle == null)
-                classStyle = 'row';
+                classStyle = WUX.CSS.ROW;
             var g = [];
             var s = WUX.style(style);
             if (s)
@@ -2855,9 +2861,9 @@ var WUX;
         };
         WContainer.prototype.addCol = function (classStyle, style) {
             if (!classStyle)
-                classStyle = 'col-12';
+                classStyle = WUX.CSS.COL + '12';
             if (!isNaN(parseInt(classStyle)))
-                classStyle = 'col-' + classStyle;
+                classStyle = WUX.CSS.COL + classStyle;
             if (!this.grid.length)
                 this.addRow();
             var g = this.grid[this.grid.length - 1];
@@ -3071,6 +3077,10 @@ var WUX;
             return this;
         };
         WContainer.prototype.section = function (title, secStyle, legStyle) {
+            if (secStyle == null)
+                secStyle = WUX.CSS.SECTION_DIV;
+            if (legStyle == null)
+                legStyle = WUX.CSS.SECTION_LEG;
             var l = WUX.build('span', title, legStyle);
             var s = WUX.build('div', l, secStyle);
             this.add(s);
@@ -5012,9 +5022,19 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.focus = function () {
-            if (!this.mounted)
+        WForm.prototype.onBlur = function (fid, h) {
+            var f = this.getField(fid);
+            if (!f)
                 return this;
+            if (f.component) {
+                f.component.on('blur', h);
+            }
+            else if (f.element instanceof HTMLElement) {
+                f.element.addEventListener('blur', h);
+            }
+            return this;
+        };
+        WForm.prototype.focus = function () {
             var f = this.first(true);
             if (!f)
                 return this;
@@ -5046,10 +5066,8 @@ var WUX;
             }
             return null;
         };
-        WForm.prototype.focusOn = function (fieldId) {
-            if (!this.mounted)
-                return this;
-            var f = this.getField(fieldId);
+        WForm.prototype.focusOn = function (fid) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             if (f.component) {
@@ -5208,15 +5226,19 @@ var WUX;
             this.currRow.push(f);
             return this;
         };
-        WForm.prototype.addTextField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addTextField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'text', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'text', opts);
         };
-        WForm.prototype.addNumberField = function (fieldId, label, min, max, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addNumberField = function (fid, label, min, max, opts) {
+            if (min === void 0) { min = 0; }
+            var id = this.subId(fid);
             var co = new WInput(id, 'number', 0, WUX.CSS.FORM_CTRL);
-            var at = 'min="' + min + '" max="' + max + '"';
+            var at = 'min="' + min + '"';
+            if (max != null)
+                at += ' max="' + max + '"';
+            ;
             if (!opts)
                 opts = {};
             if (opts.attributes)
@@ -5225,68 +5247,69 @@ var WUX;
                 opts.attributes = at;
             return this._add(id, label, co, 'number', opts);
         };
-        WForm.prototype.addPasswordField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addPasswordField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'password', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'password', opts);
         };
-        WForm.prototype.addDateField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addDateField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'date', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'date', opts);
         };
-        WForm.prototype.addMonthField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addMonthField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'month', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'month', opts);
         };
-        WForm.prototype.addTimeField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addTimeField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'time', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'time', opts);
         };
-        WForm.prototype.addEmailField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addEmailField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'email', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'email', opts);
         };
-        WForm.prototype.addNoteField = function (fieldId, label, rows, opts) {
+        WForm.prototype.addNoteField = function (fid, label, rows, opts) {
             if (!rows)
                 rows = 3;
-            var id = this.subId(fieldId);
+            var id = this.subId(fid);
             var co = new WTextArea(id, rows, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'note', opts);
         };
-        WForm.prototype.addFileField = function (fieldId, label, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addFileField = function (fid, label, opts) {
+            var id = this.subId(fid);
             var co = new WInput(id, 'file', 0, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'file', opts);
         };
-        WForm.prototype.addOptionsField = function (fieldId, label, options, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addOptionsField = function (fid, label, options, opts) {
+            var id = this.subId(fid);
             var co = new WSelect(id, options, false, WUX.CSS.FORM_CTRL);
             return this._add(id, label, co, 'select', opts);
         };
-        WForm.prototype.addRadioField = function (fieldId, label, options, opts) {
-            var id = this.subId(fieldId);
-            var co = new WRadio(id, options, WUX.CSS.FORM_CTRL, WUX.CSS.CHECK_STYLE);
+        WForm.prototype.addRadioField = function (fid, label, options, opts) {
+            var id = this.subId(fid);
+            var co = new WRadio(id, options, WUX.CSS.FORM_CTRL, WUX.CSS.CKDIV_STYLE);
             return this._add(id, label, co, 'select', opts);
         };
-        WForm.prototype.addBooleanField = function (fieldId, label, labelCheck, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addBooleanField = function (fid, label, labelCheck, opts) {
+            var id = this.subId(fid);
             var co = new WCheck(id, '');
             co.divClass = WUX.CSS.FORM_CHECK;
-            co.divStyle = WUX.CSS.CHECK_STYLE;
+            co.divStyle = WUX.CSS.CKDIV_STYLE;
             co.classStyle = WUX.CSS.FORM_CTRL;
+            co.style = WUX.CSS.CKBOX_STYLE;
             co.label = labelCheck;
             return this._add(id, label, co, 'boolean', opts);
         };
-        WForm.prototype.addToggleField = function (fieldId, label, labelCheck, opts) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addToggleField = function (fid, label, labelCheck, opts) {
+            var id = this.subId(fid);
             var co = new WCheck(id, '');
             co.lever = true;
             co.divClass = WUX.CSS.FORM_CHECK;
-            co.divStyle = WUX.CSS.CHECK_STYLE;
+            co.divStyle = WUX.CSS.CKDIV_STYLE;
             co.classStyle = WUX.CSS.FORM_CTRL;
             co.leverStyle = WUX.CSS.LEVER_STYLE;
             co.label = labelCheck;
@@ -5304,25 +5327,25 @@ var WUX;
             var co = new WLabel('', text, icon, classStyle, style);
             return this._add('', '', co, 'caption', opts);
         };
-        WForm.prototype.addHiddenField = function (fieldId, value) {
-            var id = this.subId(fieldId);
+        WForm.prototype.addHiddenField = function (fid, value) {
+            var id = this.subId(fid);
             var vs = WUX.WUtil.toString(value);
             var co = new WInput(id, 'hidden');
             co.setState(vs);
             this.currRow.push({ id: id, component: co, value: vs, type: 'hidden' });
             return this;
         };
-        WForm.prototype.addInternalField = function (fieldId, value) {
+        WForm.prototype.addInternalField = function (fid, value) {
             if (value === undefined)
                 value = null;
-            this.currRow.push({ id: this.subId(fieldId), value: value, type: 'internal' });
+            this.currRow.push({ id: this.subId(fid), value: value, type: 'internal' });
             return this;
         };
-        WForm.prototype.addComponent = function (fieldId, label, component, opts) {
+        WForm.prototype.addComponent = function (fid, label, component, opts) {
             if (!component)
                 return this;
-            if (fieldId) {
-                var id = this.subId(fieldId);
+            if (fid) {
+                var id = this.subId(fid);
                 component.id = id;
                 return this._add(id, label, component, 'component', opts);
             }
@@ -5381,7 +5404,7 @@ var WUX;
                     if (f.span && f.span > 0)
                         cs = cs * f.span;
                     if (f.colClass) {
-                        if (WUX.WUtil.starts(f.colClass, 'col-')) {
+                        if (WUX.WUtil.starts(f.colClass, WUX.CSS.COL)) {
                             this.main.addCol(f.colClass, f.colStyle);
                         }
                         else {
@@ -5665,15 +5688,15 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.setSpan = function (fieldId, span) {
-            var f = this.getField(fieldId);
+        WForm.prototype.setSpan = function (fid, span) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             f.span = span;
             return this;
         };
-        WForm.prototype.setEnabled = function (fieldId, v) {
-            var f = this.getField(fieldId);
+        WForm.prototype.setEnabled = function (fid, v) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             f.enabled = v;
@@ -5681,8 +5704,8 @@ var WUX;
                 f.component.enabled = v;
             return this;
         };
-        WForm.prototype.setReadOnly = function (fieldId, v) {
-            var f = this.getField(fieldId);
+        WForm.prototype.setReadOnly = function (fid, v) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             f.readonly = v;
@@ -6323,9 +6346,12 @@ var WUX;
             r += '<div class="tab-content"' + cs + '>';
             if (!this.tpClass)
                 this.tpClass = 'tab-pane';
+            if (!this.saClass) {
+                this.saClass = WUX.BS_VER < 4 ? 'active' : 'show active';
+            }
             for (var i = 0; i < this.tabs.length; i++) {
                 if (i == this.state) {
-                    r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + ' show active" role="tabpanel"></div>';
+                    r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + ' ' + this.saClass + '" role="tabpanel"></div>';
                 }
                 else {
                     r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + '" role="tabpanel"></div>';

@@ -28,6 +28,8 @@ declare namespace WUX {
     interface WGlobal {
         /** Locale setting */
         locale: string;
+        /** Web app root path */
+        rootPath: string;
         /** Global init function */
         init(callback: () => any): void;
         /** Shared data */
@@ -465,10 +467,15 @@ declare namespace WUX {
         static SEL_WRAPPER: string;
         static FORM_CTRL: string;
         static FORM_CHECK: string;
-        static CHECK_STYLE: string;
+        static CKDIV_STYLE: string;
+        static SECTION_DIV: string;
+        static SECTION_LEG: string;
+        static CKBOX_STYLE: string;
         static LEVER_STYLE: string;
         static ICON: string;
         static SEL_ROW: string;
+        static ROW: string;
+        static COL: string;
         static PRIMARY: WStyle;
         static SECONDARY: WStyle;
         static SUCCESS: WStyle;
@@ -777,9 +784,10 @@ declare namespace WUX {
         legend(inner: string, cls?: string, css?: string | WStyle, attr?: string | object): this;
         onEnter(h: (e: KeyboardEvent) => any): this;
         onFocus(fid: string, h: (e: FocusEvent) => any): this;
+        onBlur(fid: string, h: (e: FocusEvent) => any): this;
         focus(): this;
         first(enabled?: boolean): WField;
-        focusOn(fieldId: string): this;
+        focusOn(fid: string): this;
         getField(fid: string): WField;
         getComponent(fid: string, def?: WComponent): WComponent;
         onField(fid: string, events: 'mount' | 'unmount' | 'statechange' | 'propschange', handler: (e: WEvent) => any): this;
@@ -792,24 +800,24 @@ declare namespace WUX {
         setOptionValue(fid: string, text: string, d?: any): this;
         addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type?: string): this;
         protected _add(id: string, label: string, co: WComponent, type: string, opts?: WField): this;
-        addTextField(fieldId: string, label: string, opts?: WField): this;
-        addNumberField(fieldId: string, label: string, min: number, max: number, opts?: WField): this;
-        addPasswordField(fieldId: string, label: string, opts?: WField): this;
-        addDateField(fieldId: string, label: string, opts?: WField): this;
-        addMonthField(fieldId: string, label: string, opts?: WField): this;
-        addTimeField(fieldId: string, label: string, opts?: WField): this;
-        addEmailField(fieldId: string, label: string, opts?: WField): this;
-        addNoteField(fieldId: string, label: string, rows: number, opts?: WField): this;
-        addFileField(fieldId: string, label: string, opts?: WField): this;
-        addOptionsField(fieldId: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
-        addRadioField(fieldId: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
-        addBooleanField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this;
-        addToggleField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this;
+        addTextField(fid: string, label: string, opts?: WField): this;
+        addNumberField(fid: string, label: string, min?: number, max?: number, opts?: WField): this;
+        addPasswordField(fid: string, label: string, opts?: WField): this;
+        addDateField(fid: string, label: string, opts?: WField): this;
+        addMonthField(fid: string, label: string, opts?: WField): this;
+        addTimeField(fid: string, label: string, opts?: WField): this;
+        addEmailField(fid: string, label: string, opts?: WField): this;
+        addNoteField(fid: string, label: string, rows: number, opts?: WField): this;
+        addFileField(fid: string, label: string, opts?: WField): this;
+        addOptionsField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
+        addRadioField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
+        addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
+        addToggleField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
         addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this;
         addCaption(text: string, icon?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this;
-        addHiddenField(fieldId: string, value?: any): this;
-        addInternalField(fieldId: string, value?: any): this;
-        addComponent(fieldId: string, label: string, component: WComponent, opts?: WField): this;
+        addHiddenField(fid: string, value?: any): this;
+        addInternalField(fid: string, value?: any): this;
+        addComponent(fid: string, label: string, component: WComponent, opts?: WField): this;
         addToFooter(c: WElement): this;
         componentWillMount(): void;
         componentDidMount(): void;
@@ -823,9 +831,9 @@ declare namespace WUX {
         getFile(fid: string, onload: (f: File, b64: string) => any): File;
         getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File;
         setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this;
-        setSpan(fieldId: string, span: number): this;
-        setEnabled(fieldId: string, v: boolean): this;
-        setReadOnly(fieldId: string, v: boolean): this;
+        setSpan(fid: string, span: number): this;
+        setEnabled(fid: string, v: boolean): this;
+        setReadOnly(fid: string, v: boolean): this;
         getValues(): any;
         getState(): any;
         protected updateState(nextState: any): void;
@@ -905,6 +913,7 @@ declare namespace WUX {
         contStyle: string | WStyle;
         ulClass: string;
         tpClass: string;
+        saClass: string;
         _t: string;
         _a: string;
         _r: string;

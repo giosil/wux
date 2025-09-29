@@ -60,7 +60,7 @@ namespace WUX {
 		}
 
 		addRow(classStyle?: string, style?: string | WStyle): this {
-			if(classStyle == null) classStyle = 'row';
+			if(classStyle == null) classStyle = CSS.ROW;
 			let g: string[] = [];
 			let s = WUX.style(style);
 			if(s) classStyle += '^' + s;
@@ -70,8 +70,8 @@ namespace WUX {
 		}
 
 		addCol(classStyle?: string, style?: string | WStyle): this {
-			if(!classStyle) classStyle = 'col-12';
-			if(!isNaN(parseInt(classStyle))) classStyle = 'col-' + classStyle;
+			if(!classStyle) classStyle = CSS.COL + '12';
+			if(!isNaN(parseInt(classStyle))) classStyle = CSS.COL + classStyle;
 			if(!this.grid.length) this.addRow();
 			let g = this.grid[this.grid.length - 1];
 			let s = WUX.style(style);
@@ -244,6 +244,8 @@ namespace WUX {
 		}
 
 		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle): this {
+			if (secStyle == null) secStyle = CSS.SECTION_DIV;
+			if (legStyle == null) legStyle = CSS.SECTION_LEG;
 			let l = WUX.build('span', title, legStyle);
 			let s = WUX.build('div', l, secStyle);
 			this.add(s);
@@ -2020,8 +2022,19 @@ namespace WUX {
 			return this;
 		}
 
+		onBlur(fid: string, h: (e: FocusEvent) => any): this {
+			let f = this.getField(fid);
+			if (!f) return this;
+			if(f.component) {
+				f.component.on('blur', h);
+			}
+			else if(f.element instanceof HTMLElement) {
+				f.element.addEventListener('blur', h);
+			}
+			return this;
+		}
+
 		focus(): this {
-			if (!this.mounted) return this;
 			let f = this.first(true);
 			if (!f) return this;
 			if (f.component) {
@@ -2050,9 +2063,8 @@ namespace WUX {
 			return null;
 		}
 
-		focusOn(fieldId: string): this {
-			if (!this.mounted) return this;
-			let f = this.getField(fieldId);
+		focusOn(fid: string): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			if (f.component) {
 				f.component.focus();
@@ -2206,93 +2218,95 @@ namespace WUX {
 			return this;
 		}
 
-		addTextField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addTextField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'text', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'text', opts);
 		}
 
-		addNumberField(fieldId: string, label: string, min: number, max: number, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addNumberField(fid: string, label: string, min: number = 0, max?: number, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'number', 0, CSS.FORM_CTRL);
-			let at = 'min="' + min + '" max="' + max + '"';
+			let at = 'min="' + min + '"';
+			if (max != null) at += ' max="' + max + '"';	;
 			if (!opts) opts = {};
 			if (opts.attributes) opts.attributes += ' ' + at;
 			else opts.attributes = at;
 			return this._add(id, label, co, 'number', opts);
 		}
 
-		addPasswordField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addPasswordField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'password', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'password', opts);
 		}
 
-		addDateField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addDateField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'date', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'date', opts);
 		}
 
-		addMonthField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addMonthField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'month', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'month', opts);
 		}
 
-		addTimeField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addTimeField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'time', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'time', opts);
 		}
 
-		addEmailField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addEmailField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'email', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'email', opts);
 		}
 
-		addNoteField(fieldId: string, label: string, rows: number, opts?: WField): this {
+		addNoteField(fid: string, label: string, rows: number, opts?: WField): this {
 			if (!rows) rows = 3;
-			let id = this.subId(fieldId);
+			let id = this.subId(fid);
 			let co = new WTextArea(id, rows, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'note', opts);
 		}
 
-		addFileField(fieldId: string, label: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addFileField(fid: string, label: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WInput(id, 'file', 0, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'file', opts);
 		}
 
-		addOptionsField(fieldId: string, label: string, options?: (string | WEntity)[], opts?: WField): this {
-			let id = this.subId(fieldId);
+		addOptionsField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WSelect(id, options, false, CSS.FORM_CTRL);
 			return this._add(id, label, co, 'select', opts);
 		}
 
-		addRadioField(fieldId: string, label: string, options?: (string | WEntity)[], opts?: WField): this {
-			let id = this.subId(fieldId);
-			let co = new WRadio(id, options, CSS.FORM_CTRL, CSS.CHECK_STYLE);
+		addRadioField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this {
+			let id = this.subId(fid);
+			let co = new WRadio(id, options, CSS.FORM_CTRL, CSS.CKDIV_STYLE);
 			return this._add(id, label, co, 'select', opts);
 		}
 
-		addBooleanField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WCheck(id, '');
 			co.divClass = CSS.FORM_CHECK;
-			co.divStyle = CSS.CHECK_STYLE;
+			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
+			co.style = CSS.CKBOX_STYLE;
 			co.label = labelCheck;
 			return this._add(id, label, co, 'boolean', opts);
 		}
 
-		addToggleField(fieldId: string, label: string, labelCheck?: string, opts?: WField): this {
-			let id = this.subId(fieldId);
+		addToggleField(fid: string, label: string, labelCheck?: string, opts?: WField): this {
+			let id = this.subId(fid);
 			let co = new WCheck(id, '');
 			co.lever = true;
 			co.divClass = CSS.FORM_CHECK;
-			co.divStyle = CSS.CHECK_STYLE;
+			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
 			co.leverStyle = CSS.LEVER_STYLE;
 			co.label = labelCheck;
@@ -2311,8 +2325,8 @@ namespace WUX {
 			return this._add('', '', co, 'caption', opts);
 		}
 
-		addHiddenField(fieldId: string, value?: any): this {
-			let id = this.subId(fieldId);
+		addHiddenField(fid: string, value?: any): this {
+			let id = this.subId(fid);
 			let vs = WUtil.toString(value);
 			let co = new WInput(id, 'hidden');
 			co.setState(vs)
@@ -2320,16 +2334,16 @@ namespace WUX {
 			return this;
 		}
 
-		addInternalField(fieldId: string, value?: any): this {
+		addInternalField(fid: string, value?: any): this {
 			if (value === undefined) value = null;
-			this.currRow.push({ id: this.subId(fieldId), value: value, type: 'internal' });
+			this.currRow.push({ id: this.subId(fid), value: value, type: 'internal' });
 			return this;
 		}
 
-		addComponent(fieldId: string, label: string, component: WComponent, opts?: WField): this {
+		addComponent(fid: string, label: string, component: WComponent, opts?: WField): this {
 			if (!component) return this;
-			if (fieldId) {
-				let id = this.subId(fieldId);
+			if (fid) {
+				let id = this.subId(fid);
 				component.id = id;
 				return this._add(id, label, component, 'component', opts);
 			}
@@ -2389,7 +2403,7 @@ namespace WUX {
 					if ((cs == 1 && cols < 11) && (j == 0 || j == cols - 1)) cs = 2;
 					if (f.span && f.span > 0) cs = cs * f.span;
 					if (f.colClass) {
-						if (WUtil.starts(f.colClass, 'col-')) {
+						if (WUtil.starts(f.colClass, CSS.COL)) {
 							this.main.addCol(f.colClass, f.colStyle);
 						}
 						else {
@@ -2636,23 +2650,23 @@ namespace WUX {
 			return this;
 		}
 
-		setSpan(fieldId: string, span: number): this {
-			let f = this.getField(fieldId);
+		setSpan(fid: string, span: number): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			f.span = span;
 			return this;
 		}
 
-		setEnabled(fieldId: string, v: boolean): this {
-			let f = this.getField(fieldId);
+		setEnabled(fid: string, v: boolean): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			f.enabled = v;
 			if (f.component) f.component.enabled = v;
 			return this;
 		}
 
-		setReadOnly(fieldId: string, v: boolean): this {
-			let f = this.getField(fieldId);
+		setReadOnly(fid: string, v: boolean): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			f.readonly = v;
 			let c = f.component;

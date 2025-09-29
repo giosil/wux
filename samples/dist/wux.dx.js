@@ -18,7 +18,7 @@ var WUX;
     function initDX(callback) {
         if (WUX.debug)
             console.log('[WUX] initDX...');
-        var u = '/cldr/cldr-data-' + WUX.global.locale + '.json';
+        var u = WUX.global.rootPath + '/cldr/cldr-data-' + WUX.global.locale + '.json';
         fetch(u).then(function (response) {
             if (response.ok)
                 return response.json();

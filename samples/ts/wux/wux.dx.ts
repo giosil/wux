@@ -8,7 +8,7 @@ namespace WUX {
 
 	export function initDX(callback: () => any) {
 		if (debug) console.log('[WUX] initDX...');
-		let u = '/cldr/cldr-data-' + global.locale + '.json';
+		let u = global.rootPath + '/cldr/cldr-data-' + global.locale + '.json';
 		fetch(u).then(response => {
 			if (response.ok) return response.json();
 			console.error('[WUX] initDX loading ' + u + ' failed', response);

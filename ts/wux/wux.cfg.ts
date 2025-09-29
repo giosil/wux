@@ -12,6 +12,7 @@
 	
 	export let global: WGlobal = {
 		locale: 'it',
+		rootPath: '',
 
 		init: function _init(callback: () => any) {
 			if (debug) console.log('[WUX] global.init...');
@@ -60,10 +61,15 @@
 		static SEL_WRAPPER = 'select-wrapper';
 		static FORM_CTRL = 'form-control';
 		static FORM_CHECK = 'form-check form-check-inline';
-		static CHECK_STYLE = 'padding-top:1rem;';
+		static CKDIV_STYLE = 'padding-top:1rem;';
+		static SECTION_DIV = 'margin-top:1rem;margin-bottom:1rem;';
+		static SECTION_LEG = 'font-size:120%;font-weight:600;text-transform:uppercase;';
+		static CKBOX_STYLE = '';
 		static LEVER_STYLE = '';
 		static ICON = 'margin-right:8px;';
 		static SEL_ROW = 'primary-bg-a2';
+		static ROW = 'row';
+		static COL = 'col-';
 		
 		static PRIMARY: WStyle = { bg: '#cce5ff' };
 		static SECONDARY: WStyle = { bg: '#e2e3e5' };

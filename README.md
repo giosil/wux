@@ -211,6 +211,11 @@ this.form.onFocus('name', (e: FocusEvent) => {
   console.log('focus', e);
 });
 
+// Handle blur event on a field
+this.form.onBlur('name', (e: FocusEvent) => {
+  console.log('blur', e);
+});
+
 // Find option by text
 this.form.findOption('gender', 'Male');
 

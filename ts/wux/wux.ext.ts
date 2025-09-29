@@ -407,6 +407,7 @@ namespace WUX {
 		contStyle: string | WStyle;
 		ulClass: string;
 		tpClass: string;
+		saClass: string;
 		
 		_t: string;
 		_a: string;
@@ -501,9 +502,12 @@ namespace WUX {
 			if(cs) cs = ' style="' + cs + '"';
 			r += '<div class="tab-content"' + cs + '>';
 			if (!this.tpClass) this.tpClass = 'tab-pane';
+			if (!this.saClass) {
+				this.saClass = BS_VER < 4 ? 'active' : 'show active';
+			}
 			for (let i = 0; i < this.tabs.length; i++) {
 				if (i == this.state) {
-					r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + ' show active" role="tabpanel"></div>';
+					r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + ' ' + this.saClass + '" role="tabpanel"></div>';
 				}
 				else {
 					r += '<div id="' + this.id + '-' + i + '" class="' + this.tpClass + '" role="tabpanel"></div>';
