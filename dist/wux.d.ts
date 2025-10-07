@@ -466,11 +466,14 @@ declare namespace WUX {
         static LBL_CLASS: string;
         static SEL_WRAPPER: string;
         static SECTION_DIV: string;
+        static SECTION_CLASS: string;
+        static SECTION_TAG: string;
         static SECTION_LEG: string;
         static FORM_CTRL: string;
         static FORM_CHECK: string;
         static CKDIV_STYLE: string;
         static CKBOX_STYLE: string;
+        static LEVER_CLASS: string;
         static LEVER_STYLE: string;
         static ICON: string;
         static SEL_ROW: string;
@@ -550,7 +553,7 @@ declare namespace WUX {
         addContainer(w: WWrapper): WContainer;
         addContainer(i: string, classStyle?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer;
         end(): WContainer;
-        section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle): this;
+        section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this;
         protected componentWillMount(): void;
         protected render(): any;
         protected componentDidMount(): void;
@@ -652,6 +655,7 @@ declare namespace WUX {
         divStyle: string;
         label: string;
         value: any;
+        noval: any;
         text: string;
         lever: boolean;
         leverStyle: string;
@@ -812,7 +816,9 @@ declare namespace WUX {
         addOptionsField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
         addRadioField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this;
         addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
+        addBooleanField(fid: string, label: string, values?: any[], opts?: WField): this;
         addToggleField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
+        addToggleField(fid: string, label: string, values?: any[], opts?: WField): this;
         addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this;
         addCaption(text: string, icon?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this;
         addHiddenField(fid: string, value?: any): this;

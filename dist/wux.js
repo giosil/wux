@@ -2428,12 +2428,15 @@ var WUX;
         CSS.FORM_GROUP = 'form-group';
         CSS.LBL_CLASS = 'active';
         CSS.SEL_WRAPPER = 'select-wrapper';
-        CSS.SECTION_DIV = 'margin-top:1rem;margin-bottom:1rem;';
-        CSS.SECTION_LEG = 'font-size:120%;font-weight:600;text-transform:uppercase;';
+        CSS.SECTION_DIV = 'border-bottom:solid 1px;';
+        CSS.SECTION_CLASS = 'text-primary';
+        CSS.SECTION_TAG = 'h3';
+        CSS.SECTION_LEG = '';
         CSS.FORM_CTRL = 'form-control';
         CSS.FORM_CHECK = 'form-check form-check-inline';
         CSS.CKDIV_STYLE = 'padding-top:1rem;';
         CSS.CKBOX_STYLE = '';
+        CSS.LEVER_CLASS = 'lever';
         CSS.LEVER_STYLE = '';
         CSS.ICON = 'margin-right:8px;';
         CSS.SEL_ROW = 'primary-bg-a2';
@@ -3076,13 +3079,15 @@ var WUX;
             this._end = true;
             return this;
         };
-        WContainer.prototype.section = function (title, secStyle, legStyle) {
+        WContainer.prototype.section = function (title, secStyle, legStyle, ids) {
             if (secStyle == null)
                 secStyle = WUX.CSS.SECTION_DIV;
             if (legStyle == null)
                 legStyle = WUX.CSS.SECTION_LEG;
-            var l = WUX.build('span', title, legStyle);
-            var s = WUX.build('div', l, secStyle);
+            if (!WUX.CSS.SECTION_TAG)
+                WUX.CSS.SECTION_TAG = 'span';
+            var l = WUX.build(WUX.CSS.SECTION_TAG, title, legStyle);
+            var s = WUX.build('div', l, secStyle, '', ids, WUX.CSS.SECTION_CLASS);
             this.add(s);
             return this;
         };
@@ -3877,13 +3882,14 @@ var WUX;
             if (checked)
                 _this.updateState(value);
             _this.text = text;
+            _this.leverStyle = WUX.CSS.LEVER_STYLE;
             return _this;
         }
         Object.defineProperty(WCheck.prototype, "checked", {
             get: function () {
                 if (this.root)
                     this.props = !!this.root['checked'];
-                this.state = this.props ? this.value : undefined;
+                this.state = this.props ? this.value : this.noval;
                 return this.props;
             },
             set: function (b) {
@@ -3909,14 +3915,14 @@ var WUX;
         WCheck.prototype.getState = function () {
             if (this.root)
                 this.props = !!this.root['checked'];
-            this.state = this.props ? this.value : undefined;
+            this.state = this.props ? this.value : this.noval;
             return this.state;
         };
         WCheck.prototype.updateProps = function (nextProps) {
             _super.prototype.updateProps.call(this, nextProps);
             if (this.props == null)
                 this.props = false;
-            this.state = this.props ? this.value : undefined;
+            this.state = this.props ? this.value : this.noval;
             if (this.root)
                 this.root['checked'] = this.props;
         };
@@ -3924,26 +3930,26 @@ var WUX;
             _super.prototype.updateState.call(this, nextState);
             if (typeof this.state == 'boolean') {
                 this.props = this.state;
-                this.state = this.props ? this.value : undefined;
+                this.state = this.props ? this.value : this.noval;
             }
             else {
                 if (this.state == 'true')
-                    this.state = '1';
+                    this.state = this.value;
                 this.props = this.state && this.state == this.value;
             }
             if (this.root)
                 this.root['checked'] = this.props;
         };
         WCheck.prototype.render = function () {
-            var addAttributes = 'name="' + this.id + '" type="checkbox"';
-            addAttributes += this.props ? ' checked="checked"' : '';
+            var a = 'name="' + this.id + '" type="checkbox"';
+            a += this.props ? ' checked="checked"' : '';
             var inner = this.text ? '&nbsp;' + this.text : '';
             // Label
             if (!this.label) {
                 this.label = '';
             }
             else if (this._tooltip) {
-                addAttributes += ' title="' + this._tooltip + '"';
+                a += ' title="' + this._tooltip + '"';
             }
             var l = '<label id="' + this.id + '-l" for="' + this.id + '"';
             if (this._tooltip) {
@@ -3970,15 +3976,16 @@ var WUX;
             }
             if (r0) {
                 if (this.lever) {
+                    var cs = WUX.CSS.LEVER_CLASS ? ' class="' + WUX.CSS.LEVER_CLASS + '"' : '';
                     var ls = this.leverStyle ? ' style="' + this.leverStyle + '"' : '';
-                    r1 += '<span class="lever"' + ls + '></span></label></div>';
+                    r1 += '<span' + cs + ls + '></span></label></div>';
                 }
                 else {
                     r1 += '</label>';
                 }
                 r1 += '</div>';
             }
-            var r = r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+            var r = r0 + this.build(this.rootTag, inner, a) + r1;
             return r;
         };
         WCheck.prototype.componentDidMount = function () {
@@ -3993,7 +4000,7 @@ var WUX;
                 }
                 this.root.addEventListener("change", function (e) {
                     _this.props = !!_this.root['checked'];
-                    _this.state = _this.props ? _this.value : undefined;
+                    _this.state = _this.props ? _this.value : _this.noval;
                     _this.trigger('statechange', _this.state);
                 });
             }
@@ -5293,25 +5300,44 @@ var WUX;
             var co = new WRadio(id, options, WUX.CSS.FORM_CTRL, WUX.CSS.CKDIV_STYLE);
             return this._add(id, label, co, 'select', opts);
         };
-        WForm.prototype.addBooleanField = function (fid, label, labelCheck, opts) {
+        WForm.prototype.addBooleanField = function (fid, label, lv, opts) {
             var id = this.subId(fid);
             var co = new WCheck(id, '');
             co.divClass = WUX.CSS.FORM_CHECK;
             co.divStyle = WUX.CSS.CKDIV_STYLE;
             co.classStyle = WUX.CSS.FORM_CTRL;
             co.style = WUX.CSS.CKBOX_STYLE;
-            co.label = labelCheck;
+            if (typeof lv == 'string') {
+                co.label = lv;
+            }
+            else if (Array.isArray(lv)) {
+                co.value = lv[0];
+                co.noval = lv[1];
+            }
+            if (opts && Array.isArray(opts.value)) {
+                co.value = opts.value[0];
+                co.noval = opts.value[1];
+            }
             return this._add(id, label, co, 'boolean', opts);
         };
-        WForm.prototype.addToggleField = function (fid, label, labelCheck, opts) {
+        WForm.prototype.addToggleField = function (fid, label, lv, opts) {
             var id = this.subId(fid);
             var co = new WCheck(id, '');
             co.lever = true;
             co.divClass = WUX.CSS.FORM_CHECK;
             co.divStyle = WUX.CSS.CKDIV_STYLE;
             co.classStyle = WUX.CSS.FORM_CTRL;
-            co.leverStyle = WUX.CSS.LEVER_STYLE;
-            co.label = labelCheck;
+            if (typeof lv == 'string') {
+                co.label = lv;
+            }
+            else if (Array.isArray(lv)) {
+                co.value = lv[0];
+                co.noval = lv[1];
+            }
+            if (opts && Array.isArray(opts.value)) {
+                co.value = opts.value[0];
+                co.noval = opts.value[1];
+            }
             return this._add(id, label, co, 'boolean', opts);
         };
         WForm.prototype.addBlankField = function (label, classStyle, style, e) {

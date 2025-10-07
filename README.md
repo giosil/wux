@@ -222,6 +222,9 @@ this.form.findOption('gender', 'Male');
 // Load options later
 this.form.setOptions('gender', options);
 
+// True/False values
+this.form.addToggleField('confirm', 'Confirm', ['Yes','No']);
+
 // Register an event handler on a specific field
 this.form.onField('gender', 'statechange', (e: WUX.WEvent) => {
   console.log('gender statechange', e);
@@ -850,6 +853,9 @@ this.table.addActions('id', {
     if(n == 'HIDE') {
       e.setAttribute('style', 'display:none;');
     }
+    else if(n == 'DISABLE') {
+      e.setAttribute('class', 'btn btn-link btn-xs disabled');
+    }
   }
 });
 this.table.addActions('id', {
@@ -899,13 +905,6 @@ this.table.onRowPrepared((e: { element?: JQuery, rowElement?: JQuery, data?: any
   }
   else if(n == 'INFO') {
     WUX.setJQCss(e.rowElement, WUX.CSS.INFO);
-  }
-  // Another way to customize or hide actions dynamically
-  if(n == 'HIDE') {
-    setTimeout(() => {
-      let ae = document.getElementById('edit-' + e.data.id);
-      if (ae) ae.setAttribute('style', 'display:none;');
-    });
   }
 });
 this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: DevExpress.ui.dxDataGridColumn, rowIndex?: number, rowType?: string, row?: DevExpress.ui.dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => {

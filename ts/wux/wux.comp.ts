@@ -243,11 +243,12 @@ namespace WUX {
 			return this;
 		}
 
-		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle): this {
+		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this {
 			if (secStyle == null) secStyle = CSS.SECTION_DIV;
 			if (legStyle == null) legStyle = CSS.SECTION_LEG;
-			let l = WUX.build('span', title, legStyle);
-			let s = WUX.build('div', l, secStyle);
+			if (!CSS.SECTION_TAG) CSS.SECTION_TAG = 'span';
+			let l = WUX.build(CSS.SECTION_TAG, title, legStyle);
+			let s = WUX.build('div', l, secStyle, '', ids, CSS.SECTION_CLASS);
 			this.add(s);
 			return this;
 		}
@@ -948,6 +949,7 @@ namespace WUX {
 		divStyle: string;
 		label: string;
 		value: any;
+		noval: any;
 		text: string;
 		lever: boolean;
 		leverStyle: string;
@@ -960,11 +962,12 @@ namespace WUX {
 			this.value = value ? value : '1';
 			if (checked) this.updateState(value);
 			this.text = text;
+			this.leverStyle = CSS.LEVER_STYLE;
 		}
 
 		get checked(): boolean {
 			if(this.root) this.props = !!this.root['checked'];
-			this.state = this.props ? this.value : undefined;
+			this.state = this.props ? this.value : this.noval;
 			return this.props;
 		}
 		set checked(b: boolean) {
@@ -984,14 +987,14 @@ namespace WUX {
 
 		getState(): any {
 			if(this.root) this.props = !!this.root['checked'];
-			this.state = this.props ? this.value : undefined;
+			this.state = this.props ? this.value : this.noval;
 			return this.state;
 		}
 
 		protected updateProps(nextProps: boolean) {
 			super.updateProps(nextProps);
 			if(this.props == null) this.props = false;
-			this.state = this.props ? this.value : undefined;
+			this.state = this.props ? this.value : this.noval;
 			if (this.root) this.root['checked'] = this.props;
 		}
 
@@ -999,25 +1002,25 @@ namespace WUX {
 			super.updateState(nextState);
 			if (typeof this.state == 'boolean') {
 				this.props = this.state;
-				this.state = this.props ? this.value : undefined;
+				this.state = this.props ? this.value : this.noval;
 			}
 			else {
-				if (this.state == 'true') this.state = '1';
+				if (this.state == 'true') this.state = this.value;
 				this.props = this.state && this.state == this.value;
 			}
 			if (this.root) this.root['checked'] = this.props;
 		}
 
 		protected render() {
-			let addAttributes = 'name="' + this.id + '" type="checkbox"';
-			addAttributes += this.props ? ' checked="checked"' : '';
+			let a = 'name="' + this.id + '" type="checkbox"';
+			a += this.props ? ' checked="checked"' : '';
 			let inner = this.text ? '&nbsp;' + this.text : '';
 			// Label
 			if(!this.label) {
 				this.label = '';
 			}
 			else if (this._tooltip) {
-				addAttributes += ' title="' + this._tooltip + '"';
+				a += ' title="' + this._tooltip + '"';
 			}
 			let l = '<label id="' + this.id + '-l" for="' + this.id + '"';
 			if (this._tooltip) {
@@ -1042,15 +1045,16 @@ namespace WUX {
 			}
 			if (r0) {
 				if(this.lever) {
+					let cs = CSS.LEVER_CLASS ? ' class="' + CSS.LEVER_CLASS + '"' : '';
 					let ls = this.leverStyle ? ' style="' + this.leverStyle + '"' : '';
-					r1 += '<span class="lever"' + ls + '></span></label></div>';
+					r1 += '<span' + cs + ls + '></span></label></div>';
 				}
 				else {
 					r1 += '</label>';
 				}
 				r1 += '</div>';
 			}
-			let r = r0 + this.build(this.rootTag, inner, addAttributes) + r1;
+			let r = r0 + this.build(this.rootTag, inner, a) + r1;
 			return r;
 		}
 
@@ -1065,7 +1069,7 @@ namespace WUX {
 				}
 				this.root.addEventListener("change", (e: Event) => {
 					this.props = !!this.root['checked'];
-					this.state = this.props ? this.value : undefined;
+					this.state = this.props ? this.value : this.noval;
 					this.trigger('statechange', this.state);
 				});
 			}
@@ -2290,26 +2294,49 @@ namespace WUX {
 			return this._add(id, label, co, 'select', opts);
 		}
 
-		addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this {
+		addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
+		addBooleanField(fid: string, label: string, values?: any[], opts?: WField): this;
+		addBooleanField(fid: string, label: string, lv?: string | any[], opts?: WField): this {
 			let id = this.subId(fid);
 			let co = new WCheck(id, '');
 			co.divClass = CSS.FORM_CHECK;
 			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
 			co.style = CSS.CKBOX_STYLE;
-			co.label = labelCheck;
+			if(typeof lv == 'string') {
+				co.label = lv;
+			}
+			else if(Array.isArray(lv)) {
+				co.value = lv[0];
+				co.noval = lv[1];
+			}
+			if(opts && Array.isArray(opts.value)) {
+				co.value = opts.value[0];
+				co.noval = opts.value[1];
+			}
 			return this._add(id, label, co, 'boolean', opts);
 		}
 
-		addToggleField(fid: string, label: string, labelCheck?: string, opts?: WField): this {
+		addToggleField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
+		addToggleField(fid: string, label: string, values?: any[], opts?: WField): this;
+		addToggleField(fid: string, label: string, lv?: string | any[], opts?: WField): this {
 			let id = this.subId(fid);
 			let co = new WCheck(id, '');
 			co.lever = true;
 			co.divClass = CSS.FORM_CHECK;
 			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
-			co.leverStyle = CSS.LEVER_STYLE;
-			co.label = labelCheck;
+			if(typeof lv == 'string') {
+				co.label = lv;
+			}
+			else if(Array.isArray(lv)) {
+				co.value = lv[0];
+				co.noval = lv[1];
+			}
+			if(opts && Array.isArray(opts.value)) {
+				co.value = opts.value[0];
+				co.noval = opts.value[1];
+			}
 			return this._add(id, label, co, 'boolean', opts);
 		}
 
