@@ -3634,7 +3634,9 @@ var WUX;
             return this;
         };
         WInput.prototype.shouldComponentUpdate = function (nextProps, nextState) {
-            return this.props != nextProps || this.state != WUX.WUtil.toString(nextState);
+            // User input doesn't automatically update the state. 
+            // Therefore, the current state may not be consistent with the content in the component.
+            return true;
         };
         WInput.prototype.updateState = function (nextState) {
             // At runtime nextState can be of any type 
@@ -5798,6 +5800,11 @@ var WUX;
                     }
                     else {
                         f.required = false;
+                    }
+                    // Update label
+                    if (f.labelComp && f.label) {
+                        var r = f.required ? WUX.RES.REQ_MARK : '';
+                        f.labelComp.setState(f.label + r);
                     }
                 }
             }

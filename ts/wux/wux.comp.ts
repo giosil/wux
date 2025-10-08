@@ -731,7 +731,9 @@ namespace WUX {
 		}
 
 		protected shouldComponentUpdate(nextProps: string, nextState: string): boolean {
-			return this.props != nextProps || this.state != WUtil.toString(nextState);
+			// User input doesn't automatically update the state. 
+			// Therefore, the current state may not be consistent with the content in the component.
+			return true;
 		}
 
 		protected updateState(nextState: string) {
@@ -2756,6 +2758,11 @@ namespace WUX {
 					}
 					else {
 						f.required = false;
+					}
+					// Update label
+					if(f.labelComp && f.label) {
+						let r = f.required ? RES.REQ_MARK : '';
+						f.labelComp.setState(f.label + r);
 					}
 				}
 			}
