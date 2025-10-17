@@ -230,6 +230,18 @@ var WuxDOM = /** @class */ (function () {
         n.append(e);
         return e;
     };
+    WuxDOM.mountjq = function (e, node) {
+        if (!node || !node["length"])
+            return node;
+        WuxDOM.mount(e, node[0]);
+        return node;
+    };
+    WuxDOM.unmountjq = function (node) {
+        if (!node || !node["length"])
+            return node;
+        WuxDOM.unmount(node[0]);
+        return node;
+    };
     WuxDOM.components = {};
     WuxDOM.renderHandlers = [];
     WuxDOM.unmountHandlers = [];
@@ -240,7 +252,7 @@ var WUX;
 (function (WUX) {
     WUX.debug = false;
     WUX.registry = [];
-    WUX.version = '1.0.0';
+    WUX.version = '2.0.0';
     /**
      * Base class of a WUX component.
      */
@@ -1109,6 +1121,14 @@ var WUX;
                 return wcdn;
             return wcdn + '(' + wcid + ')';
         }
+        if (a instanceof jQuery) {
+            if (a.length) {
+                return '$("' + a.selector + '").id=' + a[0].id;
+            }
+            else {
+                return '$("' + a.selector + '").length=0';
+            }
+        }
         if (a instanceof Element) {
             return 'Element#' + a.id;
         }
@@ -1283,6 +1303,22 @@ var WUX;
         return s;
     }
     WUX.style = style;
+    function styleObj(ws) {
+        var s = style(ws);
+        var r = {};
+        if (!s)
+            return r;
+        var kvs = s.split(';');
+        for (var _i = 0, kvs_1 = kvs; _i < kvs_1.length; _i++) {
+            var kv = kvs_1[_i];
+            var c = kv.split(':');
+            if (c.length < 2)
+                continue;
+            r[c[0].trim()] = c[1].trim();
+        }
+        return r;
+    }
+    WUX.styleObj = styleObj;
     function toggleAttr(e, a, b, v) {
         if (!e || !a)
             return e;
@@ -1297,19 +1333,46 @@ var WUX;
         return e;
     }
     WUX.toggleAttr = toggleAttr;
-    function addStyle(s, k, v, n) {
-        if (!k || !v)
+    function toggleStyle(s, k, v0, v1) {
+        if (!k)
             return css(s);
-        if (!s)
-            return k + ':' + v + ';';
-        if (n) {
-            if (s.indexOf(k + ':') >= 0)
-                return css(s);
-            return css(s) + k + ':' + v + ';';
+        var o = styleObj(s);
+        var v = o[k];
+        if (typeof v0 == 'boolean') {
+            if (v0) {
+                if (v1) {
+                    o[k] = v1;
+                }
+                else {
+                    delete o[k];
+                }
+            }
+            else {
+                delete o[k];
+            }
         }
-        return css(s) + k + ':' + v + ';';
+        else if (v == v0) {
+            if (v1) {
+                o[k] = v1;
+            }
+            else {
+                delete o[k];
+            }
+        }
+        else {
+            if (v0) {
+                o[k] = v0;
+            }
+            else {
+                delete o[k];
+            }
+        }
+        var r = '';
+        for (var x in o)
+            r += x + ':' + o[x] + ';';
+        return r;
     }
-    WUX.addStyle = addStyle;
+    WUX.toggleStyle = toggleStyle;
     function css() {
         var a = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -1391,6 +1454,14 @@ var WUX;
         }
         if (!a || !a.length)
             return '';
+        if (a.length == 1) {
+            var f = a[0];
+            if (!f)
+                return '';
+            if (typeof f == 'string' && f.indexOf('^') >= 0) {
+                return buildCss.apply(void 0, f.split('^'));
+            }
+        }
         var c = cls.apply(void 0, a);
         var s = css.apply(void 0, a);
         var r = '';
@@ -1452,25 +1523,82 @@ var WUX;
     WUX.toggleClass = toggleClass;
     function addClassOf(e, name) {
         if (!e)
-            return;
+            return e;
         e.setAttribute('class', addClass(e.getAttribute('class'), name));
+        return e;
     }
     WUX.addClassOf = addClassOf;
     function removeClassOf(e, name) {
         if (!e)
-            return;
+            return e;
         var c = e.getAttribute('class');
         if (!c)
-            return;
+            return e;
         e.setAttribute('class', removeClass(e.getAttribute('class'), name));
+        return e;
     }
     WUX.removeClassOf = removeClassOf;
     function toggleClassOf(e, name) {
         if (!e)
-            return;
+            return e;
         e.setAttribute('class', toggleClass(e.getAttribute('class'), name));
+        return e;
     }
     WUX.toggleClassOf = toggleClassOf;
+    function toggleStyleOf(e, k, v0, v1) {
+        if (!e)
+            return e;
+        e.setAttribute('style', toggleStyle(e.getAttribute('style'), k, v0, v1));
+        return e;
+    }
+    WUX.toggleStyleOf = toggleStyleOf;
+    function isVisible(e) {
+        if (!e)
+            return false;
+        var s = window.getComputedStyle(e);
+        if (!s)
+            return false;
+        return s.display != 'none' && s.visibility != 'hidden';
+    }
+    WUX.isVisible = isVisible;
+    function slideToggle(e, d) {
+        if (!e)
+            return e;
+        if (isVisible(e)) {
+            slideUp(e, d);
+        }
+        else {
+            slideDown(e, d);
+        }
+        return e;
+    }
+    WUX.slideToggle = slideToggle;
+    function slideUp(e, d) {
+        if (!e)
+            return e;
+        var jq = window['jQuery'] ? window['jQuery'] : null;
+        if (jq) {
+            jq(e).slideUp(d);
+        }
+        else {
+            toggleStyleOf(e, 'display', 'none');
+        }
+        return e;
+    }
+    WUX.slideUp = slideUp;
+    function slideDown(e, d) {
+        if (!e)
+            return e;
+        var jq = window['jQuery'] ? window['jQuery'] : null;
+        if (jq) {
+            jq(e).slideDown(d);
+        }
+        else {
+            toggleStyleOf(e, 'display', 'block');
+        }
+        return e;
+    }
+    WUX.slideDown = slideDown;
     function setCss(e) {
         var a = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -2424,30 +2552,70 @@ var WUX;
     var CSS = /** @class */ (function () {
         function CSS() {
         }
+        // Container grid
+        CSS.ROW = 'row';
+        CSS.COL = 'col-';
+        // Sections
+        CSS.SEC_DIV_CLASS = 'text-primary';
+        CSS.SEC_DIV_STYLE = 'border-bottom:solid 1px;';
+        CSS.SEC_TAG = 'h5';
+        CSS.SEC_CLASS = '';
+        CSS.SEC_STYLE = '';
+        CSS.SEC_PARENT = '';
+        // Boxes
+        CSS.BOX_TAG = 'div';
+        CSS.BOX_CLASS = 'callout';
+        CSS.BOX_INNER = 'callout-inner';
+        CSS.BOX_ICON = '';
+        CSS.BOX_TITLE = 'callout-title';
+        CSS.BOX_TITLE_TAG = 'span';
+        CSS.BOX_TITLE_CLASS = 'text';
+        CSS.BOX_TITLE_STYLE = '';
+        CSS.BOX_TOOLS_EXT = '';
+        CSS.BOX_TOOLS = '';
+        CSS.BOX_TOOLS_POS = 0; // -1 left, 0 center, 1 right
+        CSS.BOX_CONTENT = '';
+        CSS.BOX_FOOTER = '';
+        CSS.BOX_CLP_CLASS = '';
+        CSS.BOX_CLP_STYLE = 'cursor:pointer;padding-left:1rem;';
+        CSS.BOX_CLP = '<i class="fa fa-chevron-up"></i>';
+        CSS.BOX_EXP = '<i class="fa fa-chevron-down"></i>';
+        // Forms
         CSS.FORM = 'padding-top:16px;';
         CSS.FORM_GROUP = 'form-group';
-        CSS.LBL_CLASS = 'active';
-        CSS.SEL_WRAPPER = 'select-wrapper';
-        CSS.SECTION_DIV = 'border-bottom:solid 1px;';
-        CSS.SECTION_CLASS = 'text-primary';
-        CSS.SECTION_TAG = 'h3';
-        CSS.SECTION_LEG = '';
         CSS.FORM_CTRL = 'form-control';
         CSS.FORM_CHECK = 'form-check form-check-inline';
+        CSS.LBL_CLASS = 'active';
+        CSS.SEL_WRAPPER = 'select-wrapper';
         CSS.CKDIV_STYLE = 'padding-top:1rem;';
         CSS.CKBOX_STYLE = '';
         CSS.LEVER_CLASS = 'lever';
         CSS.LEVER_STYLE = '';
+        // Dialogs
+        CSS.DIALOG_CLASS = 'modal fade';
+        CSS.DIALOG_MAIN = 'modal-dialog modal-lg';
+        CSS.DIALOG_FULL = 'modal-dialog modal-fullscreen';
+        CSS.DIALOG_CONTENT = 'modal-content';
+        CSS.DIALOG_BODY = 'modal-body';
+        CSS.DIALOG_HEADER = 'modal-header';
+        CSS.DIALOG_FOOTER = 'modal-footer';
+        CSS.DIALOG_TITLE = 'modal-title';
+        CSS.DIALOG_TITLE_TAG = 'h5';
+        CSS.DIALOG_OK = 'btn btn-primary button-sm';
+        CSS.DIALOG_CANCEL = 'btn btn-secondary button-sm';
+        CSS.DIALOG_X_POS = 1; // -1 left, 1 right
+        // General
         CSS.ICON = 'margin-right:8px;';
         CSS.SEL_ROW = 'primary-bg-a2';
-        CSS.ROW = 'row';
-        CSS.COL = 'col-';
         CSS.PRIMARY = { bg: '#cce5ff' };
         CSS.SECONDARY = { bg: '#e2e3e5' };
         CSS.SUCCESS = { bg: '#d4edda' };
         CSS.DANGER = { bg: '#f8d7da' };
+        CSS.ERROR = { bg: '#f8d7da' };
         CSS.WARNING = { bg: '#fff3cd' };
         CSS.INFO = { bg: '#d1ecf1' };
+        CSS.LABEL_NOTICE = { c: '#aa6a6c', fw: 'bold' };
+        CSS.LABEL_INFO = { c: '#676a96', fw: 'bold' };
         return CSS;
     }());
     WUX.CSS = CSS;
@@ -3080,16 +3248,33 @@ var WUX;
             return this;
         };
         WContainer.prototype.section = function (title, secStyle, legStyle, ids) {
-            if (secStyle == null)
-                secStyle = WUX.CSS.SECTION_DIV;
+            // Build legend
             if (legStyle == null)
-                legStyle = WUX.CSS.SECTION_LEG;
-            if (!WUX.CSS.SECTION_TAG)
-                WUX.CSS.SECTION_TAG = 'span';
-            var l = WUX.build(WUX.CSS.SECTION_TAG, title, legStyle);
-            var s = WUX.build('div', l, secStyle, '', ids, WUX.CSS.SECTION_CLASS);
+                legStyle = WUX.CSS.SEC_STYLE;
+            var t = WUX.CSS.SEC_TAG ? WUX.CSS.SEC_TAG : 'span';
+            var l = WUX.build(t, title, legStyle, '', ids, WUX.CSS.SEC_CLASS);
+            // Build container
+            if (secStyle == null)
+                secStyle = WUX.CSS.SEC_DIV_STYLE;
+            var s = WUX.build('div', l, secStyle, '', '', WUX.CSS.SEC_DIV_CLASS);
+            // Add parent class/style
+            if (WUX.CSS.SEC_PARENT && this.grid.length) {
+                var g = this.grid[this.grid.length - 1];
+                if (g.length) {
+                    var cs = g[g.length - 1];
+                    if (!cs)
+                        cs = '';
+                    g[g.length - 1] = cs + '^' + WUX.CSS.SEC_PARENT;
+                }
+            }
+            // Add to container
             this.add(s);
             return this;
+        };
+        WContainer.prototype.addBox = function (title, classStyle, style, id, attributes) {
+            var box = new WBox(id, title, classStyle, style, attributes);
+            this.add(box);
+            return box;
         };
         WContainer.prototype.componentWillMount = function () {
             // Before the container
@@ -3118,9 +3303,9 @@ var WUX;
                     var cl = g.length;
                     if (!cl)
                         continue;
-                    inner += '<div ' + this.cs(g[0]) + ' id="' + this.subId(r + '_0') + '">';
+                    inner += '<div id="' + this.subId(r + '_0') + '" ' + WUX.buildCss(g[0]) + '>';
                     for (var c = 1; c < cl; c++) {
-                        inner += '<div id="' + this.subId(r + '_' + c) + '" ' + this.cs(g[c]) + '></div>';
+                        inner += '<div id="' + this.subId(r + '_' + c) + '" ' + WUX.buildCss(g[c]) + '></div>';
                     }
                     inner += "</div>";
                 }
@@ -3133,6 +3318,13 @@ var WUX;
             return this.buildRoot(this.rootTag, inner);
         };
         WContainer.prototype.componentDidMount = function () {
+            this._mount(this.context, this.root);
+        };
+        WContainer.prototype._mount = function (x, r) {
+            if (!x)
+                x = this.context;
+            if (!r)
+                r = this.root;
             // Before the container (See componentWillMount)
             // Before the grid
             var bg = document.getElementById(this.subId('bg'));
@@ -3145,7 +3337,7 @@ var WUX;
             else {
                 for (var _b = 0, _c = this.cbgr; _b < _c.length; _b++) {
                     var c = _c[_b];
-                    c.mount(this.root);
+                    c.mount(r);
                 }
             }
             // Grid
@@ -3159,12 +3351,12 @@ var WUX;
             // After Grid
             for (var _d = 0, _e = this.cagr; _d < _e.length; _d++) {
                 var c = _e[_d];
-                c.mount(this.root);
+                c.mount(r);
             }
             // After the container
             for (var _f = 0, _g = this.caft; _f < _g.length; _f++) {
                 var e = _g[_f];
-                e.mount(this.context);
+                e.mount(x);
             }
         };
         WContainer.prototype.componentWillUnmount = function () {
@@ -3188,16 +3380,6 @@ var WUX;
                 var c = _j[_h];
                 c.unmount();
             } // Components before the container
-        };
-        WContainer.prototype.cs = function (cs) {
-            if (!cs)
-                return '';
-            var x = cs.indexOf('^');
-            if (x < 0)
-                return 'class="' + cs + '"';
-            var c = cs.substring(0, x);
-            var s = cs.substring(x + 1);
-            return 'class="' + c + '" style="' + s + '"';
         };
         WContainer.prototype.getElement = function (r, c) {
             if (!this.grid || !this.grid.length) {
@@ -3231,6 +3413,198 @@ var WUX;
         return WContainer;
     }(WUX.WComponent));
     WUX.WContainer = WContainer;
+    var WBox = /** @class */ (function (_super) {
+        __extends(WBox, _super);
+        function WBox(id, title, classStyle, style, attributes) {
+            var _this = _super.call(this, id, classStyle, style, attributes, false, 'box') || this;
+            _this.tools = [];
+            _this.collapsed = false;
+            _this._ce = false;
+            if (!_this._classStyle)
+                _this._classStyle = WUX.CSS.BOX_CLASS;
+            if (WUX.CSS.BOX_TAG)
+                _this.rootTag = WUX.CSS.BOX_TAG;
+            _this._title = title;
+            return _this;
+        }
+        Object.defineProperty(WBox.prototype, "title", {
+            get: function () {
+                return this._title;
+            },
+            set: function (s) {
+                this._title = s;
+                var c = document.getElementById(this.subId('caption'));
+                if (c)
+                    c.innerText = s;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        WBox.prototype.addTool = function (c) {
+            if (c)
+                this.tools.push(c);
+            return this;
+        };
+        WBox.prototype.addCollapse = function (h) {
+            this._ce = true;
+            this._ch = h;
+            return this;
+        };
+        WBox.prototype.endBox = function () {
+            // Same as end() but more explanatory
+            if (this.parent instanceof WContainer)
+                return this.parent;
+            return _super.prototype.end.call(this);
+        };
+        WBox.prototype.end = function () {
+            if (this.parent instanceof WContainer)
+                return this.parent;
+            return _super.prototype.end.call(this);
+        };
+        WBox.prototype.collapse = function (h) {
+            if (this.collapsed)
+                return this;
+            // Call handler first
+            if (!h)
+                h = this._ch;
+            if (h)
+                h(this.createEvent('collapse', { "collapsed": false }));
+            // Then collapse
+            var c = document.getElementById(this.subId('content'));
+            WUX.slideUp(c, 200);
+            if (WUX.CSS.BOX_EXP) {
+                var a = document.getElementById(this.subId('collapse'));
+                if (a)
+                    a.innerHTML = WUX.CSS.BOX_EXP;
+            }
+            this.collapsed = true;
+            return this;
+        };
+        WBox.prototype.expand = function (h) {
+            if (!this.collapsed)
+                return this;
+            // Call handler first
+            if (!h)
+                h = this._ch;
+            if (h)
+                h(this.createEvent('collapse', { "collapsed": true }));
+            // Then expand
+            var c = document.getElementById(this.subId('content'));
+            WUX.slideDown(c, 200);
+            if (WUX.CSS.BOX_CLP) {
+                var a = document.getElementById(this.subId('collapse'));
+                if (a)
+                    a.innerHTML = WUX.CSS.BOX_CLP;
+            }
+            this.collapsed = false;
+            return this;
+        };
+        WBox.prototype.toggle = function (h) {
+            if (this.collapsed) {
+                this.expand(h);
+            }
+            else {
+                this.collapse(h);
+            }
+            return this;
+        };
+        WBox.prototype.render = function () {
+            var ic = 'id="' + this.subId('content') + '"';
+            // Remove previous Head / Tail
+            if (this.ashe && this.ashe.length) {
+                var h0 = this.ashe[0];
+                if (h0 && h0.indexOf(ic) > 0) {
+                    this.ashe.shift();
+                    this.asta.shift();
+                }
+            }
+            // Build tools
+            var t = '';
+            if (this._ce) {
+                var ct = WUX.CSS.BOX_CLP ? WUX.CSS.BOX_CLP : '';
+                if (WUX.CSS.BOX_TOOLS)
+                    t += '<div id="' + this.subId('tools') + '"' + WUX.buildCss(WUX.CSS.BOX_TOOLS) + '>';
+                t += '<a id="' + this.subId('collapse') + '" title="collapse"' + WUX.buildCss(WUX.CSS.BOX_CLP_CLASS, WUX.CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
+                if (WUX.CSS.BOX_TOOLS)
+                    t += '</div>';
+            }
+            // Head
+            var h = '';
+            if (WUX.CSS.BOX_INNER)
+                h += '<div id="' + this.subId('inner') + '"' + WUX.buildCss(WUX.CSS.BOX_INNER) + '>';
+            if (this._title) {
+                if (WUX.CSS.BOX_TITLE)
+                    h += '<div id="' + this.subId('title') + '" class="' + WUX.CSS.BOX_TITLE + '">';
+                // Left title container
+                if (t && WUX.CSS.BOX_TOOLS_POS == -1)
+                    h += t;
+                if (WUX.CSS.BOX_ICON) {
+                    h += WUX.CSS.BOX_ICON.indexOf('<') >= 0 ? WUX.CSS.BOX_ICON : '<i class="' + WUX.CSS.BOX_ICON + '"></i> ';
+                }
+                // Center title container
+                // Build title / caption
+                var tt = WUX.CSS.BOX_TITLE_TAG ? WUX.CSS.BOX_TITLE_TAG : 'span';
+                h += '<' + tt + ' id="' + this.subId('caption') + '"' + WUX.buildCss(WUX.CSS.BOX_TITLE_CLASS, WUX.CSS.BOX_TITLE_STYLE) + '>' + this._title;
+                if (t && WUX.CSS.BOX_TOOLS_POS == 0)
+                    h += ' ' + t;
+                h += '</' + tt + '>';
+                // Build Header
+                if (this.tools && this.tools.length) {
+                    h += '<div id="' + this.subId('tools-ext') + '"' + WUX.buildCss(WUX.CSS.BOX_TOOLS_EXT) + '></div>';
+                }
+                // Right title container
+                if (t && WUX.CSS.BOX_TOOLS_POS == 1)
+                    h += t;
+                if (WUX.CSS.BOX_TITLE)
+                    h += '</div>';
+            }
+            h += '<div ' + ic + WUX.buildCss(WUX.CSS.BOX_CONTENT) + '>';
+            // Tail
+            var f = '</div>'; // BOX_CONTENT
+            if (this.footer) {
+                if (WUX.CSS.BOX_FOOTER) {
+                    f += '<div id="' + this.subId('footer') + '"' + WUX.buildCss(WUX.CSS.BOX_FOOTER) + '>' + this.footer + '</div>';
+                }
+                else {
+                    f += this.footer;
+                }
+            }
+            if (WUX.CSS.BOX_INNER)
+                f += '</div>'; // BOX_INNER
+            this.ashe.unshift(h);
+            this.asta.unshift(f);
+            return _super.prototype.render.call(this);
+        };
+        WBox.prototype.componentDidMount = function () {
+            var _this = this;
+            this._mount(this.root, document.getElementById(this.subId('content')));
+            // Tools
+            var e = document.getElementById(this.subId('tools-ext'));
+            if (e) {
+                for (var _i = 0, _a = this.tools; _i < _a.length; _i++) {
+                    var t = _a[_i];
+                    t.mount(e);
+                }
+            }
+            if (this._ce) {
+                var c = document.getElementById(this.subId('collapse'));
+                if (c) {
+                    c.addEventListener('click', function (e) {
+                        _this.toggle();
+                    });
+                }
+            }
+        };
+        WBox.prototype.componentWillUnmount = function () {
+            for (var _i = 0, _a = this.tools; _i < _a.length; _i++) {
+                var t = _a[_i];
+                t.unmount();
+            }
+            _super.prototype.componentWillUnmount.call(this);
+        };
+        return WBox;
+    }(WContainer));
+    WUX.WBox = WBox;
     var WPages = /** @class */ (function (_super) {
         __extends(WPages, _super);
         function WPages(id, classStyle, style, attributes, props) {
@@ -3902,6 +4276,8 @@ var WUX;
         });
         Object.defineProperty(WCheck.prototype, "tooltip", {
             set: function (s) {
+                if (!s)
+                    s = '';
                 this._tooltip = s;
                 var l = document.getElementById(this.id + '-l');
                 if (l) {
@@ -5000,6 +5376,7 @@ var WUX;
             this.currRow = null;
             this.footer = [];
             this.captions = [];
+            this.tips = {};
             this.addRow();
             this.leg = null;
             return this;
@@ -5207,7 +5584,10 @@ var WUX;
                 co.readonly = !!f.readonly;
                 co.autofocus = !!f.autofocus;
                 co.onEnter(function (e) {
+                    // This control cannot be taken out because the handler can be configured after the field is added.
                     if (_this.handlers['_enter']) {
+                        if (e)
+                            e["data"] = _this.ripId(id);
                         for (var _i = 0, _a = _this.handlers['_enter']; _i < _a.length; _i++) {
                             var h = _a[_i];
                             h(e);
@@ -5238,7 +5618,12 @@ var WUX;
         WForm.prototype.addTextField = function (fid, label, opts) {
             var id = this.subId(fid);
             var co = new WInput(id, 'text', 0, WUX.CSS.FORM_CTRL);
-            return this._add(id, label, co, 'text', opts);
+            if (typeof opts == 'boolean') {
+                return this._add(id, label, co, 'text', { readonly: opts });
+            }
+            else {
+                return this._add(id, label, co, 'text', opts);
+            }
         };
         WForm.prototype.addNumberField = function (fid, label, min, max, opts) {
             if (min === void 0) { min = 0; }
@@ -5381,6 +5766,52 @@ var WUX;
                 return this._add('', label, component, 'component', opts);
             }
         };
+        WForm.prototype.section = function (title, secStyle, legStyle, ids) {
+            // Build legend
+            if (legStyle == null)
+                legStyle = WUX.CSS.SEC_STYLE;
+            var t = WUX.CSS.SEC_TAG ? WUX.CSS.SEC_TAG : 'span';
+            var l = WUX.build(t, title, legStyle, '', ids, WUX.CSS.SEC_CLASS);
+            if (secStyle == null)
+                secStyle = WUX.CSS.SEC_DIV_STYLE;
+            return this.addRow().addBlankField('', WUX.CSS.SEC_DIV_CLASS, secStyle, l);
+        };
+        WForm.prototype.setTooltip = function (fid, text) {
+            var f = this.getField(fid);
+            if (!f)
+                return this;
+            if (!text) {
+                delete this.tips[f.id];
+                f.tooltip = '';
+            }
+            else {
+                this.tips[f.id] = text;
+                f.tooltip = text;
+            }
+            return this;
+        };
+        WForm.prototype.setLabelCss = function (fieldId, css) {
+            var f = this.getField(fieldId);
+            if (!f)
+                return this;
+            f.labelCss = css;
+            if (f.labelComp) {
+                var lcl = WUX.cls(f.labelCss);
+                if (lcl)
+                    f.labelComp.classStyle = lcl;
+                f.labelComp.style = WUX.style(f.labelCss);
+            }
+            return this;
+        };
+        WForm.prototype.setLabelText = function (fieldId, t) {
+            var f = this.getField(fieldId);
+            if (!f)
+                return this;
+            f.label = t;
+            if (f.labelComp)
+                f.labelComp.setState(t);
+            return this;
+        };
         WForm.prototype.addToFooter = function (c) {
             if (!c && !this.footer)
                 return this;
@@ -5448,17 +5879,16 @@ var WUX;
                         var lc = WUX.CSS.LBL_CLASS;
                         var ls = '';
                         if (f.labelCss) {
-                            if (f.labelCss.indexOf(':')) {
-                                ls = f.labelCss;
-                            }
-                            else {
-                                lc = f.labelCss;
-                            }
+                            var lcl = WUX.cls(f.labelCss);
+                            if (lcl)
+                                lc = lcl;
+                            ls = WUX.style(f.labelCss);
                         }
                         else if (f.classStyle) {
                             lc = f.classStyle;
                         }
                         var l = new WLabel(f.id + '-l', f.label + r, '', lc, ls);
+                        l.tooltip = this.tips[f.id];
                         f.labelComp = l.for(f.id);
                     }
                     if (g) {
@@ -5742,16 +6172,21 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.getValues = function () {
+        WForm.prototype.getValues = function (f) {
             var v = {};
             for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
                 var r = _a[_i];
                 for (var _b = 0, r_5 = r; _b < r_5.length; _b++) {
-                    var f = r_5[_b];
-                    var k = this.ripId(f.id);
+                    var f_1 = r_5[_b];
+                    var k = this.ripId(f_1.id);
                     if (!k)
                         continue;
-                    v[k] = f.component ? f.component.getState() : f.value;
+                    if (f_1) {
+                        v[k] = WUX.WUtil.toString(f_1.component ? f_1.component.getState() : f_1.value);
+                    }
+                    else {
+                        v[k] = f_1.component ? f_1.component.getState() : f_1.value;
+                    }
                 }
             }
             return v;
@@ -5903,7 +6338,6 @@ var WUX;
             var _this = _super.call(this, id, name, undefined, classStyle, style, attributes) || this;
             _this.pg = 0;
             _this.buttons = [];
-            _this.tagTitle = 'h5';
             if (btnClose) {
                 if (!btnOk)
                     _this.txtCancel = WUX.RES.CLOSE;
@@ -5937,7 +6371,7 @@ var WUX;
                 return this;
             this.isShown = false;
             if (!this.contClass)
-                this.contClass = 'modal-content';
+                this.contClass = WUX.CSS.DIALOG_CONTENT;
             this.cntRoot = new WUX.WContainer(this.id);
             this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
             this.cntContent = this.cntMain.addContainer('', this.contClass, this.contStyle);
@@ -5987,7 +6421,7 @@ var WUX;
             get: function () {
                 if (this.cntHeader)
                     return this.cntHeader;
-                this.cntHeader = new WUX.WContainer('', 'modal-header');
+                this.cntHeader = new WUX.WContainer('', WUX.CSS.DIALOG_HEADER);
                 return this.cntHeader;
             },
             enumerable: false,
@@ -5997,7 +6431,7 @@ var WUX;
             get: function () {
                 if (this.cntBody)
                     return this.cntBody;
-                this.cntBody = new WUX.WContainer('', WUX.cls('modal-body', this.bodyClass), '', this._attributes);
+                this.cntBody = new WUX.WContainer('', WUX.cls(WUX.CSS.DIALOG_BODY, this.bodyClass), '', this._attributes);
                 return this.cntBody;
             },
             enumerable: false,
@@ -6007,7 +6441,7 @@ var WUX;
             get: function () {
                 if (this.cntFooter)
                     return this.cntFooter;
-                this.cntFooter = new WUX.WContainer('', 'modal-footer');
+                this.cntFooter = new WUX.WContainer('', WUX.CSS.DIALOG_FOOTER);
                 return this.cntFooter;
             },
             enumerable: false,
@@ -6044,7 +6478,12 @@ var WUX;
                     this.btnClose.on('click', function (e) {
                         _this.close();
                     });
-                    this.header.add(this.buildTitle()).add(this.btnClose);
+                    if (WUX.CSS.DIALOG_X_POS >= 0) {
+                        this.header.add(this.buildTitle()).add(this.btnClose);
+                    }
+                    else {
+                        this.header.add(this.btnClose).add(this.buildTitle());
+                    }
                 }
             },
             enumerable: false,
@@ -6057,13 +6496,13 @@ var WUX;
             return true;
         };
         WDialog.prototype.buildBtnOK = function () {
-            return new WUX.WButton(this.subId('bfo'), WUX.RES.OK, '', 'btn btn-primary button-sm', '', '');
+            return new WUX.WButton(this.subId('bfo'), WUX.RES.OK, '', WUX.CSS.DIALOG_OK, '', '');
         };
         WDialog.prototype.buildBtnCancel = function () {
             if (this.txtCancel) {
-                return new WUX.WButton(this.subId('bfc'), this.txtCancel, '', 'btn btn-secondary button-sm', '', '');
+                return new WUX.WButton(this.subId('bfc'), this.txtCancel, '', WUX.CSS.DIALOG_CANCEL, '', '');
             }
-            return new WUX.WButton(this.subId('bfc'), WUX.RES.CANCEL, '', 'btn btn-secondary button-sm', '', '');
+            return new WUX.WButton(this.subId('bfc'), WUX.RES.CANCEL, '', WUX.CSS.DIALOG_CANCEL, '', '');
         };
         WDialog.prototype.fireOk = function () {
             if (this.onClickOk())
@@ -6192,11 +6631,11 @@ var WUX;
         };
         WDialog.prototype.render = function () {
             if (!this._classStyle)
-                this._classStyle = 'modal fade';
+                this._classStyle = WUX.CSS.DIALOG_CLASS;
             if (!this.mainClass)
-                this.mainClass = this.fullscreen ? 'modal-dialog modal-fullscreen' : 'modal-dialog modal-lg';
+                this.mainClass = this.fullscreen ? WUX.CSS.DIALOG_FULL : WUX.CSS.DIALOG_MAIN;
             if (!this.contClass)
-                this.contClass = 'modal-content';
+                this.contClass = WUX.CSS.DIALOG_CONTENT;
             this.isShown = false;
             this.cntRoot = new WUX.WContainer(this.id, this._classStyle, '', 'role="dialog" tabindex="-1" aria-hidden="true"');
             this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
@@ -6265,8 +6704,8 @@ var WUX;
         };
         WDialog.prototype.buildTitle = function () {
             if (!this.tagTitle)
-                this.tagTitle = 'h3';
-            var c = this.wp ? '' : '  class="modal-title"';
+                this.tagTitle = WUX.CSS.DIALOG_TITLE_TAG ? WUX.CSS.DIALOG_TITLE_TAG : 'h5';
+            var c = this.wp ? '' : WUX.buildCss(WUX.CSS.DIALOG_TITLE);
             return '<' + this.tagTitle + c + ' id="' + this.subId('title') + '">' + WUX.WUtil.toText(this._title) + '</' + this.tagTitle + '>';
         };
         return WDialog;
@@ -6365,7 +6804,7 @@ var WUX;
             for (var i = 0; i < this.tabs.length; i++) {
                 var tab = this.tabs[i];
                 if (i == this.state) {
-                    r += '<li class="nav-item" role="presentation"><' + this._t + ' class="nav-link active" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '"> ' + tab.name + '</' + this._t + '></li>';
+                    r += '<li class="nav-item' + (WUX.BS_VER < 4 ? ' active' : '') + '" role="presentation"><' + this._t + ' class="nav-link active" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '"> ' + tab.name + '</' + this._t + '></li>';
                 }
                 else {
                     r += '<li class="nav-item" role="presentation"><' + this._t + ' class="nav-link" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '">' + tab.name + '</' + this._t + '></li>';

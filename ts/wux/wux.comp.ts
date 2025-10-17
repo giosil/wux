@@ -9,7 +9,7 @@ namespace WUX {
 			if(tag) this.rootTag = tag;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			this.isText = false;
 			if(typeof this.props == 'string') {
 				if(!this.props || this.props.indexOf('<') < 0) {
@@ -244,13 +244,31 @@ namespace WUX {
 		}
 
 		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this {
-			if (secStyle == null) secStyle = CSS.SECTION_DIV;
-			if (legStyle == null) legStyle = CSS.SECTION_LEG;
-			if (!CSS.SECTION_TAG) CSS.SECTION_TAG = 'span';
-			let l = WUX.build(CSS.SECTION_TAG, title, legStyle);
-			let s = WUX.build('div', l, secStyle, '', ids, CSS.SECTION_CLASS);
+			// Build legend
+			if (legStyle == null) legStyle = CSS.SEC_STYLE;
+			let t = CSS.SEC_TAG ? CSS.SEC_TAG : 'span';
+			let l = WUX.build(t, title, legStyle, '', ids, CSS.SEC_CLASS);
+			// Build container
+			if (secStyle == null) secStyle = CSS.SEC_DIV_STYLE;
+			let s = WUX.build('div', l, secStyle, '', '', CSS.SEC_DIV_CLASS);
+			// Add parent class/style
+			if (CSS.SEC_PARENT && this.grid.length) {
+				let g = this.grid[this.grid.length - 1];
+				if (g.length) {
+					let cs = g[g.length - 1];
+					if (!cs) cs = '';
+					g[g.length - 1] = cs + '^' + CSS.SEC_PARENT;
+				}
+			}
+			// Add to container
 			this.add(s);
 			return this;
+		}
+
+		addBox(title?: string, classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object): WBox {
+			let box = new WBox(id, title, classStyle, style, attributes);
+			this.add(box);
+			return box;
 		}
 
 		protected componentWillMount(): void {
@@ -260,7 +278,7 @@ namespace WUX {
 			}
 		}
 
-		protected render(): any {
+		protected render(): WElement {
 			let inner = '';
 			// Head
 			for(let s of this.ashe) {
@@ -278,9 +296,9 @@ namespace WUX {
 					let g = this.grid[r];
 					let cl = g.length;
 					if(!cl) continue;
-					inner += '<div ' + this.cs(g[0]) + ' id="' + this.subId(r + '_0') + '">';
+					inner += '<div id="' + this.subId(r + '_0') + '" ' + buildCss(g[0]) + '>';
 					for(let c = 1; c < cl; c++) {
-						inner += '<div id="' + this.subId(r + '_' + c) + '" ' + this.cs(g[c]) + '></div>';
+						inner += '<div id="' + this.subId(r + '_' + c) + '" ' + buildCss(g[c]) + '></div>';
 					}
 					inner += "</div>";
 				}
@@ -293,6 +311,12 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
+			this._mount(this.context, this.root);
+		}
+
+		protected _mount(x: Element, r: Element): void {
+			if (!x) x = this.context;
+			if (!r) r = this.root;
 			// Before the container (See componentWillMount)
 			// Before the grid
 			let bg = document.getElementById(this.subId('bg'));
@@ -303,7 +327,7 @@ namespace WUX {
 			}
 			else {
 				for(let c of this.cbgr) {
-					c.mount(this.root);
+					c.mount(r);
 				}
 			}
 			// Grid
@@ -315,11 +339,11 @@ namespace WUX {
 			}
 			// After Grid
 			for(let c of this.cagr) {
-				c.mount(this.root);
+				c.mount(r);
 			}
 			// After the container
 			for(let e of this.caft) {
-				e.mount(this.context);
+				e.mount(x);
 			}
 		}
 
@@ -329,15 +353,6 @@ namespace WUX {
 			for(let c of this.comp) c.unmount(); //     Grid components
 			for(let c of this.cbgr) c.unmount(); //   Components before Grid
 			for(let c of this.cbef) c.unmount(); // Components before the container
-		}
-
-		protected cs(cs: string) {
-			if(!cs) return '';
-			let x = cs.indexOf('^');
-			if(x < 0) return 'class="' + cs + '"';
-			let c = cs.substring(0, x);
-			let s = cs.substring(x + 1);
-			return 'class="' + c + '" style="' + s + '"';
 		}
 
 		getElement(r: number, c?: number): HTMLElement {
@@ -366,6 +381,176 @@ namespace WUX {
 			// c in id starts at 1
 			c++;
 			return document.getElementById(this.subId(r + '_' + c));
+		}
+	}
+
+	export class WBox extends WContainer {
+		_title: string;
+		footer: string;
+		tools: WComponent[] = [];
+		collapsed: boolean = false;
+		_ce: boolean = false;
+		_ch: (e?: WEvent) => any;
+	
+		constructor(id?: string, title?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+			super(id, classStyle, style, attributes, false, 'box');
+			if (!this._classStyle) this._classStyle = CSS.BOX_CLASS;
+			if (CSS.BOX_TAG) this.rootTag = CSS.BOX_TAG;
+			this._title = title;
+		}
+
+		get title(): string {
+			return this._title;
+		}
+		set title(s: string) {
+			this._title = s;
+			let c = document.getElementById(this.subId('caption'));
+			if(c) c.innerText = s;
+		}
+
+		addTool(c: WComponent): this {
+			if (c) this.tools.push(c);
+			return this;
+		}
+
+		addCollapse(h?: (e?: WEvent) => any): this {
+			this._ce = true;
+			this._ch = h;
+			return this;
+		}
+
+		endBox(): WContainer {
+			// Same as end() but more explanatory
+			if (this.parent instanceof WContainer) return this.parent;
+			return super.end();
+		}
+
+		end(): WContainer {
+			if (this.parent instanceof WContainer) return this.parent;
+			return super.end();
+		}
+
+		collapse(h?: (e?: WEvent) => any): this {
+			if (this.collapsed) return this;
+			// Call handler first
+			if (!h) h = this._ch;
+			if (h) h(this.createEvent('collapse', {"collapsed": false}));
+			// Then collapse
+			let c = document.getElementById(this.subId('content'));
+			slideUp(c, 200);
+			if (CSS.BOX_EXP) {
+				let a = document.getElementById(this.subId('collapse'));
+				if (a) a.innerHTML = CSS.BOX_EXP;
+			}
+			this.collapsed = true;
+			return this;
+		}
+
+		expand(h?: (e?: WEvent) => any): this {
+			if (!this.collapsed) return this;
+			// Call handler first
+			if (!h) h = this._ch;
+			if (h) h(this.createEvent('collapse', {"collapsed": true}));
+			// Then expand
+			let c = document.getElementById(this.subId('content'));
+			slideDown(c, 200);
+			if (CSS.BOX_CLP) {
+				let a = document.getElementById(this.subId('collapse'));
+				if (a) a.innerHTML = CSS.BOX_CLP;
+			}
+			this.collapsed = false;
+			return this;
+		}
+
+		toggle(h?: (e?: WEvent) => any): this {
+			if(this.collapsed) {
+				this.expand(h);
+			}
+			else {
+				this.collapse(h);
+			}
+			return this;
+		}
+
+		protected render(): WElement {
+			let ic = 'id="' + this.subId('content') + '"';
+			// Remove previous Head / Tail
+			if (this.ashe && this.ashe.length) {
+				let h0 = this.ashe[0];
+				if (h0 && h0.indexOf(ic) > 0) {
+					this.ashe.shift();
+					this.asta.shift();
+				}
+			}
+			// Build tools
+			let t = '';
+			if (this._ce) {
+				let ct = CSS.BOX_CLP ? CSS.BOX_CLP : '';
+				if (CSS.BOX_TOOLS) t += '<div id="' + this.subId('tools') + '"' + buildCss(CSS.BOX_TOOLS) + '>';
+				t += '<a id="' + this.subId('collapse') + '" title="collapse"' + buildCss(CSS.BOX_CLP_CLASS, CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
+				if (CSS.BOX_TOOLS) t += '</div>'
+			}
+			// Head
+			let h = '';
+			if (CSS.BOX_INNER) h += '<div id="' + this.subId('inner') + '"' + buildCss(CSS.BOX_INNER) + '>';
+			if (this._title) {
+				if (CSS.BOX_TITLE) h += '<div id="' + this.subId('title') + '" class="' + CSS.BOX_TITLE + '">';
+				// Left title container
+				if (t && CSS.BOX_TOOLS_POS == -1) h += t;
+				if (CSS.BOX_ICON) {
+					h += CSS.BOX_ICON.indexOf('<') >= 0 ? CSS.BOX_ICON : '<i class="' + CSS.BOX_ICON + '"></i> ';
+				}
+				// Center title container
+				// Build title / caption
+				let tt = CSS.BOX_TITLE_TAG ? CSS.BOX_TITLE_TAG : 'span';
+				h += '<' + tt + ' id="' + this.subId('caption') + '"' + buildCss(CSS.BOX_TITLE_CLASS, CSS.BOX_TITLE_STYLE) + '>' + this._title;
+				if (t && CSS.BOX_TOOLS_POS == 0) h += ' ' + t;
+				h += '</' + tt + '>';
+				// Build Header
+				if (this.tools && this.tools.length) {
+					h += '<div id="' + this.subId('tools-ext') + '"' + buildCss(CSS.BOX_TOOLS_EXT) + '></div>';
+				}
+				// Right title container
+				if (t && CSS.BOX_TOOLS_POS == 1) h += t;
+				if (CSS.BOX_TITLE) h += '</div>';
+			}
+			h += '<div ' + ic + buildCss(CSS.BOX_CONTENT) + '>';
+			// Tail
+			let f = '</div>'; // BOX_CONTENT
+			if (this.footer) {
+				if (CSS.BOX_FOOTER) {
+					f += '<div id="' + this.subId('footer') + '"' + buildCss(CSS.BOX_FOOTER) + '>' + this.footer + '</div>';
+				}
+				else {
+					f += this.footer;
+				}
+			}
+			if (CSS.BOX_INNER) f += '</div>'; // BOX_INNER
+			this.ashe.unshift(h);
+			this.asta.unshift(f);
+			return super.render();
+		}
+
+		protected componentDidMount(): void {
+			this._mount(this.root, document.getElementById(this.subId('content')));
+			// Tools
+			let e = document.getElementById(this.subId('tools-ext'));
+			if (e) {
+				for(let t of this.tools) t.mount(e);
+			}
+			if (this._ce) {
+				let c = document.getElementById(this.subId('collapse'));
+				if (c) {
+					c.addEventListener('click', (e: MouseEvent) => {
+						this.toggle();
+					});
+				}
+			}
+		}
+
+		componentWillUnmount(): void {
+			for(let t of this.tools) t.unmount();
+			super.componentWillUnmount();
 		}
 	}
 
@@ -475,7 +660,7 @@ namespace WUX {
 			return null;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let l = this.components.length;
 			if (!this.state) this.state = 0;
 			if (this.state < 0) this.state = l + this.state;
@@ -602,7 +787,7 @@ namespace WUX {
 			}
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let addAttributes = '';
 			if (this._href) addAttributes += 'href="' + this._href + '"';
 			if (this._target) {
@@ -668,7 +853,7 @@ namespace WUX {
 			return this;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let text = this.state ? this.state : '';
 			if (this.forId) return this.buildRoot('label', WUX.buildIcon(this.props, '', ' ') + text, 'for="' + this.forId + '"', this._classStyle);
 			return this.buildRoot(this.rootTag, WUX.buildIcon(this.props, '', ' ') + text, null, this._classStyle);
@@ -752,7 +937,7 @@ namespace WUX {
 			return this.state;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let l = '';
 			if (this.label) {
 				l = this.id ? '<label for="' + this.id + '">' : '<label>'
@@ -850,7 +1035,7 @@ namespace WUX {
 			return this.state;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			if (!this.props) this.props = 1;
 			if (this._style) {
 				if (this._style.indexOf('width') < 0) {
@@ -917,7 +1102,7 @@ namespace WUX {
 			this.setState(text);
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let addAttributes = this.type ? 'type="' + this.type + '"' : '';
 			let html = '';
 			if (this.state) {
@@ -977,6 +1162,7 @@ namespace WUX {
 		}
 
 		set tooltip(s: string) {
+			if (!s) s = '';
 			this._tooltip = s;
 			let l = document.getElementById(this.id + '-l');
 			if(l) {
@@ -1013,7 +1199,7 @@ namespace WUX {
 			if (this.root) this.root['checked'] = this.props;
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let a = 'name="' + this.id + '" type="checkbox"';
 			a += this.props ? ' checked="checked"' : '';
 			let inner = this.text ? '&nbsp;' + this.text : '';
@@ -1247,7 +1433,7 @@ namespace WUX {
 			}
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let r = this.buildOptions();
 			return WUX.build('div', r, this._style, this._attributes, this.id, this._classStyle);
 		}
@@ -1470,7 +1656,7 @@ namespace WUX {
 			}
 		}
 
-		protected render() {
+		protected render(): WElement {
 			let o = this.buildOptions();
 			let addAttributes = 'name="' + this.id + '"';
 			if (this.multiple) addAttributes += ' multiple="multiple"';
@@ -1659,7 +1845,7 @@ namespace WUX {
 			return [this.state[this.selectedRow]];
 		}
 
-		protected render() {
+		protected render(): WElement {
 			if (this.sortable && this.sortable.length) {
 				this.soId = [];
 				this.sortBy = [];
@@ -1947,6 +2133,7 @@ namespace WUX {
 		mainClass: string;
 		mainStyle: string | WStyle;
 		groupStyle: string | WStyle;
+		tips: { [fid: string]: string };
 		leg: Element;
 
 		constructor(id?: string, title?: string, action?: string) {
@@ -1995,6 +2182,7 @@ namespace WUX {
 			this.currRow = null;
 			this.footer = [];
 			this.captions = [];
+			this.tips = {};
 			this.addRow();
 			this.leg = null;
 			return this;
@@ -2201,7 +2389,9 @@ namespace WUX {
 				co.readonly = !!f.readonly;
 				co.autofocus = !!f.autofocus;
 				co.onEnter((e: KeyboardEvent) => {
+					// This control cannot be taken out because the handler can be configured after the field is added.
 					if (this.handlers['_enter']) {
+						if (e) e["data"] = this.ripId(id);
 						for (let h of this.handlers['_enter']) h(e);
 					}
 				});
@@ -2224,10 +2414,15 @@ namespace WUX {
 			return this;
 		}
 
-		addTextField(fid: string, label: string, opts?: WField): this {
+		addTextField(fid: string, label: string, opts?: WField | boolean): this {
 			let id = this.subId(fid);
 			let co = new WInput(id, 'text', 0, CSS.FORM_CTRL);
-			return this._add(id, label, co, 'text', opts);
+			if(typeof opts == 'boolean') {
+				return this._add(id, label, co, 'text', {readonly: opts});
+			}
+			else {
+				return this._add(id, label, co, 'text', opts);
+			}
 		}
 
 		addNumberField(fid: string, label: string, min: number = 0, max?: number, opts?: WField): this {
@@ -2382,6 +2577,49 @@ namespace WUX {
 			}
 		}
 
+		section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this {
+			// Build legend
+			if (legStyle == null) legStyle = CSS.SEC_STYLE;
+			let t = CSS.SEC_TAG ? CSS.SEC_TAG : 'span';
+			let l = WUX.build(t, title, legStyle, '', ids, CSS.SEC_CLASS);
+			if (secStyle == null) secStyle = CSS.SEC_DIV_STYLE;
+			return this.addRow().addBlankField('', CSS.SEC_DIV_CLASS, secStyle, l);
+		}
+
+		setTooltip(fid: string, text: string): this {
+			let f = this.getField(fid);
+			if (!f) return this;
+			if (!text) {
+				delete this.tips[f.id];
+				f.tooltip = '';
+			}
+			else {
+				this.tips[f.id] = text;
+				f.tooltip = text;
+			}
+			return this;
+		}
+
+		setLabelCss(fieldId: string, css: string | WStyle): this {
+			let f = this.getField(fieldId);
+			if (!f) return this;
+			f.labelCss = css;
+			if (f.labelComp) {
+				let lcl = cls(f.labelCss);
+				if (lcl) f.labelComp.classStyle = lcl;
+				f.labelComp.style = style(f.labelCss);
+			}
+			return this;
+		}
+
+		setLabelText(fieldId: string, t: string): this {
+			let f = this.getField(fieldId);
+			if (!f) return this;
+			f.label = t;
+			if (f.labelComp) f.labelComp.setState(t);
+			return this;
+		}
+
 		addToFooter(c: WElement): this {
 			if (!c && !this.footer) return this;
 			this.footer.push(c)
@@ -2449,17 +2687,15 @@ namespace WUX {
 						let lc = CSS.LBL_CLASS;
 						let ls = '';
 						if (f.labelCss) {
-							if (f.labelCss.indexOf(':')) {
-								ls = f.labelCss;
-							}
-							else {
-								lc = f.labelCss;
-							}
+							let lcl = cls(f.labelCss);
+							if (lcl) lc = lcl;
+							ls = style(f.labelCss);
 						}
 						else if (f.classStyle) {
 							lc = f.classStyle;
 						}
 						let l = new WLabel(f.id + '-l', f.label + r, '', lc, ls);
+						l.tooltip = this.tips[f.id];
 						f.labelComp = l.for(f.id);
 					}
 					
@@ -2705,13 +2941,18 @@ namespace WUX {
 			return this;
 		}
 
-		getValues(): any {
+		getValues(f?: boolean): any {
 			let v = {};
 			for (let r of this.rows) {
 				for (let f of r) {
 					let k = this.ripId(f.id);
 					if (!k) continue;
-					v[k] = f.component ? f.component.getState() : f.value;
+					if(f) {
+						v[k] = WUtil.toString(f.component ? f.component.getState() : f.value);
+					}
+					else {
+						v[k] = f.component ? f.component.getState() : f.value;
+					}
 				}
 			}
 			return v;

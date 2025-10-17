@@ -184,6 +184,16 @@ class WuxDOM {
 		n.append(e);
 		return e;
 	}
+	static mountjq(e: WUX.WElement, node: JQuery): JQuery {
+		if (!node || !node["length"]) return node;
+		WuxDOM.mount(e, node[0]);
+		return node;
+	}
+	static unmountjq(node: JQuery): JQuery {
+		if (!node || !node["length"]) return node;
+		WuxDOM.unmount(node[0]);
+		return node;
+	}
 }
 // WUX Base
 namespace WUX {
@@ -196,7 +206,7 @@ namespace WUX {
 
 	export let registry: string[] = [];
 
-	export const version = '1.0.0';
+	export const version = '2.0.0';
 
 	/** Global settings */
 	export interface WGlobal {
@@ -250,7 +260,7 @@ namespace WUX {
 		icon?: string;
 		tooltip?: string;
 		element?: WElement;
-		labelCss?: string;
+		labelCss?: string | WStyle;
 		labelComp?: WComponent;
 		colClass?: string;
 		colStyle?: string | WStyle;
@@ -1061,6 +1071,14 @@ namespace WUX {
 			if (!wcid) return wcdn;
 			return wcdn + '(' + wcid + ')';
 		}
+		if (a instanceof jQuery) {
+			if ((a as JQuery).length) {
+				return '$("' + (a as JQuery).selector + '").id=' + (a as JQuery)[0].id;
+			}
+			else {
+				return '$("' + (a as JQuery).selector + '").length=0';
+			}
+		}
 		if (a instanceof Element) {
 			return 'Element#' + a.id;
 		}
@@ -1283,6 +1301,19 @@ namespace WUX {
 		return s;
 	}
 
+	export function styleObj(ws: string | WStyle): { [key: string]: string } {
+		let s = style(ws);
+		let r: { [key: string]: string } = {};
+		if (!s) return r;
+		let kvs = s.split(';');
+		for (let kv of kvs) {
+			let c = kv.split(':');
+			if (c.length < 2) continue;
+			r[c[0].trim()] = c[1].trim();
+		}
+		return r;
+	}
+
 	export function toggleAttr(e: Element, a: string, b: boolean, v?: string): Element {
 		if (!e || !a) return e;
 		if (!v) v = '';
@@ -1295,14 +1326,44 @@ namespace WUX {
 		return e;
 	}
 
-	export function addStyle(s: string, k: string, v: string, n?: boolean): string {
-		if (!k || !v) return css(s);
-		if (!s) return k + ':' + v + ';';
-		if (n) {
-			if (s.indexOf(k + ':') >= 0) return css(s);
-			return css(s) + k + ':' + v + ';';
+	export function toggleStyle(s: string | WStyle, k: string, b?: boolean, v1?: string): string;
+	export function toggleStyle(s: string | WStyle, k: string, v0?: string, v1?: string): string;
+	export function toggleStyle(s: string | WStyle, k: string, v0?: string | boolean, v1?: string): string {
+		if (!k) return css(s);
+		let o = styleObj(s);
+		let v = o[k];
+		if (typeof v0 == 'boolean') {
+			if (v0) {
+				if(v1) {
+					o[k] = v1;
+				}
+				else {
+					delete o[k];
+				}
+			}
+			else {
+				delete o[k];
+			}
 		}
-		return css(s) + k + ':' + v + ';';
+		else if(v == v0) {
+			if(v1) {
+				o[k] = v1;
+			}
+			else {
+				delete o[k];
+			}
+		}
+		else {
+			if(v0) {
+				o[k] = v0;
+			}
+			else {
+				delete o[k];
+			}
+		}
+		let r = '';
+		for (let x in o) r += x + ':' + o[x] + ';';
+		return r;
 	}
 
 	export function css(...a: (string | WStyle)[]): string {
@@ -1363,6 +1424,13 @@ namespace WUX {
 
 	export function buildCss(...a: (string | WStyle)[]): string {
 		if (!a || !a.length) return '';
+		if (a.length == 1) {
+			let f = a[0];
+			if (!f) return '';
+			if (typeof f == 'string' && f.indexOf('^') >= 0) {
+				return buildCss(...f.split('^'));
+			}
+		}
 		let c = cls(...a);
 		let s = css(...a);
 		let r = '';
@@ -1409,21 +1477,74 @@ namespace WUX {
 		return r.trim();
 	}
 
-	export function addClassOf(e: Element, name: string) {
-		if (!e) return;
+	export function addClassOf(e: Element, name: string): Element {
+		if (!e) return e;
 		e.setAttribute('class', addClass(e.getAttribute('class'), name));
+		return e;
 	}
 
-	export function removeClassOf(e: Element, name: string) {
-		if (!e) return;
+	export function removeClassOf(e: Element, name: string): Element {
+		if (!e) return e;
 		let c = e.getAttribute('class');
-		if(!c) return;
+		if(!c) return e;
 		e.setAttribute('class', removeClass(e.getAttribute('class'), name));
+		return e;
 	}
 
-	export function toggleClassOf(e: Element, name: string) {
-		if (!e) return;
+	export function toggleClassOf(e: Element, name: string): Element {
+		if (!e) return e;
 		e.setAttribute('class', toggleClass(e.getAttribute('class'), name));
+		return e;
+	}
+
+	export function toggleStyleOf(e: Element, k: string, b?: boolean, v1?: string): Element;
+	export function toggleStyleOf(e: Element, k: string, v0?: string, v1?: string): Element;
+	export function toggleStyleOf(e: Element, k: string, v0?: string | boolean, v1?: string): Element {
+		if (!e) return e;
+		e.setAttribute('style', toggleStyle(e.getAttribute('style'), k, v0 as any, v1));
+		return e;
+	}
+
+	export function isVisible(e: Element): boolean {
+		if (!e) return false;
+		let s = window.getComputedStyle(e);
+		if (!s) return false;
+		return s.display != 'none' && s.visibility != 'hidden';
+	}
+
+	export function slideToggle(e: Element, d?: number): Element {
+		if (!e) return e;
+		if (isVisible(e)) {
+			slideUp(e, d);
+		}
+		else {
+			slideDown(e, d);
+		}
+		return e;
+	}
+
+	export function slideUp(e: Element, d?: number): Element {
+		if(!e) return e;
+		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
+		if (jq) {
+			jq(e).slideUp(d);
+		}
+		else {
+			toggleStyleOf(e, 'display', 'none');
+		}
+		return e;
+	}
+
+	export function slideDown(e: Element, d?: number): Element {
+		if(!e) return e;
+		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
+		if (jq) {
+			jq(e).slideDown(d);
+		}
+		else {
+			toggleStyleOf(e, 'display', 'block');
+		}
+		return e;
 	}
 
 	export function setCss(e: WComponent | Element, ...a: (string | WStyle)[]): WComponent | Element {

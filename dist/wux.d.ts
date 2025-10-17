@@ -17,13 +17,15 @@ declare class WuxDOM {
     static unmount(node?: WUX.WNode): Element;
     static replace(o: WUX.WElement, e?: WUX.WElement): Element;
     static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode, a?: object): Element;
+    static mountjq(e: WUX.WElement, node: JQuery): JQuery;
+    static unmountjq(node: JQuery): JQuery;
 }
 declare namespace WUX {
     type WElement = string | Element | WComponent;
     type WNode = string | Element;
     let debug: boolean;
     let registry: string[];
-    const version = "1.0.0";
+    const version = "2.0.0";
     /** Global settings */
     interface WGlobal {
         /** Locale setting */
@@ -73,7 +75,7 @@ declare namespace WUX {
         icon?: string;
         tooltip?: string;
         element?: WElement;
-        labelCss?: string;
+        labelCss?: string | WStyle;
         labelComp?: WComponent;
         colClass?: string;
         colStyle?: string | WStyle;
@@ -353,8 +355,12 @@ declare namespace WUX {
         n?: string;
     }
     function style(ws: string | WStyle): string;
+    function styleObj(ws: string | WStyle): {
+        [key: string]: string;
+    };
     function toggleAttr(e: Element, a: string, b: boolean, v?: string): Element;
-    function addStyle(s: string, k: string, v: string, n?: boolean): string;
+    function toggleStyle(s: string | WStyle, k: string, b?: boolean, v1?: string): string;
+    function toggleStyle(s: string | WStyle, k: string, v0?: string, v1?: string): string;
     function css(...a: (string | WStyle)[]): string;
     function cls(...a: (string | WStyle)[]): string;
     function attributes(a: any): string;
@@ -362,9 +368,15 @@ declare namespace WUX {
     function addClass(css: string, name: string): string;
     function removeClass(css: string, name: string): string;
     function toggleClass(css: string, name: string): string;
-    function addClassOf(e: Element, name: string): void;
-    function removeClassOf(e: Element, name: string): void;
-    function toggleClassOf(e: Element, name: string): void;
+    function addClassOf(e: Element, name: string): Element;
+    function removeClassOf(e: Element, name: string): Element;
+    function toggleClassOf(e: Element, name: string): Element;
+    function toggleStyleOf(e: Element, k: string, b?: boolean, v1?: string): Element;
+    function toggleStyleOf(e: Element, k: string, v0?: string, v1?: string): Element;
+    function isVisible(e: Element): boolean;
+    function slideToggle(e: Element, d?: number): Element;
+    function slideUp(e: Element, d?: number): Element;
+    function slideDown(e: Element, d?: number): Element;
     function setCss(e: WComponent | Element, ...a: (string | WStyle)[]): WComponent | Element;
     function buildIcon(icon: string, before?: string, after?: string, size?: number, cls?: string, title?: string): string;
     function build(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): string;
@@ -461,30 +473,64 @@ declare namespace WUX {
     let initApp: (callback: () => any) => any;
     let global: WGlobal;
     class CSS {
+        static ROW: string;
+        static COL: string;
+        static SEC_DIV_CLASS: string;
+        static SEC_DIV_STYLE: string;
+        static SEC_TAG: string;
+        static SEC_CLASS: string;
+        static SEC_STYLE: string;
+        static SEC_PARENT: string;
+        static BOX_TAG: string;
+        static BOX_CLASS: string;
+        static BOX_INNER: string;
+        static BOX_ICON: string;
+        static BOX_TITLE: string;
+        static BOX_TITLE_TAG: string;
+        static BOX_TITLE_CLASS: string;
+        static BOX_TITLE_STYLE: string;
+        static BOX_TOOLS_EXT: string;
+        static BOX_TOOLS: string;
+        static BOX_TOOLS_POS: number;
+        static BOX_CONTENT: string;
+        static BOX_FOOTER: string;
+        static BOX_CLP_CLASS: string;
+        static BOX_CLP_STYLE: string;
+        static BOX_CLP: string;
+        static BOX_EXP: string;
         static FORM: string;
         static FORM_GROUP: string;
-        static LBL_CLASS: string;
-        static SEL_WRAPPER: string;
-        static SECTION_DIV: string;
-        static SECTION_CLASS: string;
-        static SECTION_TAG: string;
-        static SECTION_LEG: string;
         static FORM_CTRL: string;
         static FORM_CHECK: string;
+        static LBL_CLASS: string;
+        static SEL_WRAPPER: string;
         static CKDIV_STYLE: string;
         static CKBOX_STYLE: string;
         static LEVER_CLASS: string;
         static LEVER_STYLE: string;
+        static DIALOG_CLASS: string;
+        static DIALOG_MAIN: string;
+        static DIALOG_FULL: string;
+        static DIALOG_CONTENT: string;
+        static DIALOG_BODY: string;
+        static DIALOG_HEADER: string;
+        static DIALOG_FOOTER: string;
+        static DIALOG_TITLE: string;
+        static DIALOG_TITLE_TAG: string;
+        static DIALOG_OK: string;
+        static DIALOG_CANCEL: string;
+        static DIALOG_X_POS: number;
         static ICON: string;
         static SEL_ROW: string;
-        static ROW: string;
-        static COL: string;
         static PRIMARY: WStyle;
         static SECONDARY: WStyle;
         static SUCCESS: WStyle;
         static DANGER: WStyle;
+        static ERROR: WStyle;
         static WARNING: WStyle;
         static INFO: WStyle;
+        static LABEL_NOTICE: WStyle;
+        static LABEL_INFO: WStyle;
     }
     class RES {
         static OK: string;
@@ -554,12 +600,34 @@ declare namespace WUX {
         addContainer(i: string, classStyle?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer;
         end(): WContainer;
         section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this;
+        addBox(title?: string, classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object): WBox;
         protected componentWillMount(): void;
-        protected render(): any;
+        protected render(): WElement;
+        protected componentDidMount(): void;
+        protected _mount(x: Element, r: Element): void;
+        componentWillUnmount(): void;
+        getElement(r: number, c?: number): HTMLElement;
+    }
+    class WBox extends WContainer {
+        _title: string;
+        footer: string;
+        tools: WComponent[];
+        collapsed: boolean;
+        _ce: boolean;
+        _ch: (e?: WEvent) => any;
+        constructor(id?: string, title?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
+        get title(): string;
+        set title(s: string);
+        addTool(c: WComponent): this;
+        addCollapse(h?: (e?: WEvent) => any): this;
+        endBox(): WContainer;
+        end(): WContainer;
+        collapse(h?: (e?: WEvent) => any): this;
+        expand(h?: (e?: WEvent) => any): this;
+        toggle(h?: (e?: WEvent) => any): this;
+        protected render(): WElement;
         protected componentDidMount(): void;
         componentWillUnmount(): void;
-        protected cs(cs: string): string;
-        getElement(r: number, c?: number): HTMLElement;
     }
     class WPages extends WComponent<any, number> {
         components: WComponent[];
@@ -579,7 +647,7 @@ declare namespace WUX {
         prev(): boolean;
         show(p: number, before?: (c: WComponent) => any, after?: (c: WComponent) => any, t?: number): WComponent;
         curr(): WComponent;
-        protected render(): string;
+        protected render(): WElement;
         protected updateState(nextState: number): void;
         protected componentDidMount(): void;
         componentWillUnmount(): void;
@@ -595,7 +663,7 @@ declare namespace WUX {
         set href(s: string);
         get target(): string;
         set target(s: string);
-        protected render(): string;
+        protected render(): WElement;
         setState(nextState: string, force?: boolean, callback?: () => any): this;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
@@ -606,7 +674,7 @@ declare namespace WUX {
         set icon(i: string);
         protected updateState(nextState: string): void;
         for(e: WElement): this;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
     }
     class WInput extends WComponent<string, string> {
@@ -624,7 +692,7 @@ declare namespace WUX {
         protected shouldComponentUpdate(nextProps: string, nextState: string): boolean;
         protected updateState(nextState: string): void;
         getState(): string;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
     }
     class WTextArea extends WComponent<number, string> {
@@ -637,7 +705,7 @@ declare namespace WUX {
         set autofocus(v: boolean);
         protected updateState(nextState: string): void;
         getState(): string;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
     }
     class WButton extends WComponent<string, string> {
@@ -646,7 +714,7 @@ declare namespace WUX {
         get icon(): string;
         set icon(i: string);
         setText(text?: string, icon?: string): void;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
@@ -666,7 +734,7 @@ declare namespace WUX {
         getState(): any;
         protected updateProps(nextProps: boolean): void;
         protected updateState(nextState: any): void;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
     }
     class WRadio extends WComponent<string, any> implements WISelectable {
@@ -686,7 +754,7 @@ declare namespace WUX {
         remOption(e: string | WEntity): this;
         indexOption(e: string | WEntity): number;
         protected updateState(nextState: any): void;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
         protected componentDidUpdate(prevProps: any, prevState: any): void;
         protected buildOptions(): string;
@@ -703,7 +771,7 @@ declare namespace WUX {
         indexOption(e: string | WEntity): number;
         setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
         protected updateState(nextState: any): void;
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
         protected buildOptions(): string;
     }
@@ -757,7 +825,7 @@ declare namespace WUX {
         selectAll(toggle?: boolean): this;
         getSelectedRows(): number[];
         getSelectedRowsData(): any[];
-        protected render(): string;
+        protected render(): WElement;
         protected componentDidMount(): void;
         protected componentDidUpdate(prevProps: any, prevState: any): void;
         protected updSort(): void;
@@ -780,6 +848,9 @@ declare namespace WUX {
         mainClass: string;
         mainStyle: string | WStyle;
         groupStyle: string | WStyle;
+        tips: {
+            [fid: string]: string;
+        };
         leg: Element;
         constructor(id?: string, title?: string, action?: string);
         get enabled(): boolean;
@@ -804,7 +875,7 @@ declare namespace WUX {
         setOptionValue(fid: string, text: string, d?: any): this;
         addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type?: string): this;
         protected _add(id: string, label: string, co: WComponent, type: string, opts?: WField): this;
-        addTextField(fid: string, label: string, opts?: WField): this;
+        addTextField(fid: string, label: string, opts?: WField | boolean): this;
         addNumberField(fid: string, label: string, min?: number, max?: number, opts?: WField): this;
         addPasswordField(fid: string, label: string, opts?: WField): this;
         addDateField(fid: string, label: string, opts?: WField): this;
@@ -824,6 +895,10 @@ declare namespace WUX {
         addHiddenField(fid: string, value?: any): this;
         addInternalField(fid: string, value?: any): this;
         addComponent(fid: string, label: string, component: WComponent, opts?: WField): this;
+        section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this;
+        setTooltip(fid: string, text: string): this;
+        setLabelCss(fieldId: string, css: string | WStyle): this;
+        setLabelText(fieldId: string, t: string): this;
         addToFooter(c: WElement): this;
         componentWillMount(): void;
         componentDidMount(): void;
@@ -840,7 +915,7 @@ declare namespace WUX {
         setSpan(fid: string, span: number): this;
         setEnabled(fid: string, v: boolean): this;
         setReadOnly(fid: string, v: boolean): this;
-        getValues(): any;
+        getValues(f?: boolean): any;
         getState(): any;
         protected updateState(nextState: any): void;
         protected updateView(): void;

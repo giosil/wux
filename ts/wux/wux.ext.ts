@@ -71,7 +71,6 @@ namespace WUX {
 		constructor(id: string, name: string = 'WDialog', btnOk = true, btnClose = true, classStyle?: string, style?: string | WUX.WStyle, attributes?: string | object) {
 			super(id, name, undefined, classStyle, style, attributes);
 			this.buttons = [];
-			this.tagTitle = 'h5';
 			if (btnClose) {
 				if (!btnOk) this.txtCancel = RES.CLOSE;
 				this.buttonCancel();
@@ -96,7 +95,7 @@ namespace WUX {
 			this.wp = wp;
 			if(!wp) return this;
 			this.isShown = false;
-			if(!this.contClass) this.contClass = 'modal-content';
+			if(!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
 			this.cntRoot = new WContainer(this.id);
 			this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
 			this.cntContent = this.cntMain.addContainer('', this.contClass, this.contStyle);
@@ -143,19 +142,19 @@ namespace WUX {
 
 		get header(): WUX.WContainer {
 			if (this.cntHeader) return this.cntHeader;
-			this.cntHeader = new WUX.WContainer('', 'modal-header');
+			this.cntHeader = new WUX.WContainer('', CSS.DIALOG_HEADER);
 			return this.cntHeader;
 		}
 
 		get body(): WUX.WContainer {
 			if (this.cntBody) return this.cntBody;
-			this.cntBody = new WUX.WContainer('', WUX.cls('modal-body', this.bodyClass), '', this._attributes);
+			this.cntBody = new WUX.WContainer('', WUX.cls(CSS.DIALOG_BODY, this.bodyClass), '', this._attributes);
 			return this.cntBody;
 		}
 
 		get footer(): WUX.WContainer {
 			if (this.cntFooter) return this.cntFooter;
-			this.cntFooter = new WUX.WContainer('', 'modal-footer');
+			this.cntFooter = new WUX.WContainer('', CSS.DIALOG_FOOTER);
 			return this.cntFooter;
 		}
 
@@ -188,7 +187,12 @@ namespace WUX {
 				this.btnClose.on('click', (e: PointerEvent) => {
 					this.close();
 				});
-				this.header.add(this.buildTitle()).add(this.btnClose);
+				if(CSS.DIALOG_X_POS >= 0) {
+					this.header.add(this.buildTitle()).add(this.btnClose);
+				}
+				else {
+					this.header.add(this.btnClose).add(this.buildTitle());
+				}
 			}
 		}
 
@@ -201,14 +205,14 @@ namespace WUX {
 		}
 
 		protected buildBtnOK(): WUX.WButton {
-			return new WUX.WButton(this.subId('bfo'), RES.OK, '', 'btn btn-primary button-sm', '', '');
+			return new WUX.WButton(this.subId('bfo'), RES.OK, '', CSS.DIALOG_OK, '', '');
 		}
 
 		protected buildBtnCancel(): WUX.WButton {
 			if (this.txtCancel) {
-				return new WUX.WButton(this.subId('bfc'), this.txtCancel, '', 'btn btn-secondary button-sm', '', '');
+				return new WUX.WButton(this.subId('bfc'), this.txtCancel, '', CSS.DIALOG_CANCEL, '', '');
 			}
-			return new WUX.WButton(this.subId('bfc'), RES.CANCEL, '', 'btn btn-secondary button-sm', '', '');
+			return new WUX.WButton(this.subId('bfc'), RES.CANCEL, '', CSS.DIALOG_CANCEL, '', '');
 		}
 
 		fireOk(): void {
@@ -341,9 +345,9 @@ namespace WUX {
 		}
 
 		protected render() {
-			if(!this._classStyle) this._classStyle = 'modal fade';
-			if(!this.mainClass) this.mainClass = this.fullscreen ? 'modal-dialog modal-fullscreen' : 'modal-dialog modal-lg';
-			if(!this.contClass) this.contClass = 'modal-content';
+			if(!this._classStyle) this._classStyle = CSS.DIALOG_CLASS;
+			if(!this.mainClass) this.mainClass = this.fullscreen ? CSS.DIALOG_FULL : CSS.DIALOG_MAIN;
+			if(!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
 			this.isShown = false;
 			this.cntRoot = new WUX.WContainer(this.id, this._classStyle, '', 'role="dialog" tabindex="-1" aria-hidden="true"');
 			this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
@@ -396,8 +400,8 @@ namespace WUX {
 		}
 
 		protected buildTitle(): string {
-			if (!this.tagTitle) this.tagTitle = 'h3';
-			let c = this.wp ? '' : '  class="modal-title"';
+			if (!this.tagTitle) this.tagTitle = CSS.DIALOG_TITLE_TAG ? CSS.DIALOG_TITLE_TAG : 'h5';
+			let c = this.wp ? '' : buildCss(CSS.DIALOG_TITLE);
 			return '<' + this.tagTitle + c + ' id="' + this.subId('title') + '">' + WUtil.toText(this._title) + '</' + this.tagTitle + '>';
 		}
 	}
@@ -491,7 +495,7 @@ namespace WUX {
 			for (let i = 0; i < this.tabs.length; i++) {
 				let tab = this.tabs[i];
 				if (i == this.state) {
-					r += '<li class="nav-item" role="presentation"><' + this._t + ' class="nav-link active" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '"> ' + tab.name + '</'  + this._t + '></li>';
+					r += '<li class="nav-item' + (BS_VER < 4 ? ' active' : '') + '" role="presentation"><' + this._t + ' class="nav-link active" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '"> ' + tab.name + '</'  + this._t + '></li>';
 				}
 				else {
 					r += '<li class="nav-item" role="presentation"><' + this._t + ' class="nav-link" ' + this._a + '="tab" ' + this._r + '="#' + this.id + '-' + i + '" role="tab" id="' + this.id + '-p' + i + '">' + tab.name + '</'  + this._t + '></li>';

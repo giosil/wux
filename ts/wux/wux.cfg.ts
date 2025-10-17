@@ -55,31 +55,72 @@
 	}
 	
 	export class CSS {
+		// Container grid
+		static ROW = 'row';
+		static COL = 'col-';
+		// Sections
+		static SEC_DIV_CLASS = 'text-primary';
+		static SEC_DIV_STYLE = 'border-bottom:solid 1px;';
+		static SEC_TAG = 'h5';
+		static SEC_CLASS = '';
+		static SEC_STYLE = '';
+		static SEC_PARENT = '';
+		// Boxes
+		static BOX_TAG = 'div';
+		static BOX_CLASS = 'callout';
+		static BOX_INNER = 'callout-inner';
+		static BOX_ICON = '';
+		static BOX_TITLE = 'callout-title';
+		static BOX_TITLE_TAG = 'span';
+		static BOX_TITLE_CLASS = 'text';
+		static BOX_TITLE_STYLE = '';
+		static BOX_TOOLS_EXT = '';
+		static BOX_TOOLS = '';
+		static BOX_TOOLS_POS = 0; // -1 left, 0 center, 1 right
+		static BOX_CONTENT = '';
+		static BOX_FOOTER = '';
+		static BOX_CLP_CLASS = '';
+		static BOX_CLP_STYLE = 'cursor:pointer;padding-left:1rem;';
+		static BOX_CLP = '<i class="fa fa-chevron-up"></i>';
+		static BOX_EXP = '<i class="fa fa-chevron-down"></i>';
+		// Forms
 		static FORM = 'padding-top:16px;';
 		static FORM_GROUP = 'form-group';
-		static LBL_CLASS = 'active';
-		static SEL_WRAPPER = 'select-wrapper';
-		static SECTION_DIV = 'border-bottom:solid 1px;';
-		static SECTION_CLASS = 'text-primary';
-		static SECTION_TAG = 'h3';
-		static SECTION_LEG = '';
 		static FORM_CTRL = 'form-control';
 		static FORM_CHECK = 'form-check form-check-inline';
+		static LBL_CLASS = 'active';
+		static SEL_WRAPPER = 'select-wrapper';
 		static CKDIV_STYLE = 'padding-top:1rem;';
 		static CKBOX_STYLE = '';
 		static LEVER_CLASS = 'lever';
 		static LEVER_STYLE = '';
+		// Dialogs
+		static DIALOG_CLASS = 'modal fade';
+		static DIALOG_MAIN = 'modal-dialog modal-lg';
+		static DIALOG_FULL = 'modal-dialog modal-fullscreen';
+		static DIALOG_CONTENT = 'modal-content';
+		static DIALOG_BODY = 'modal-body';
+		static DIALOG_HEADER = 'modal-header';
+		static DIALOG_FOOTER = 'modal-footer';
+		static DIALOG_TITLE = 'modal-title';
+		static DIALOG_TITLE_TAG = 'h5';
+		static DIALOG_OK = 'btn btn-primary button-sm';
+		static DIALOG_CANCEL = 'btn btn-secondary button-sm';
+		static DIALOG_X_POS = 1; // -1 left, 1 right
+		// General
 		static ICON = 'margin-right:8px;';
 		static SEL_ROW = 'primary-bg-a2';
-		static ROW = 'row';
-		static COL = 'col-';
-		
+	
 		static PRIMARY: WStyle = { bg: '#cce5ff' };
 		static SECONDARY: WStyle = { bg: '#e2e3e5' };
 		static SUCCESS: WStyle = { bg: '#d4edda' };
 		static DANGER: WStyle = { bg: '#f8d7da' };
+		static ERROR: WStyle = { bg: '#f8d7da' };
 		static WARNING: WStyle = { bg: '#fff3cd' };
 		static INFO: WStyle = { bg: '#d1ecf1' };
+		
+		static LABEL_NOTICE: WStyle = { c: '#aa6a6c', fw: 'bold' };
+		static LABEL_INFO: WStyle = { c: '#676a96', fw: 'bold' };
 	}
 	
 	export class RES {
