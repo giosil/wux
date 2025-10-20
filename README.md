@@ -158,7 +158,7 @@ this.main
   .addBox('Box title')
     .addTool(this.badges)
     .addCollapse()
-    .addRow('')
+    .addRow()
       .addCol('col-md-12')
         .add('<p>Box sample</p>')
     .end()
