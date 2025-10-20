@@ -283,6 +283,12 @@ let count = this.form.notBlank('name', 'gender');
 let f = this.form.getFile('file', (f: File, b64: string) => {
   console.log('file, content', f, b64);
 }
+
+// Modify label text
+this.form.setLabelText('file', 'File to upload');
+
+// Modify label Style
+this.form.setLabelCss('file', 'color: red;');
 ```
 
 ### WUX.WButton

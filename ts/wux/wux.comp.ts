@@ -2487,8 +2487,8 @@ namespace WUX {
 
 		addRadioField(fid: string, label: string, options?: (string | WEntity)[], opts?: WField): this {
 			let id = this.subId(fid);
-			let co = new WRadio(id, options, CSS.FORM_CTRL, CSS.CKDIV_STYLE);
-			return this._add(id, label, co, 'select', opts);
+			let co = new WRadio(id, options, CSS.FORM_CTRL, CSS.RADIO_STYLE);
+			return this._add(id, label, co, 'radio', opts);
 		}
 
 		addBooleanField(fid: string, label: string, labelCheck?: string, opts?: WField): this;
@@ -2600,8 +2600,8 @@ namespace WUX {
 			return this;
 		}
 
-		setLabelCss(fieldId: string, css: string | WStyle): this {
-			let f = this.getField(fieldId);
+		setLabelCss(fid: string, css: string | WStyle): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			f.labelCss = css;
 			if (f.labelComp) {
@@ -2612,8 +2612,8 @@ namespace WUX {
 			return this;
 		}
 
-		setLabelText(fieldId: string, t: string): this {
-			let f = this.getField(fieldId);
+		setLabelText(fid: string, t: string): this {
+			let f = this.getField(fid);
 			if (!f) return this;
 			f.label = t;
 			if (f.labelComp) f.labelComp.setState(t);
@@ -2701,12 +2701,7 @@ namespace WUX {
 					
 					if (g) {
 						if (f.type == 'select') {
-							if (f.component instanceof WRadio) {
-								this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: css(this.groupStyle, CSS.RADIO_STYLE)}, f.labelComp, f.component);
-							}
-							else {
-								this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: this.groupStyle}, f.labelComp, f.component);
-							}
+							this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: this.groupStyle}, f.labelComp, f.component);
 						}
 						else {
 							this.main.addGroup({classStyle: CSS.FORM_GROUP, style: this.groupStyle}, f.labelComp, f.component);

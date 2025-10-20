@@ -90,7 +90,7 @@
 		static FORM_CHECK = 'form-check form-check-inline';
 		static LBL_CLASS = 'active';
 		static SEL_WRAPPER = 'select-wrapper';
-		static RADIO_STYLE = 'padding-top:1rem;';
+		static RADIO_STYLE = 'padding-top:0px;';
 		static CKDIV_STYLE = 'padding-top:1rem;';
 		static CKBOX_STYLE = '';
 		static LEVER_CLASS = 'lever';

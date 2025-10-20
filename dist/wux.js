@@ -2587,7 +2587,7 @@ var WUX;
         CSS.FORM_CHECK = 'form-check form-check-inline';
         CSS.LBL_CLASS = 'active';
         CSS.SEL_WRAPPER = 'select-wrapper';
-        CSS.RADIO_STYLE = 'padding-top:1rem;';
+        CSS.RADIO_STYLE = 'padding-top:0px;';
         CSS.CKDIV_STYLE = 'padding-top:1rem;';
         CSS.CKBOX_STYLE = '';
         CSS.LEVER_CLASS = 'lever';
@@ -5685,8 +5685,8 @@ var WUX;
         };
         WForm.prototype.addRadioField = function (fid, label, options, opts) {
             var id = this.subId(fid);
-            var co = new WRadio(id, options, WUX.CSS.FORM_CTRL, WUX.CSS.CKDIV_STYLE);
-            return this._add(id, label, co, 'select', opts);
+            var co = new WRadio(id, options, WUX.CSS.FORM_CTRL, WUX.CSS.RADIO_STYLE);
+            return this._add(id, label, co, 'radio', opts);
         };
         WForm.prototype.addBooleanField = function (fid, label, lv, opts) {
             var id = this.subId(fid);
@@ -5791,8 +5791,8 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.setLabelCss = function (fieldId, css) {
-            var f = this.getField(fieldId);
+        WForm.prototype.setLabelCss = function (fid, css) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             f.labelCss = css;
@@ -5804,8 +5804,8 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.setLabelText = function (fieldId, t) {
-            var f = this.getField(fieldId);
+        WForm.prototype.setLabelText = function (fid, t) {
+            var f = this.getField(fid);
             if (!f)
                 return this;
             f.label = t;
@@ -5894,12 +5894,7 @@ var WUX;
                     }
                     if (g) {
                         if (f.type == 'select') {
-                            if (f.component instanceof WRadio) {
-                                this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: WUX.css(this.groupStyle, WUX.CSS.RADIO_STYLE) }, f.labelComp, f.component);
-                            }
-                            else {
-                                this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: this.groupStyle }, f.labelComp, f.component);
-                            }
+                            this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: this.groupStyle }, f.labelComp, f.component);
                         }
                         else {
                             this.main.addGroup({ classStyle: WUX.CSS.FORM_GROUP, style: this.groupStyle }, f.labelComp, f.component);

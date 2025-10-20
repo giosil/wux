@@ -898,8 +898,8 @@ declare namespace WUX {
         addComponent(fid: string, label: string, component: WComponent, opts?: WField): this;
         section(title: string, secStyle?: string | WStyle, legStyle?: string | WStyle, ids?: string): this;
         setTooltip(fid: string, text: string): this;
-        setLabelCss(fieldId: string, css: string | WStyle): this;
-        setLabelText(fieldId: string, t: string): this;
+        setLabelCss(fid: string, css: string | WStyle): this;
+        setLabelText(fid: string, t: string): this;
         addToFooter(c: WElement): this;
         componentWillMount(): void;
         componentDidMount(): void;
