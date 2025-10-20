@@ -504,6 +504,7 @@ declare namespace WUX {
         static FORM_CHECK: string;
         static LBL_CLASS: string;
         static SEL_WRAPPER: string;
+        static RADIO_STYLE: string;
         static CKDIV_STYLE: string;
         static CKBOX_STYLE: string;
         static LEVER_CLASS: string;

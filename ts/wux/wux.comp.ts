@@ -2701,7 +2701,12 @@ namespace WUX {
 					
 					if (g) {
 						if (f.type == 'select') {
-							this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: this.groupStyle}, f.labelComp, f.component);
+							if (f.component instanceof WRadio) {
+								this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: css(this.groupStyle, CSS.RADIO_STYLE)}, f.labelComp, f.component);
+							}
+							else {
+								this.main.addGroup({classStyle: CSS.SEL_WRAPPER, style: this.groupStyle}, f.labelComp, f.component);
+							}
 						}
 						else {
 							this.main.addGroup({classStyle: CSS.FORM_GROUP, style: this.groupStyle}, f.labelComp, f.component);

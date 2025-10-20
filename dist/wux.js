@@ -2587,6 +2587,7 @@ var WUX;
         CSS.FORM_CHECK = 'form-check form-check-inline';
         CSS.LBL_CLASS = 'active';
         CSS.SEL_WRAPPER = 'select-wrapper';
+        CSS.RADIO_STYLE = 'padding-top:1rem;';
         CSS.CKDIV_STYLE = 'padding-top:1rem;';
         CSS.CKBOX_STYLE = '';
         CSS.LEVER_CLASS = 'lever';
@@ -5893,7 +5894,12 @@ var WUX;
                     }
                     if (g) {
                         if (f.type == 'select') {
-                            this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: this.groupStyle }, f.labelComp, f.component);
+                            if (f.component instanceof WRadio) {
+                                this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: WUX.css(this.groupStyle, WUX.CSS.RADIO_STYLE) }, f.labelComp, f.component);
+                            }
+                            else {
+                                this.main.addGroup({ classStyle: WUX.CSS.SEL_WRAPPER, style: this.groupStyle }, f.labelComp, f.component);
+                            }
                         }
                         else {
                             this.main.addGroup({ classStyle: WUX.CSS.FORM_GROUP, style: this.groupStyle }, f.labelComp, f.component);
