@@ -609,6 +609,17 @@ declare namespace WUX {
         componentWillUnmount(): void;
         getElement(r: number, c?: number): HTMLElement;
     }
+    /**
+     * Box container
+     *   inner
+     *     title
+     *       caption
+     *       tools
+     *         collapse [ addCollapse(h: (e?: WUX.WEvent) => any) ]
+     *       tools-ext [ addTool(c: WUX.WComponent) ]
+     *     content
+     *     footer
+     */
     class WBox extends WContainer {
         _title: string;
         footer: string;
@@ -621,6 +632,7 @@ declare namespace WUX {
         set title(s: string);
         addTool(c: WComponent): this;
         addCollapse(h?: (e?: WEvent) => any): this;
+        offCollapse(ce?: boolean): this;
         endBox(): WContainer;
         end(): WContainer;
         collapse(h?: (e?: WEvent) => any): this;

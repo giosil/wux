@@ -384,6 +384,17 @@ namespace WUX {
 		}
 	}
 
+	/**
+	 * Box container
+	 *   inner
+	 *     title
+	 *       caption
+	 *       tools
+	 *         collapse [ addCollapse(h: (e?: WUX.WEvent) => any) ]
+	 *       tools-ext [ addTool(c: WUX.WComponent) ]
+	 *     content
+	 *     footer
+	 */
 	export class WBox extends WContainer {
 		_title: string;
 		footer: string;
@@ -419,6 +430,12 @@ namespace WUX {
 			return this;
 		}
 
+		offCollapse(ce: boolean = true): this {
+			this._ce = ce;
+			this._ch = null;
+			return this;
+		}
+
 		endBox(): WContainer {
 			// Same as end() but more explanatory
 			if (this.parent instanceof WContainer) return this.parent;
@@ -432,32 +449,34 @@ namespace WUX {
 
 		collapse(h?: (e?: WEvent) => any): this {
 			if (this.collapsed) return this;
+			// Chck if collapsible
+			if (!this._ce) return this;
+			let a = document.getElementById(this.subId('collapse'));
+			if (!a) return this;
 			// Call handler first
 			if (!h) h = this._ch;
 			if (h) h(this.createEvent('collapse', {"collapsed": false}));
 			// Then collapse
 			let c = document.getElementById(this.subId('content'));
 			slideUp(c, 200);
-			if (CSS.BOX_EXP) {
-				let a = document.getElementById(this.subId('collapse'));
-				if (a) a.innerHTML = CSS.BOX_EXP;
-			}
+			if (CSS.BOX_EXP) a.innerHTML = CSS.BOX_EXP;
 			this.collapsed = true;
 			return this;
 		}
 
 		expand(h?: (e?: WEvent) => any): this {
 			if (!this.collapsed) return this;
+			// Chck if collapsible
+			if (!this._ce) return this;
+			let a = document.getElementById(this.subId('collapse'));
+			if (!a) return this;
 			// Call handler first
 			if (!h) h = this._ch;
 			if (h) h(this.createEvent('collapse', {"collapsed": true}));
 			// Then expand
 			let c = document.getElementById(this.subId('content'));
 			slideDown(c, 200);
-			if (CSS.BOX_CLP) {
-				let a = document.getElementById(this.subId('collapse'));
-				if (a) a.innerHTML = CSS.BOX_CLP;
-			}
+			if (CSS.BOX_CLP) a.innerHTML = CSS.BOX_CLP;
 			this.collapsed = false;
 			return this;
 		}
@@ -482,19 +501,19 @@ namespace WUX {
 					this.asta.shift();
 				}
 			}
-			// Build tools
-			let t = '';
-			if (this._ce) {
-				let ct = CSS.BOX_CLP ? CSS.BOX_CLP : '';
-				if (CSS.BOX_TOOLS) t += '<div id="' + this.subId('tools') + '"' + buildCss(CSS.BOX_TOOLS) + '>';
-				t += '<a id="' + this.subId('collapse') + '" title="collapse"' + buildCss(CSS.BOX_CLP_CLASS, CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
-				if (CSS.BOX_TOOLS) t += '</div>'
-			}
 			// Head
 			let h = '';
 			if (CSS.BOX_INNER) h += '<div id="' + this.subId('inner') + '"' + buildCss(CSS.BOX_INNER) + '>';
-			if (this._title) {
-				if (CSS.BOX_TITLE) h += '<div id="' + this.subId('title') + '" class="' + CSS.BOX_TITLE + '">';
+			if (this._title && CSS.BOX_TITLE) {
+				// Build tools
+				let t = '';
+				if (this._ce) {
+					let ct = CSS.BOX_CLP ? CSS.BOX_CLP : '';
+					if (CSS.BOX_TOOLS) t += '<div id="' + this.subId('tools') + '"' + buildCss(CSS.BOX_TOOLS) + '>';
+					t += '<a id="' + this.subId('collapse') + '" title="collapse"' + buildCss(CSS.BOX_CLP_CLASS, CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
+					if (CSS.BOX_TOOLS) t += '</div>'
+				}
+				h += '<div id="' + this.subId('title') + '" class="' + CSS.BOX_TITLE + '">';
 				// Left title container
 				if (t && CSS.BOX_TOOLS_POS == -1) h += t;
 				if (CSS.BOX_ICON) {
@@ -512,7 +531,7 @@ namespace WUX {
 				}
 				// Right title container
 				if (t && CSS.BOX_TOOLS_POS == 1) h += t;
-				if (CSS.BOX_TITLE) h += '</div>';
+				h += '</div>'; // BOX_TITLE
 			}
 			h += '<div ' + ic + buildCss(CSS.BOX_CONTENT) + '>';
 			// Tail

@@ -3414,6 +3414,17 @@ var WUX;
         return WContainer;
     }(WUX.WComponent));
     WUX.WContainer = WContainer;
+    /**
+     * Box container
+     *   inner
+     *     title
+     *       caption
+     *       tools
+     *         collapse [ addCollapse(h: (e?: WUX.WEvent) => any) ]
+     *       tools-ext [ addTool(c: WUX.WComponent) ]
+     *     content
+     *     footer
+     */
     var WBox = /** @class */ (function (_super) {
         __extends(WBox, _super);
         function WBox(id, title, classStyle, style, attributes) {
@@ -3451,6 +3462,12 @@ var WUX;
             this._ch = h;
             return this;
         };
+        WBox.prototype.offCollapse = function (ce) {
+            if (ce === void 0) { ce = true; }
+            this._ce = ce;
+            this._ch = null;
+            return this;
+        };
         WBox.prototype.endBox = function () {
             // Same as end() but more explanatory
             if (this.parent instanceof WContainer)
@@ -3465,6 +3482,12 @@ var WUX;
         WBox.prototype.collapse = function (h) {
             if (this.collapsed)
                 return this;
+            // Chck if collapsible
+            if (!this._ce)
+                return this;
+            var a = document.getElementById(this.subId('collapse'));
+            if (!a)
+                return this;
             // Call handler first
             if (!h)
                 h = this._ch;
@@ -3473,16 +3496,19 @@ var WUX;
             // Then collapse
             var c = document.getElementById(this.subId('content'));
             WUX.slideUp(c, 200);
-            if (WUX.CSS.BOX_EXP) {
-                var a = document.getElementById(this.subId('collapse'));
-                if (a)
-                    a.innerHTML = WUX.CSS.BOX_EXP;
-            }
+            if (WUX.CSS.BOX_EXP)
+                a.innerHTML = WUX.CSS.BOX_EXP;
             this.collapsed = true;
             return this;
         };
         WBox.prototype.expand = function (h) {
             if (!this.collapsed)
+                return this;
+            // Chck if collapsible
+            if (!this._ce)
+                return this;
+            var a = document.getElementById(this.subId('collapse'));
+            if (!a)
                 return this;
             // Call handler first
             if (!h)
@@ -3492,11 +3518,8 @@ var WUX;
             // Then expand
             var c = document.getElementById(this.subId('content'));
             WUX.slideDown(c, 200);
-            if (WUX.CSS.BOX_CLP) {
-                var a = document.getElementById(this.subId('collapse'));
-                if (a)
-                    a.innerHTML = WUX.CSS.BOX_CLP;
-            }
+            if (WUX.CSS.BOX_CLP)
+                a.innerHTML = WUX.CSS.BOX_CLP;
             this.collapsed = false;
             return this;
         };
@@ -3519,23 +3542,22 @@ var WUX;
                     this.asta.shift();
                 }
             }
-            // Build tools
-            var t = '';
-            if (this._ce) {
-                var ct = WUX.CSS.BOX_CLP ? WUX.CSS.BOX_CLP : '';
-                if (WUX.CSS.BOX_TOOLS)
-                    t += '<div id="' + this.subId('tools') + '"' + WUX.buildCss(WUX.CSS.BOX_TOOLS) + '>';
-                t += '<a id="' + this.subId('collapse') + '" title="collapse"' + WUX.buildCss(WUX.CSS.BOX_CLP_CLASS, WUX.CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
-                if (WUX.CSS.BOX_TOOLS)
-                    t += '</div>';
-            }
             // Head
             var h = '';
             if (WUX.CSS.BOX_INNER)
                 h += '<div id="' + this.subId('inner') + '"' + WUX.buildCss(WUX.CSS.BOX_INNER) + '>';
-            if (this._title) {
-                if (WUX.CSS.BOX_TITLE)
-                    h += '<div id="' + this.subId('title') + '" class="' + WUX.CSS.BOX_TITLE + '">';
+            if (this._title && WUX.CSS.BOX_TITLE) {
+                // Build tools
+                var t = '';
+                if (this._ce) {
+                    var ct = WUX.CSS.BOX_CLP ? WUX.CSS.BOX_CLP : '';
+                    if (WUX.CSS.BOX_TOOLS)
+                        t += '<div id="' + this.subId('tools') + '"' + WUX.buildCss(WUX.CSS.BOX_TOOLS) + '>';
+                    t += '<a id="' + this.subId('collapse') + '" title="collapse"' + WUX.buildCss(WUX.CSS.BOX_CLP_CLASS, WUX.CSS.BOX_CLP_STYLE) + '>' + ct + '</a>';
+                    if (WUX.CSS.BOX_TOOLS)
+                        t += '</div>';
+                }
+                h += '<div id="' + this.subId('title') + '" class="' + WUX.CSS.BOX_TITLE + '">';
                 // Left title container
                 if (t && WUX.CSS.BOX_TOOLS_POS == -1)
                     h += t;
@@ -3556,8 +3578,7 @@ var WUX;
                 // Right title container
                 if (t && WUX.CSS.BOX_TOOLS_POS == 1)
                     h += t;
-                if (WUX.CSS.BOX_TITLE)
-                    h += '</div>';
+                h += '</div>'; // BOX_TITLE
             }
             h += '<div ' + ic + WUX.buildCss(WUX.CSS.BOX_CONTENT) + '>';
             // Tail
