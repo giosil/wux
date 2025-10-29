@@ -30,7 +30,7 @@ To check the accessibility of your web application see [MAUVE++](https://mauve.i
 
 ## Examples
 
-The simplest example of WUX.WComponent is as follows:
+The simplest example of **WUX.WComponent** is as follows:
 
 ```typescript
 namespace APP {
@@ -56,7 +56,7 @@ namespace APP {
 }
 ```
 
-Finally, the **render()** method can also return an instance of WUX.WComponent.
+Finally, the **render()** method can also return an instance of **WUX.WComponent**.
 
 ```typescript
 namespace APP {
@@ -68,7 +68,39 @@ namespace APP {
 }
 ```
 
-This way you can develop a view by composing strings, elements and instances of WUX.WComponent.
+This way you can develop a view by composing strings, elements and instances of **WUX.WComponent**.
+
+Generally you can use the **WUX.WContainer** component to lay out other components, html or elements.
+
+```typescript
+namespace APP {
+  export class Main extends WUX.WComponent {
+    main:      WUX.WContainer;
+    component: WUX.Wrapp;
+    element:   Element;
+
+    protected render() {
+      this.component = new WUX.Wrapp('Hello World!', 'h1');
+
+      this.element = document.createElement('p');
+      this.element.textContent = 'Sample element';
+
+      this.main = new WUX.WContainer();
+      this.main
+        .addRow()
+          .addCol('col-md-12')
+            .add(this.component)
+        .addRow()
+          .addCol('col-md-6')
+            .add('<p>Sample string</p>')
+          .addCol('col-md-6')
+            .add(this.element);
+
+      return this.main;
+    }
+  }
+}
+```
 
 To mount a view, simply write:
 
