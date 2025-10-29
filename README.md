@@ -148,7 +148,7 @@ this.main
         {"classStyle": "form-row"}, 
         this.btnFind, 
         this.btnReset)
-    .addCol('col-md-4', {a : 'right'})
+    .addCol('col-md-4', {a: 'right'})
       .addGroup(
         {"classStyle": "form-row"}, 
         this.btnNew)
@@ -161,7 +161,7 @@ this.main
     .addRow()
       .addCol('col-md-12')
         .add('<p>Box sample</p>')
-    .end()
+    .endBox()
   .tail('<p>Tail</p>')
   .after('<p>After</p>');
 ```
