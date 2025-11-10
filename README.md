@@ -1,8 +1,8 @@
 # WUX - Wrapped User Experience ver. 2 &middot; [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 
-A Javascript library to build component based user interface.
+**WUX** is a Javascript library to build component based user interface.
 
-The project was born from a long experience in the development of portals in the public sector, particularly in the Italian market where the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme is recommended by [AGID](https://www.agid.gov.it).
+The project builds on years of experience developing portals for the Italian public sector, where [AGID](https://www.agid.gov.it) recommends the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme.
 
 The main idea was to support the development of modern web applications without using more complicated frameworks.
 
