@@ -968,6 +968,8 @@ this.tabReg.onCellPrepared((e: { component?: DevExpress.DOMComponent, element?: 
     if(t && t.length) {
       t.html(e.column.caption.replace('_', '<br>'));
     }
+    // Tool tips
+    e.cellElement.attr('title', 'Tool tip text');
   }
 });
 this.tabReg.onCellClick((e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: DevExpress.ui.dxDataGridRowObject }) => {
