@@ -335,6 +335,7 @@ this.btnFind = new WUX.WButton(
   'btn-icon btn btn-primary',  // Style class
   'margin-right: 0.5rem;'      // Inline style
 );
+this.btnFind.lock = true; // Inhibits state change (Caption)
 this.btnFind.on('click', (e: PointerEvent) => {
   // Perform operation
 });

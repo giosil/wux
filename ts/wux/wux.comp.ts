@@ -1099,6 +1099,7 @@ namespace WUX {
 	
 	export class WButton extends WComponent<string, string> {
 		public readonly type: string;
+		lock: boolean;
 
 		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string) {
 			// WComponent init
@@ -1119,6 +1120,11 @@ namespace WUX {
 		setText(text?: string, icon?: string) {
 			if (icon != null) this.props = icon;
 			this.setState(text);
+		}
+
+		setState(nextState: string, force?: boolean, callback?: () => any): this {
+			if (this.lock) return this;
+			return super.setState(nextState, force, callback);
 		}
 
 		protected render(): WElement {

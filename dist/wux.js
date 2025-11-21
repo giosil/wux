@@ -4238,6 +4238,11 @@ var WUX;
                 this.props = icon;
             this.setState(text);
         };
+        WButton.prototype.setState = function (nextState, force, callback) {
+            if (this.lock)
+                return this;
+            return _super.prototype.setState.call(this, nextState, force, callback);
+        };
         WButton.prototype.render = function () {
             var addAttributes = this.type ? 'type="' + this.type + '"' : '';
             var html = '';

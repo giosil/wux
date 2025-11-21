@@ -723,10 +723,12 @@ declare namespace WUX {
     }
     class WButton extends WComponent<string, string> {
         readonly type: string;
+        lock: boolean;
         constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string);
         get icon(): string;
         set icon(i: string);
         setText(text?: string, icon?: string): void;
+        setState(nextState: string, force?: boolean, callback?: () => any): this;
         protected render(): WElement;
         protected componentDidMount(): void;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
