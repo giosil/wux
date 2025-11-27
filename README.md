@@ -335,7 +335,6 @@ this.btnFind = new WUX.WButton(
   'btn-icon btn btn-primary',  // Style class
   'margin-right: 0.5rem;'      // Inline style
 );
-this.btnFind.lock = true; // Inhibits state change (Caption)
 this.btnFind.on('click', (e: PointerEvent) => {
   // Perform operation
 });
@@ -354,6 +353,12 @@ this.btnReset.on('click', (e: PointerEvent) => {
 
 // To disable a button
 this.btnFind.enabled = false;
+
+// The WButton state is the button's caption.
+// If the component can change state, such as when added to a WForm, 
+// it can be locked like this:
+
+this.btnFind.lock = true;
 ```
 
 ### WUX.WLink
@@ -369,13 +374,18 @@ let link = new WUX.WLink(
   'text-primary',            // Style class
   'cursor:pointer;'          // Inline style
 );
-link.lock = true; // Inhibits state change (Caption)
 link.tooltip = 'Download file';
 link.on('click', (e: MouseEvent) => {
   let cid = WUX.getId(e.currentTarget);
   let fid = WUtil.toNumber(WUX.lastSub(cid));
   // Perform operation
 });
+
+// As with WButton, the state of WLink is the link's caption.
+// If the component can change state, such as when added to a WForm, 
+// it can be locked as follows:
+
+link.lock = true;
 ```
 
 ### WUX.WInput
