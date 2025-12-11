@@ -381,7 +381,7 @@ link.on('click', (e: MouseEvent) => {
   // Perform operation
 });
 
-// As with WButton, the state of WLink is the link's caption.
+// The WLink state is the link's caption.
 // If the component can change state, such as when added to a WForm, 
 // it can be locked as follows:
 
