@@ -594,9 +594,9 @@ this.tab
         .add(this.table)
       .addCol('col-2')
         .add(this.btnAdd)
-        .addDiv(4)
+        .add('<div style="height:4px"></div>')
         .add(this.btnRem)
-        .addDiv(4)
+        .add('<div style="height:4px"></div>')
         .add(this.btnUp)
         .add(this.btnDw);
 
@@ -873,6 +873,12 @@ let b = WUX.build('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye
 
 let e = WUX.create('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye', 'text-center');
 // -> Element <div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>
+
+// Download a file
+WUX.saveFile(base64, 'file.pdf');
+
+// View a file
+WUX.viewFile(base64, 'file.pdf');
 ```
 
 ### WUX DX Extension ###
