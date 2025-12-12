@@ -208,9 +208,9 @@ this.main.addGroup({"classStyle": "form-row"}, this.btnFind, this.btnReset);
 // addLine add a new container with one row and N cols:
 // .addRow()
 //   .addCol('1', 'margin-left: 2px;')
-//      .add('<p>c1</p>')
+//      .add('<p>e1</p>')
 //   .addCol('1', 'margin-left: 2px;')
-//      .add('<p>c2</p>')
+//      .add('<p>e2</p>')
 this.main.addLine('margin-left: 2px;', '<p>e1</p>', '<p>e2</p>');
 
 // addStack add a new container with N row+cols:
