@@ -1,6 +1,6 @@
 # WUX - Wrapped User Experience ver. 2 &middot; [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 
-**WUX** is a Javascript library to build component based user interface.
+**WUX** is a JavaScript library for rapidly developing component-based user interfaces.
 
 The project builds on years of experience developing portals for the Italian public sector, where [AGID](https://www.agid.gov.it) recommends the [Bootstrap Italia](https://italia.github.io/bootstrap-italia) theme.
 
@@ -196,6 +196,31 @@ this.main
     .endBox()
   .tail('<p>Tail</p>')
   .after('<p>After</p>');
+
+// Some special features:
+// - addGroup(w: WWrapper, ...ac: WElement[]): this;
+// - addLine(style:  string | WStyle, ...ac: WElement[]): this;
+// - addStack(style: string | WStyle, ...ac: WElement[]): this;
+
+// addGroup add a new container as wrapper
+this.main.addGroup({"classStyle": "form-row"}, this.btnFind, this.btnReset);
+
+// addLine add a new container with one row and N cols:
+// .addRow()
+//   .addCol('1', 'margin-left: 2px;')
+//      .add('<p>c1</p>')
+//   .addCol('1', 'margin-left: 2px;')
+//      .add('<p>c2</p>')
+this.main.addLine('margin-left: 2px;', '<p>e1</p>', '<p>e2</p>');
+
+// addStack add a new container with N row+cols:
+// .addRow()
+//   .addCol('12', 'margin-bottom: 2px;')
+//      .add('<p>e1</p>')
+// .addRow()
+//   .addCol('12', 'margin-bottom: 2px;')
+//      .add('<p>e2</p>')
+this.main.addStack('margin-bottom: 2px;', '<p>e1</p>', '<p>e2</p>');
 ```
 
 ### WUX.WForm
