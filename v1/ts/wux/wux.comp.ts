@@ -2762,12 +2762,14 @@
                                 if(isNaN(ch) || ch < 16) ch = 16;
                                 this.checkboxStyle = 'height:' + ch + 'px;';
                             }
+                            let ic = '<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" ';
                             if(this.checkboxStyle.length > 2) {
-                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '" style="' + this.checkboxStyle + '"/>');
+                                ic += 'style="' + this.checkboxStyle + '" ';
                             }
-                            else {
-                                f.element = $('<input type="checkbox" name="' + f.id + '" id="' + f.id + '" class="' + this.inputClass + '"/>');
-                            }
+                            if (f.readonly) ic += 'readonly ';
+                            if (f.enabled == false) ic += 'disabled ';
+                            ic += '/>';
+                            f.element = $(ic);
                             break;
                         case WInputType.Radio:
                             if (f.component) f.component.mount($fg);
