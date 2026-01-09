@@ -553,6 +553,7 @@ let k = ['code', 'name', '_v',   '_m',   '_d'];
 this.table = new WUX.WTable(this.subId('tapp'), h, k);
 this.table.selectionMode = 'single';
 this.table.div = 'table-responsive';
+// Types: s=string, w=string/center, c=number/currency.2, c5=number/currency.5, i=number/0, n=number/2, d=date, t=datetime, b=boolean
 this.table.types = ['s', 's', 'w', 'w', 'w'];
 this.table.sortable = [0, 1];
 // Click event
@@ -922,8 +923,7 @@ this.table = new WUX.WDXTable(this.subId('tapp'), h, k);
 this.table.selectionMode = 'single';
 this.table.filter = true;
 this.table.exportFile = "entities";
-// Types: 
-// s=string, w=string/center, c=number/currency.2, c5=number/currency.5, i=number/0, n=number/2, d=date, t=datetime, b=boolean
+// Types: s=string, w=string/center, c=number/currency.2, c5=number/currency.5, i=number/0, n=number/2, d=date, t=datetime, b=boolean
 this.table.types = ['s', 's'];
 // Pagination
 this.table.paging = true;
