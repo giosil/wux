@@ -1088,7 +1088,7 @@ chart.exec('refresh', 0);
 <table>
   <tr>
     <td><img src="wux-black.svg" width="300" height="300"></td>
-    <td style="background-color:black;"><img src="wux-white.svg" width="300" height="300"></td>
+    <td><img src="wux-white.svg" width="300" height="300"></td>
   </tr>
 </table>
 
