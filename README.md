@@ -896,6 +896,19 @@ let tc1 = WUX.toggleClass('text-center', 'text-red');
 let tc2 = WUX.toggleClass('text-center text-red', 'text-red');
 // -> 'text-center'
 
+let ts1 = WUX.toggleStyle('margin:8px;color:red;', 'color', 'red', 'blue');
+// -> 'margin:8px;color:blue;'
+// see also WUX.toggleStyleOf(e: Element, k: string, v0?: string | boolean, v1?: string): Element
+
+let ts2 = WUX.toggleStyle('margin:8px;color:blue;', 'color', 'red', 'blue');
+// -> 'margin:8px;color:red;'
+
+let ts3 = WUX.toggleStyle('margin:8px;', 'color', true, 'blue');
+// -> 'margin:8px;color:blue;'
+
+let ts4 = WUX.toggleStyle('margin:8px;color:blue;', 'color', false, 'blue');
+// -> 'margin:8px;'
+
 let b = WUX.build('div', '<p>Bye</p>', 'color: red', 'aria-label="bye"', 'id-bye', 'text-center');
 // -> '<div id="id-bye" class="text-center" style="color: red" aria-label="bye"><p>Bye</p></div>'
 
