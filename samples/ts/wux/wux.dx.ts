@@ -3,7 +3,8 @@ namespace WUX {
 	export type DxComponentType = 'dxAccordion' | 'dxActionSheet' | 'dxAutocomplete' | 'dxBox' | 'dxButton' | 'dxButtonGroup' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxContextMenu' | 'dxDataGrid' | 'dxDateBox' | 'dxDeferRendering' | 'dxDiagram' | 'dxDraggable' | 'dxDrawer' | 'dxDropDownBox' | 'dxDropDownButton' | 'dxFileManager' | 'dxFileUploader' | 'dxFilterBuilder' | 'dxForm' | 'dxGallery' | 'dxGantt' | 'dxHtmlEditor' | 'dxList' | 'dxLoadIndicator' | 'dxLoadPanel' | 'dxLookup' | 'dxMap' | 'dxMenu' | 'dxMultiView' | 'dxNavBar' | 'dxNumberBox' | 'dxPivotGrid' | 'dxPivotGridFieldChooser' | 'dxPopover' | 'dxPopup' | 'dxProgressBar' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxRecurrenceEditor' | 'dxResizable' | 'dxResponsiveBox' | 'dxScheduler' | 'dxScrollView' | 'dxSelectBox' | 'dxSlideOut' | 'dxSlideOutView' | 'dxSlider' | 'dxSortable' | 'dxSpeedDialAction' | 'dxSwitch' | 'dxTabPanel' | 'dxTabs' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox' | 'dxTileView' | 'dxToast' | 'dxToolbar' | 'dxTooltip' | 'dxTreeList' | 'dxTreeView' | 'dxValidationGroup' | 'dxValidationSummary' | 'dxValidator' | 'dxBarGauge' | 'dxBullet' | 'dxChart' | 'dxCircularGauge' | 'dxFunnel' | 'dxLinearGauge' | 'dxPieChart' | 'dxPolarChart' | 'dxRangeSelector' | 'dxSankey' | 'dxSparkline' | 'dxTreeMap' | 'dxVectorMap';
 	
 	export let dxTableDidMount: (c: WDXTable) => any;
-	export let dxTreeDidMount: (c: WDxTreeView) => any;
+	export let dxTreeDidMount: (c: WDXTreeView) => any;
+	export let dxSelectBoxDidMount: (c: WDXSelectBox) => any;
 	export let dxCompDidMount: (c: WDX) => any;
 
 	export function initDX(callback: () => any) {
@@ -43,7 +44,7 @@ namespace WUX {
 		}
 
 		override componentDidMount(): void {
-			if (!this.$r || !this.$r[this.props]) return null;
+			if (!this.$r || !this.$r[this.props]) return;
 			if (this.opts) {
 				this.$r[this.props](this.opts);
 			}
@@ -1014,6 +1015,7 @@ namespace WUX {
 		}
 
 		protected componentWillUpdate(nextProps: any, nextState: any): void {
+			if (!this.$r) return;
 			if (!nextState) nextState = [];
 			this.editmap = {};
 			let gopt: DevExpress.ui.dxDataGridOptions;
@@ -1063,20 +1065,20 @@ namespace WUX {
 	/*
 	* Wrapper dxTreeView. Required DevExpress.ui.dxTreeView https://js.devexpress.com/
 	*/
-	export class WDxTreeView extends WUX.WComponent<string, any[]> {
+	export class WDXTreeView extends WUX.WComponent<string, any[]> {
 		height: number;
 		width: number;
 		searchEnabled: boolean;
 		selectionMode: 'multiple' | 'single';
 		selectByClick: boolean;
 
-		constructor(id?: string) {
-			super(id ? id : '*', 'WDxTreeView');
+		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+			super(id ? id : '*', 'WDXTreeView', '', classStyle, style, attributes);
 		}
 
 		getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView {
 			if (!this.$r) return null;
-			if(opt) this.$r.dxTreeView(opt);
+			if (opt) this.$r.dxTreeView(opt);
 			return this.$r.dxTreeView('instance');
 		}
 
@@ -1120,7 +1122,7 @@ namespace WUX {
 		getSelectedItems(): any[] {
 			if (!this.mounted) return [];
 			let n = this.$r.dxTreeView('instance').getSelectedNodes();
-			if(!n) return [];
+			if (!n) return [];
 			return n.map(function(node) { return node.itemData; });
 		}
 
@@ -1154,7 +1156,7 @@ namespace WUX {
 		protected updateProps(nextProps: string): void {
 			super.updateProps(nextProps);
 			if (!this.mounted) return;
-			if(this.props) {
+			if (this.props) {
 				this.$r.dxTreeView('instance').option('searchMode', this.props);
 			}
 		}
@@ -1175,13 +1177,14 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
+			if (!this.$r) return;
 			let opt: DevExpress.ui.dxTreeViewOptions = {
 				height: this.height,
 				width: this.width,
 				searchEnabled: this.searchEnabled,
 				items: this.state
 			}
-			if(this.selectionMode == "multiple") {
+			if (this.selectionMode == "multiple") {
 				opt.selectionMode = "multiple";
 				opt.showCheckBoxesMode = "normal";
 				opt.selectByClick = this.selectByClick;
@@ -1199,11 +1202,174 @@ namespace WUX {
 			this.beforeInit(opt);
 
 			let t = this.$r.dxTreeView(opt);
-			if(this.props) {
+			if (this.props) {
 				t.option('searchMode', this.props);
 			}
 
-			if(dxTreeDidMount) dxTreeDidMount(this);
+			if (dxTreeDidMount) dxTreeDidMount(this);
+		}
+	}
+
+	export class WDXSelectBox extends WUX.WComponent implements WISelectable {
+		options: Array<string | WEntity>;
+		searchEnabled: boolean = true;
+
+		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+			super(id ? id : '*', 'WDXSelectBox', [], classStyle, style, attributes);
+		}
+
+		getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox {
+			if (!this.$r) return null;
+			if (opt) {
+				this.$r.dxSelectBox(opt);
+				if (Array.isArray(opt.dataSource)) {
+					this.options = opt.dataSource;
+				}
+			}
+			return this.$r.dxSelectBox('instance');
+		}
+
+		beforeInit(opt: DevExpress.ui.dxSelectBoxOptions): void {
+		}
+
+		getProps(): any {
+			if (!this.$r) return this.props;
+			this.props = [];
+			let v = this.$r.dxSelectBox('instance').option('value');
+			if (v == null) {
+				return this.props;
+			}
+			let i = this.indexOption(v);
+			if (i < 0) {
+				return this.props;
+			}
+			let o = this.options[i];
+			if(typeof o == 'string') {
+				this.props.push(o);
+			}
+			else {
+				this.props.push(o.text);
+			}
+			return this.props;
+		}
+
+		findOption(text: string, d: any = null): any {
+			if (!this.options) return d;
+			if (!text) text = '';
+			for(let o of this.options) {
+				if(typeof o == 'string') {
+					if(o == text) return o;
+				}
+				else {
+					if(o.text == text) return o.id;
+				}
+			}
+			return d;
+		}
+
+		select(i: number): this {
+			if (!this.root || !this.options) return this;
+			this.setState(this.options.length > i ? this.options[i] : null);
+			return this;
+		}
+
+		addOption(e: string | WEntity, sel?: boolean): this {
+			if (!e) return this;
+			if (!this.options) this.options = [];
+			this.options.push(e);
+			if (!this.mounted) return this;
+			// Update component
+			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			if (sel) this.updateState(e);
+			return this;
+		}
+
+		remOption(e: string | WEntity): this {
+			let x = this.indexOption(e);
+			if (x < 0) return this;
+			this.options.splice(x, 1);
+			if (!this.mounted) return this;
+			// Update component
+			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			return this;
+		}
+
+		indexOption(e: string | WEntity): number {
+			return WUtil.indexOption(this.options, e);
+		}
+
+		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
+			this.options = options;
+			if (!this.mounted) return this;
+			let p = this.$r.dxSelectBox('instance').option('value');
+			// Update component
+			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			if (prevVal) {
+				this.$r.dxSelectBox('instance').option('value', p);
+			}
+			else if (options && options.length) {
+				if (typeof options[0] == 'string') {
+					this.trigger('statechange', options[0]);
+				}
+				else {
+					this.trigger('statechange', WUtil.getString(options[0], 'id'));
+				}
+			}
+			return this;
+		}
+
+		protected getDataSource(): Array<WEntity> {
+			let r: Array<WEntity> = [];
+			if (!this.options) return r;
+			for (let i = 0; i < this.options.length; i++) {
+				let s = this.options[i];
+				if (!s) continue;
+				if (typeof s == 'string') {
+					r.push({"id": s, "text": s});
+				}
+				else {
+					r.push(s);
+				}
+			}
+			return r;
+		}
+
+		override getState() {
+			if (!this.$r) return this.state;
+			return this.$r.dxSelectBox('instance').option('value');
+		}
+
+		override updateState(nextState: any) {
+			super.updateState(nextState);
+			if (!this.$r) return;
+			// Avoid double triggering (see onValueChanged)
+			this.dontTrigger = true;
+			this.$r.dxSelectBox('instance').option('value', nextState);
+		}
+
+		override componentDidMount(): void {
+			if (!this.$r) return;
+
+			let opt: DevExpress.ui.dxSelectBoxOptions = {
+				dataSource: this.getDataSource(),
+				valueExpr: "id",
+				displayExpr: "text",
+				searchEnabled: this.searchEnabled,
+				onValueChanged: (data) => {
+					if(data.value) {
+						this.trigger('statechange', WUtil.toString(data.value, null));
+					}
+					else {
+						this.trigger('statechange', null);
+					}
+				}
+			}
+
+			this.beforeInit(opt);
+
+			this.$r.dxSelectBox(opt);
+
+			if (dxSelectBoxDidMount) dxSelectBoxDidMount(this);
 		}
 	}
 }

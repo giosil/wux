@@ -1,7 +1,8 @@
 declare namespace WUX {
     type DxComponentType = 'dxAccordion' | 'dxActionSheet' | 'dxAutocomplete' | 'dxBox' | 'dxButton' | 'dxButtonGroup' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxContextMenu' | 'dxDataGrid' | 'dxDateBox' | 'dxDeferRendering' | 'dxDiagram' | 'dxDraggable' | 'dxDrawer' | 'dxDropDownBox' | 'dxDropDownButton' | 'dxFileManager' | 'dxFileUploader' | 'dxFilterBuilder' | 'dxForm' | 'dxGallery' | 'dxGantt' | 'dxHtmlEditor' | 'dxList' | 'dxLoadIndicator' | 'dxLoadPanel' | 'dxLookup' | 'dxMap' | 'dxMenu' | 'dxMultiView' | 'dxNavBar' | 'dxNumberBox' | 'dxPivotGrid' | 'dxPivotGridFieldChooser' | 'dxPopover' | 'dxPopup' | 'dxProgressBar' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxRecurrenceEditor' | 'dxResizable' | 'dxResponsiveBox' | 'dxScheduler' | 'dxScrollView' | 'dxSelectBox' | 'dxSlideOut' | 'dxSlideOutView' | 'dxSlider' | 'dxSortable' | 'dxSpeedDialAction' | 'dxSwitch' | 'dxTabPanel' | 'dxTabs' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox' | 'dxTileView' | 'dxToast' | 'dxToolbar' | 'dxTooltip' | 'dxTreeList' | 'dxTreeView' | 'dxValidationGroup' | 'dxValidationSummary' | 'dxValidator' | 'dxBarGauge' | 'dxBullet' | 'dxChart' | 'dxCircularGauge' | 'dxFunnel' | 'dxLinearGauge' | 'dxPieChart' | 'dxPolarChart' | 'dxRangeSelector' | 'dxSankey' | 'dxSparkline' | 'dxTreeMap' | 'dxVectorMap';
     let dxTableDidMount: (c: WDXTable) => any;
-    let dxTreeDidMount: (c: WDxTreeView) => any;
+    let dxTreeDidMount: (c: WDXTreeView) => any;
+    let dxSelectBoxDidMount: (c: WDXSelectBox) => any;
     let dxCompDidMount: (c: WDX) => any;
     function initDX(callback: () => any): void;
     class WDX extends WComponent<DxComponentType, any> {
@@ -248,13 +249,13 @@ declare namespace WUX {
         protected componentDidMount(): void;
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
-    class WDxTreeView extends WUX.WComponent<string, any[]> {
+    class WDXTreeView extends WUX.WComponent<string, any[]> {
         height: number;
         width: number;
         searchEnabled: boolean;
         selectionMode: 'multiple' | 'single';
         selectByClick: boolean;
-        constructor(id?: string);
+        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
         getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView;
         /**
             To expand on click:
@@ -300,5 +301,23 @@ declare namespace WUX {
         expandAll(): this;
         collapseAll(): this;
         protected componentDidMount(): void;
+    }
+    class WDXSelectBox extends WUX.WComponent implements WISelectable {
+        options: Array<string | WEntity>;
+        searchEnabled: boolean;
+        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
+        getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox;
+        beforeInit(opt: DevExpress.ui.dxSelectBoxOptions): void;
+        getProps(): any;
+        findOption(text: string, d?: any): any;
+        select(i: number): this;
+        addOption(e: string | WEntity, sel?: boolean): this;
+        remOption(e: string | WEntity): this;
+        indexOption(e: string | WEntity): number;
+        setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
+        protected getDataSource(): Array<WEntity>;
+        getState(): any;
+        updateState(nextState: any): void;
+        componentDidMount(): void;
     }
 }

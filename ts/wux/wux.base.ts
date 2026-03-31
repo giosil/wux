@@ -311,6 +311,11 @@ namespace WUX {
 	export interface WISelectable extends WComponent {
 		options: Array<string | WEntity>;
 		select(i: number): this;
+		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
+		findOption(text: string, d?: any): any;
+		addOption(e: string | WEntity, sel?: boolean): this;
+		remOption(e: string | WEntity): this;
+		indexOption(e: string | WEntity): number;
 	}
 
 	/**
@@ -2049,6 +2054,45 @@ namespace WUX {
 				if (w == v) return i;
 			}
 			return -1;
+		}
+
+		static indexOption(o: Array<string | WEntity>, e: string | WEntity): number {
+			if (!e) return -2;
+			if (!o) return -1;
+			let x = -1;
+			for (let i = 0; i < o.length; i++) {
+				let s = o[i];
+				if (!s) continue;
+				if (typeof e == 'string') {
+					if (typeof s == 'string') {
+						if (s == e) {
+							x = i;
+							break;
+						}
+					}
+					else {
+						if (s.id == e) {
+							x = i;
+							break;
+						}
+					}
+				}
+				else {
+					if (typeof s == 'string') {
+						if (s == e.id) {
+							x = i;
+							break;
+						}
+					}
+					else {
+						if (s.id == e.id) {
+							x = i;
+							break;
+						}
+					}
+				}
+			}
+			return x;
 		}
 
 		static isSameDate(a: Date, b: Date): boolean {

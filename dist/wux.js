@@ -2196,6 +2196,47 @@ var WUX;
             }
             return -1;
         };
+        WUtil.indexOption = function (o, e) {
+            if (!e)
+                return -2;
+            if (!o)
+                return -1;
+            var x = -1;
+            for (var i = 0; i < o.length; i++) {
+                var s = o[i];
+                if (!s)
+                    continue;
+                if (typeof e == 'string') {
+                    if (typeof s == 'string') {
+                        if (s == e) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    else {
+                        if (s.id == e) {
+                            x = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    if (typeof s == 'string') {
+                        if (s == e.id) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    else {
+                        if (s.id == e.id) {
+                            x = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            return x;
+        };
         WUtil.isSameDate = function (a, b) {
             var na = this.toNumber(a);
             var nb = this.toNumber(b);
@@ -4549,45 +4590,7 @@ var WUX;
             return this;
         };
         WRadio.prototype.indexOption = function (e) {
-            if (!e)
-                return -2;
-            if (!this.options)
-                return -1;
-            var x = -1;
-            for (var i = 0; i < this.options.length; i++) {
-                var s = this.options[i];
-                if (!s)
-                    continue;
-                if (typeof e == 'string') {
-                    if (typeof s == 'string') {
-                        if (s == e) {
-                            x = i;
-                            break;
-                        }
-                    }
-                    else {
-                        if (s.id == e) {
-                            x = i;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    if (typeof s == 'string') {
-                        if (s == e.id) {
-                            x = i;
-                            break;
-                        }
-                    }
-                    else {
-                        if (s.id == e.id) {
-                            x = i;
-                            break;
-                        }
-                    }
-                }
-            }
-            return x;
+            return WUX.WUtil.indexOption(this.options, e);
         };
         WRadio.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
@@ -4772,45 +4775,7 @@ var WUX;
             return this;
         };
         WSelect.prototype.indexOption = function (e) {
-            if (!e)
-                return -2;
-            if (!this.options)
-                return -1;
-            var x = -1;
-            for (var i = 0; i < this.options.length; i++) {
-                var s = this.options[i];
-                if (!s)
-                    continue;
-                if (typeof e == 'string') {
-                    if (typeof s == 'string') {
-                        if (s == e) {
-                            x = i;
-                            break;
-                        }
-                    }
-                    else {
-                        if (s.id == e) {
-                            x = i;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    if (typeof s == 'string') {
-                        if (s == e.id) {
-                            x = i;
-                            break;
-                        }
-                    }
-                    else {
-                        if (s.id == e.id) {
-                            x = i;
-                            break;
-                        }
-                    }
-                }
-            }
-            return x;
+            return WUX.WUtil.indexOption(this.options, e);
         };
         WSelect.prototype.setOptions = function (options, prevVal) {
             this.options = options;
@@ -5525,6 +5490,18 @@ var WUX;
             c.on(events, handler);
             return this;
         };
+        WForm.prototype.setOptions = function (fid, options, prevVal) {
+            var f = this.getField(fid);
+            if (!f)
+                return this;
+            var c = f.component;
+            if (!c)
+                return this;
+            if (typeof c['setOptions'] == 'function') {
+                c['setOptions'](options, prevVal);
+            }
+            return this;
+        };
         WForm.prototype.findOption = function (fid, text, d) {
             if (d === void 0) { d = null; }
             if (!text)
@@ -5532,11 +5509,8 @@ var WUX;
             var c = this.getComponent(fid);
             if (!c)
                 return d;
-            if (c instanceof WSelect) {
-                return c.findOption(text, d);
-            }
-            else if (c instanceof WRadio) {
-                return c.findOption(text, d);
+            if (typeof c['findOption'] == 'function') {
+                return c['findOption'](text, d);
             }
             return d;
         };
@@ -5544,11 +5518,8 @@ var WUX;
             var c = this.getComponent(fid);
             if (!c)
                 return -3;
-            if (c instanceof WSelect) {
-                return c.indexOption(e);
-            }
-            else if (c instanceof WRadio) {
-                return c.indexOption(e);
+            if (typeof c['indexOption'] == 'function') {
+                return c['indexOption'](e);
             }
             return -4;
         };
@@ -5556,11 +5527,8 @@ var WUX;
             var c = this.getComponent(fid);
             if (!c)
                 return this;
-            if (c instanceof WSelect) {
-                c.addOption(e, sel);
-            }
-            else if (c instanceof WRadio) {
-                c.addOption(e, sel);
+            if (typeof c['addOption'] == 'function') {
+                c['addOption'](e, sel);
             }
             return this;
         };
@@ -5568,11 +5536,8 @@ var WUX;
             var c = this.getComponent(fid);
             if (!c)
                 return this;
-            if (c instanceof WSelect) {
-                c.remOption(e);
-            }
-            else if (c instanceof WRadio) {
-                c.remOption(e);
+            if (typeof c['remOption'] == 'function') {
+                c['remOption'](e);
             }
             return this;
         };
@@ -5984,13 +5949,10 @@ var WUX;
             if (c) {
                 if (v && cbNoOpt) {
                     var i = -3;
-                    if (c instanceof WSelect) {
-                        i = c.indexOption(v);
+                    if (typeof c['indexOption'] == 'function') {
+                        i = c['indexOption'](v);
                     }
-                    else if (c instanceof WRadio) {
-                        i = c.indexOption(v);
-                    }
-                    if (i == -1) {
+                    if (i == -1 || i == null) {
                         cbNoOpt(c, v);
                     }
                     else {
@@ -6032,13 +5994,10 @@ var WUX;
             if (c) {
                 if (w && cbNoOpt) {
                     var i = -3;
-                    if (c instanceof WSelect) {
-                        i = c.indexOption(w);
+                    if (typeof c['indexOption'] == 'function') {
+                        i = c['indexOption'](w);
                     }
-                    else if (c instanceof WRadio) {
-                        i = c.indexOption(w);
-                    }
-                    if (i == -1) {
+                    if (i == -1 || i == null) {
                         cbNoOpt(c, w);
                     }
                     else {
@@ -6158,19 +6117,6 @@ var WUX;
                 r.readAsDataURL(l);
             }
             return l;
-        };
-        WForm.prototype.setOptions = function (fid, options, prevVal) {
-            var f = this.getField(fid);
-            if (!f)
-                return this;
-            var c = f.component;
-            if (c instanceof WSelect) {
-                c.setOptions(options, prevVal);
-            }
-            else if (c instanceof WRadio) {
-                c.setOptions(options, prevVal);
-            }
-            return this;
         };
         WForm.prototype.setSpan = function (fid, span) {
             var f = this.getField(fid);

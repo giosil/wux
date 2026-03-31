@@ -1406,42 +1406,7 @@ namespace WUX {
 		}
 
 		indexOption(e: string | WEntity): number {
-			if (!e) return -2;
-			if (!this.options) return -1;
-			let x = -1;
-			for (let i = 0; i < this.options.length; i++) {
-				let s = this.options[i];
-				if (!s) continue;
-				if (typeof e == 'string') {
-					if (typeof s == 'string') {
-						if (s == e) {
-							x = i;
-							break;
-						}
-					}
-					else {
-						if (s.id == e) {
-							x = i;
-							break;
-						}
-					}
-				}
-				else {
-					if (typeof s == 'string') {
-						if (s == e.id) {
-							x = i;
-							break;
-						}
-					}
-					else {
-						if (s.id == e.id) {
-							x = i;
-							break;
-						}
-					}
-				}
-			}
-			return x;
+			return WUtil.indexOption(this.options, e);
 		}
 
 		protected updateState(nextState: any) {
@@ -1608,42 +1573,7 @@ namespace WUX {
 		}
 
 		indexOption(e: string | WEntity): number {
-			if (!e) return -2;
-			if (!this.options) return -1;
-			let x = -1;
-			for (let i = 0; i < this.options.length; i++) {
-				let s = this.options[i];
-				if (!s) continue;
-				if (typeof e == 'string') {
-					if (typeof s == 'string') {
-						if (s == e) {
-							x = i;
-							break;
-						}
-					}
-					else {
-						if (s.id == e) {
-							x = i;
-							break;
-						}
-					}
-				}
-				else {
-					if (typeof s == 'string') {
-						if (s == e.id) {
-							x = i;
-							break;
-						}
-					}
-					else {
-						if (s.id == e.id) {
-							x = i;
-							break;
-						}
-					}
-				}
-			}
-			return x;
+			return WUtil.indexOption(this.options, e);
 		}
 
 		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
@@ -2331,15 +2261,23 @@ namespace WUX {
 			return this;
 		}
 
+		setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this {
+			let f = this.getField(fid);
+			if (!f) return this;
+			let c = f.component;
+			if (!c) return this;
+			if (typeof c['setOptions'] == 'function') {
+				c['setOptions'](options, prevVal);
+			}
+			return this;
+		}
+
 		findOption(fid: string, text: string, d: any = null): any {
 			if (!text) text = '';
 			let c = this.getComponent(fid);
 			if(!c) return d;
-			if(c instanceof WSelect) {
-				return c.findOption(text, d);
-			}
-			else if (c instanceof WRadio) {
-				return c.findOption(text, d);
+			if (typeof c['findOption'] == 'function') {
+				return c['findOption'](text, d);
 			}
 			return d;
 		}
@@ -2347,11 +2285,8 @@ namespace WUX {
 		indexOption(fid: string, e: string | WEntity): number {
 			let c = this.getComponent(fid);
 			if(!c) return -3;
-			if(c instanceof WSelect) {
-				return c.indexOption(e);
-			}
-			else if (c instanceof WRadio) {
-				return c.indexOption(e);
+			if (typeof c['indexOption'] == 'function') {
+				return c['indexOption'](e);
 			}
 			return -4;
 		}
@@ -2359,11 +2294,8 @@ namespace WUX {
 		addOption(fid: string, e: string | WEntity, sel?: boolean): this {
 			let c = this.getComponent(fid);
 			if(!c) return this;
-			if(c instanceof WSelect) {
-				c.addOption(e, sel);
-			}
-			else if (c instanceof WRadio) {
-				c.addOption(e, sel);
+			if (typeof c['addOption'] == 'function') {
+				c['addOption'](e, sel);
 			}
 			return this;
 		}
@@ -2371,11 +2303,8 @@ namespace WUX {
 		remOption(fid: string, e: string | WEntity): this {
 			let c = this.getComponent(fid);
 			if(!c) return this;
-			if(c instanceof WSelect) {
-				c.remOption(e);
-			}
-			else if (c instanceof WRadio) {
-				c.remOption(e);
+			if (typeof c['remOption'] == 'function') {
+				c['remOption'](e);
 			}
 			return this;
 		}
@@ -2781,13 +2710,10 @@ namespace WUX {
 			if (c) {
 				if (v && cbNoOpt) {
 					let i = -3;
-					if (c instanceof WSelect) {
-						i = c.indexOption(v);
+					if (typeof c['indexOption'] == 'function') {
+						i = c['indexOption'](v);
 					}
-					else if (c instanceof WRadio) {
-						i = c.indexOption(v);
-					}
-					if (i == -1) {
+					if (i == -1 || i == null) {
 						cbNoOpt(c, v);
 					}
 					else {
@@ -2821,16 +2747,13 @@ namespace WUX {
 			if (f.type == 'date') w = isoDate(w);
 			if (f.type == 'time') w = formatTime(w, false);
 			let c = f.component;
-			if (c)  {
+			if (c) {
 				if (w && cbNoOpt) {
 					let i = -3;
-					if (c instanceof WSelect) {
-						i = c.indexOption(w);
+					if (typeof c['indexOption'] == 'function') {
+						i = c['indexOption'](w);
 					}
-					else if (c instanceof WRadio) {
-						i = c.indexOption(w);
-					}
-					if (i == -1) {
+					if (i == -1 || i == null) {
 						cbNoOpt(c, w);
 					}
 					else {
@@ -2925,19 +2848,6 @@ namespace WUX {
 				r.readAsDataURL(l);
 			}
 			return l;
-		}
-
-		setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this {
-			let f = this.getField(fid);
-			if (!f) return this;
-			let c = f.component;
-			if (c instanceof WSelect) {
-				c.setOptions(options, prevVal);
-			}
-			else if (c instanceof WRadio) {
-				c.setOptions(options, prevVal);
-			}
-			return this;
 		}
 
 		setSpan(fid: string, span: number): this {

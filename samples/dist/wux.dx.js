@@ -57,7 +57,7 @@ var WUX;
         });
         WDX.prototype.componentDidMount = function () {
             if (!this.$r || !this.$r[this.props])
-                return null;
+                return;
             if (this.opts) {
                 this.$r[this.props](this.opts);
             }
@@ -1047,6 +1047,8 @@ var WUX;
         };
         WDXTable.prototype.componentWillUpdate = function (nextProps, nextState) {
             var _this = this;
+            if (!this.$r)
+                return;
             if (!nextState)
                 nextState = [];
             this.editmap = {};
@@ -1105,12 +1107,12 @@ var WUX;
     /*
     * Wrapper dxTreeView. Required DevExpress.ui.dxTreeView https://js.devexpress.com/
     */
-    var WDxTreeView = /** @class */ (function (_super) {
-        __extends(WDxTreeView, _super);
-        function WDxTreeView(id) {
-            return _super.call(this, id ? id : '*', 'WDxTreeView') || this;
+    var WDXTreeView = /** @class */ (function (_super) {
+        __extends(WDXTreeView, _super);
+        function WDXTreeView(id, classStyle, style, attributes) {
+            return _super.call(this, id ? id : '*', 'WDXTreeView', '', classStyle, style, attributes) || this;
         }
-        WDxTreeView.prototype.getInstance = function (opt) {
+        WDXTreeView.prototype.getInstance = function (opt) {
             if (!this.$r)
                 return null;
             if (opt)
@@ -1121,7 +1123,7 @@ var WUX;
             To expand on click:
             e.component.expandItem(e.node.key);
         */
-        WDxTreeView.prototype.onItemClick = function (h) {
+        WDXTreeView.prototype.onItemClick = function (h) {
             // Single handler
             this.handlers['_onItemClick'] = [h];
             if (this.mounted) {
@@ -1131,7 +1133,7 @@ var WUX;
                 this.$r.dxTreeView(opt);
             }
         };
-        WDxTreeView.prototype.onSelectionChanged = function (h) {
+        WDXTreeView.prototype.onSelectionChanged = function (h) {
             // Single handler
             this.handlers['_onSelectionChanged'] = [h];
             if (this.mounted) {
@@ -1141,7 +1143,7 @@ var WUX;
                 this.$r.dxTreeView(opt);
             }
         };
-        WDxTreeView.prototype.onItemRendered = function (h) {
+        WDXTreeView.prototype.onItemRendered = function (h) {
             // Single handler
             this.handlers['_onItemRendered'] = [h];
             if (this.mounted) {
@@ -1151,7 +1153,7 @@ var WUX;
                 this.$r.dxTreeView(opt);
             }
         };
-        WDxTreeView.prototype.getSelectedItems = function () {
+        WDXTreeView.prototype.getSelectedItems = function () {
             if (!this.mounted)
                 return [];
             var n = this.$r.dxTreeView('instance').getSelectedNodes();
@@ -1159,13 +1161,13 @@ var WUX;
                 return [];
             return n.map(function (node) { return node.itemData; });
         };
-        WDxTreeView.prototype.select = function (item) {
+        WDXTreeView.prototype.select = function (item) {
             if (!this.mounted)
                 return this;
             this.$r.dxTreeView('selectItem', item);
             return this;
         };
-        WDxTreeView.prototype.off = function (events) {
+        WDXTreeView.prototype.off = function (events) {
             _super.prototype.off.call(this, events);
             if (!events)
                 return this;
@@ -1179,7 +1181,7 @@ var WUX;
             this.$r.dxTreeView(opt);
             return this;
         };
-        WDxTreeView.prototype.updateState = function (nextState) {
+        WDXTreeView.prototype.updateState = function (nextState) {
             _super.prototype.updateState.call(this, nextState);
             if (this.$r && this.$r.length) {
                 var opt = {
@@ -1188,7 +1190,7 @@ var WUX;
                 this.$r.dxTreeView(opt);
             }
         };
-        WDxTreeView.prototype.updateProps = function (nextProps) {
+        WDXTreeView.prototype.updateProps = function (nextProps) {
             _super.prototype.updateProps.call(this, nextProps);
             if (!this.mounted)
                 return;
@@ -1196,21 +1198,23 @@ var WUX;
                 this.$r.dxTreeView('instance').option('searchMode', this.props);
             }
         };
-        WDxTreeView.prototype.beforeInit = function (opt) {
+        WDXTreeView.prototype.beforeInit = function (opt) {
         };
-        WDxTreeView.prototype.expandAll = function () {
+        WDXTreeView.prototype.expandAll = function () {
             if (!this.mounted)
                 return this;
             this.$r.dxTreeView('expandAll');
             return this;
         };
-        WDxTreeView.prototype.collapseAll = function () {
+        WDXTreeView.prototype.collapseAll = function () {
             if (!this.mounted)
                 return this;
             this.$r.dxTreeView('collapseAll');
             return this;
         };
-        WDxTreeView.prototype.componentDidMount = function () {
+        WDXTreeView.prototype.componentDidMount = function () {
+            if (!this.$r)
+                return;
             var opt = {
                 height: this.height,
                 width: this.width,
@@ -1239,9 +1243,179 @@ var WUX;
             if (WUX.dxTreeDidMount)
                 WUX.dxTreeDidMount(this);
         };
-        return WDxTreeView;
+        return WDXTreeView;
     }(WUX.WComponent));
-    WUX.WDxTreeView = WDxTreeView;
+    WUX.WDXTreeView = WDXTreeView;
+    var WDXSelectBox = /** @class */ (function (_super) {
+        __extends(WDXSelectBox, _super);
+        function WDXSelectBox(id, classStyle, style, attributes) {
+            var _this = _super.call(this, id ? id : '*', 'WDXSelectBox', [], classStyle, style, attributes) || this;
+            _this.searchEnabled = true;
+            return _this;
+        }
+        WDXSelectBox.prototype.getInstance = function (opt) {
+            if (!this.$r)
+                return null;
+            if (opt) {
+                this.$r.dxSelectBox(opt);
+                if (Array.isArray(opt.dataSource)) {
+                    this.options = opt.dataSource;
+                }
+            }
+            return this.$r.dxSelectBox('instance');
+        };
+        WDXSelectBox.prototype.beforeInit = function (opt) {
+        };
+        WDXSelectBox.prototype.getProps = function () {
+            if (!this.$r)
+                return this.props;
+            this.props = [];
+            var v = this.$r.dxSelectBox('instance').option('value');
+            if (v == null) {
+                return this.props;
+            }
+            var i = this.indexOption(v);
+            if (i < 0) {
+                return this.props;
+            }
+            var o = this.options[i];
+            if (typeof o == 'string') {
+                this.props.push(o);
+            }
+            else {
+                this.props.push(o.text);
+            }
+            return this.props;
+        };
+        WDXSelectBox.prototype.findOption = function (text, d) {
+            if (d === void 0) { d = null; }
+            if (!this.options)
+                return d;
+            if (!text)
+                text = '';
+            for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
+                var o = _a[_i];
+                if (typeof o == 'string') {
+                    if (o == text)
+                        return o;
+                }
+                else {
+                    if (o.text == text)
+                        return o.id;
+                }
+            }
+            return d;
+        };
+        WDXSelectBox.prototype.select = function (i) {
+            if (!this.root || !this.options)
+                return this;
+            this.setState(this.options.length > i ? this.options[i] : null);
+            return this;
+        };
+        WDXSelectBox.prototype.addOption = function (e, sel) {
+            if (!e)
+                return this;
+            if (!this.options)
+                this.options = [];
+            this.options.push(e);
+            if (!this.mounted)
+                return this;
+            // Update component
+            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            if (sel)
+                this.updateState(e);
+            return this;
+        };
+        WDXSelectBox.prototype.remOption = function (e) {
+            var x = this.indexOption(e);
+            if (x < 0)
+                return this;
+            this.options.splice(x, 1);
+            if (!this.mounted)
+                return this;
+            // Update component
+            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            return this;
+        };
+        WDXSelectBox.prototype.indexOption = function (e) {
+            return WUX.WUtil.indexOption(this.options, e);
+        };
+        WDXSelectBox.prototype.setOptions = function (options, prevVal) {
+            this.options = options;
+            if (!this.mounted)
+                return this;
+            var p = this.$r.dxSelectBox('instance').option('value');
+            // Update component
+            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            if (prevVal) {
+                this.$r.dxSelectBox('instance').option('value', p);
+            }
+            else if (options && options.length) {
+                if (typeof options[0] == 'string') {
+                    this.trigger('statechange', options[0]);
+                }
+                else {
+                    this.trigger('statechange', WUX.WUtil.getString(options[0], 'id'));
+                }
+            }
+            return this;
+        };
+        WDXSelectBox.prototype.getDataSource = function () {
+            var r = [];
+            if (!this.options)
+                return r;
+            for (var i = 0; i < this.options.length; i++) {
+                var s = this.options[i];
+                if (!s)
+                    continue;
+                if (typeof s == 'string') {
+                    r.push({ "id": s, "text": s });
+                }
+                else {
+                    r.push(s);
+                }
+            }
+            return r;
+        };
+        WDXSelectBox.prototype.getState = function () {
+            if (!this.$r)
+                return this.state;
+            return this.$r.dxSelectBox('instance').option('value');
+        };
+        WDXSelectBox.prototype.updateState = function (nextState) {
+            _super.prototype.updateState.call(this, nextState);
+            if (!this.$r)
+                return;
+            // Avoid double triggering (see onValueChanged)
+            this.dontTrigger = true;
+            this.$r.dxSelectBox('instance').option('value', nextState);
+        };
+        WDXSelectBox.prototype.componentDidMount = function () {
+            var _this = this;
+            if (!this.$r)
+                return;
+            var opt = {
+                dataSource: this.getDataSource(),
+                valueExpr: "id",
+                displayExpr: "text",
+                searchEnabled: this.searchEnabled,
+                onValueChanged: function (data) {
+                    if (data.value) {
+                        _this.trigger('statechange', WUX.WUtil.toString(data.value, null));
+                    }
+                    else {
+                        _this.trigger('statechange', null);
+                    }
+                }
+            };
+            this.beforeInit(opt);
+            this.$r.dxSelectBox(opt);
+            if (WUX.dxSelectBoxDidMount)
+                WUX.dxSelectBoxDidMount(this);
+        };
+        return WDXSelectBox;
+    }(WUX.WComponent));
+    WUX.WDXSelectBox = WDXSelectBox;
 })(WUX || (WUX = {}));
 // Internal init
 WUX.init0 = WUX.initDX;

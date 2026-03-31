@@ -123,6 +123,11 @@ declare namespace WUX {
     interface WISelectable extends WComponent {
         options: Array<string | WEntity>;
         select(i: number): this;
+        setOptions(options: Array<string | WEntity>, prevVal?: boolean): this;
+        findOption(text: string, d?: any): any;
+        addOption(e: string | WEntity, sel?: boolean): this;
+        remOption(e: string | WEntity): this;
+        indexOption(e: string | WEntity): number;
     }
     /**
      * Base class of a WUX component.
@@ -425,6 +430,7 @@ declare namespace WUX {
         static sort(a: any, t?: boolean, k?: string): any[];
         static find(a: any, k: any, v: any): any;
         static indexOf(a: any, k: any, v: any): number;
+        static indexOption(o: Array<string | WEntity>, e: string | WEntity): number;
         static isSameDate(a: Date, b: Date): boolean;
         static indexOfDate(a: Date[], v: Date): number;
         static round2(a: any): number;
@@ -883,6 +889,7 @@ declare namespace WUX {
         onField(fid: string, events: 'mount' | 'unmount' | 'statechange' | 'propschange', handler: (e: WEvent) => any): this;
         onField(fid: string, events: 'click' | 'dblclick' | 'mouseenter' | 'mouseleave' | 'keypress' | 'keydown' | 'keyup' | 'submit' | 'change' | 'focus' | 'blur' | 'resize', handler: (e: Event) => any): this;
         onField(fid: string, events: string, handler: (e: any) => any): this;
+        setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this;
         findOption(fid: string, text: string, d?: any): any;
         indexOption(fid: string, e: string | WEntity): number;
         addOption(fid: string, e: string | WEntity, sel?: boolean): this;
@@ -926,7 +933,6 @@ declare namespace WUX {
         isBlank(...fids: string[]): boolean;
         getFile(fid: string, onload: (f: File, b64: string) => any): File;
         getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File;
-        setOptions(fid: string, options: Array<string | WEntity>, prevVal?: boolean): this;
         setSpan(fid: string, span: number): this;
         setEnabled(fid: string, v: boolean): this;
         setReadOnly(fid: string, v: boolean): this;
