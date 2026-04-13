@@ -9,7 +9,7 @@ namespace WUX {
 
 	export function initDX(callback: () => any) {
 		if (debug) console.log('[WUX] initDX...');
-		let u = window["wux_dx_cldr"];
+		let u = (window as any)["wux_dx_cldr"];
 		if (!u) u = global.rootPath + '/cldr/cldr-data-' + global.locale + '.json';
 		fetch(u).then(response => {
 			if (response.ok) return response.json();
@@ -29,9 +29,9 @@ namespace WUX {
 
 	export class WDX extends WComponent<DxComponentType, any> {
 		opts: any;
-		$i: DevExpress.ui.Widget;
+		$i?: DevExpress.ui.Widget;
 
-		constructor(props: DxComponentType, id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(props: DxComponentType, id?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id, 'WDX', props, classStyle, style, attributes);
 		}
 
@@ -44,6 +44,7 @@ namespace WUX {
 		}
 
 		override componentDidMount(): void {
+			if (!this.props) return;
 			if (!this.$r || !this.$r[this.props]) return;
 			if (this.opts) {
 				this.$r[this.props](this.opts);
@@ -68,6 +69,7 @@ namespace WUX {
 
 		getInstance(c?: (i: any) => void): any;
 		getInstance(o?: any, c?: (i: any) => void): any {
+			if (!this.props) return null;
 			if (!this.$r || !this.$r[this.props]) return null;
 			if (o && typeof o != 'function') this.$r[this.props](o);
 			this.$i = this.$r[this.props]('instance') as DevExpress.ui.Widget;
@@ -93,13 +95,13 @@ namespace WUX {
 		exec(m: string, t: number = -1, c?: (i: any) => void): this {
 			if (!this.$i || !m) return this;
 			if (t >= 0) {
-				setTimeout(() => { 
-					this.$i[m](); 
-					if (c) c(this.$i); 
+				setTimeout(() => {
+					if (this.$i) (this.$i as any)[m]();
+					if (c) c(this.$i);
 				}, t);
 			}
 			else {
-				this.$i[m]();
+				(this.$i as any)[m]();
 				if (c) c(this.$i);
 			}
 			return this;
@@ -120,7 +122,7 @@ namespace WUX {
 			return this;
 		}
 
-		_off(n: string, f?: Function): this {
+		_off(n: string, f: Function): this {
 			if (!this.$i) return this;
 			this.$i.off(n, f);
 			return this;
@@ -132,13 +134,13 @@ namespace WUX {
 			if (s > 0) {
 				let m0 = m.substring(0, s);
 				let m1 = m.substring(s + 1);
-				if (!this.$i[m0]) return null;
-				let r0 = this.$i[m0]();
+				if (!(this.$i as any)[m0]) return null;
+				let r0 = (this.$i as any)[m0]();
 				if (!r0 || !r0[m1]) return null;
 				return r0[m1](...a);
 			}
-			if (!this.$i[m]) return null;
-			return this.$i[m](...a);
+			if (!(this.$i as any)[m]) return null;
+			return (this.$i as any)[m](...a);
 		}
 	}
 	
@@ -150,29 +152,29 @@ namespace WUX {
 		keys: any[];
 		types: string[];
 		widths: number[];
-		widthsPerc: boolean;
+		widthsPerc?: boolean;
 
 		selectionMode: 'single' | 'multiple' | 'none';
 		templates: ((cnt: JQuery, opt: { data: any, text: string }) => any)[];
-		selectedIndex: number;
+		selectedIndex?: number;
 
 		filter: boolean;
-		hideHeader: boolean;
+		hideHeader?: boolean;
 		keepSorting: boolean;
-		exportFile: string;
+		exportFile?: string;
 		scrolling: string;
 		pageSize: number;
 		paging: boolean;
 		sorting: boolean;
-		selectionFilter: any[];
+		selectionFilter?: any[];
 		dataSource: any;
-		storeKey: string;
+		storeKey?: string;
 
 		// Actions
 		actions: WUX.WField[];
-		actionsTitle: string;
-		actionsStyle: WUX.WStyle;
-		actionWidth: number;
+		actionsTitle?: string;
+		actionsStyle?: WUX.WStyle;
+		actionWidth?: number;
 
 		// Columns groups
 		groups: string[];
@@ -181,15 +183,15 @@ namespace WUX {
 		// Additional
 		_editable: boolean;
 		editables: boolean[];
-		editmap: {};
-		filterOps: string[];
+		editmap: { [key: string]: any };
+		filterOps?: string[];
 		hiddenCols: string[];
 
 		// Auxiliary
-		$csa: JQuery; // Combo Select All
-		$i: DevExpress.ui.dxDataGrid;
+		$csa?: JQuery; // Combo Select All
+		$i?: DevExpress.ui.dxDataGrid | null;
 
-		constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: string | Object, props?: any) {
+		constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: any, props?: any) {
 			// WComponent init
 			super(id, 'WDXTable', props, classStyle, style, attributes);
 			// WDXTable init
@@ -252,7 +254,7 @@ namespace WUX {
 				this.$i.refresh();
 			}
 			else {
-				this.$i.refresh().done([() => { setTimeout(() => { if (col) this.$i.editCell(row, col); }, t); }]);
+				this.$i.refresh().done([() => { setTimeout(() => { if (col && this.$i) this.$i.editCell(row, col); }, t); }]);
 			}
 			return this;
 		}
@@ -264,7 +266,7 @@ namespace WUX {
 			}
 			else {
 				this.$i.repaintRows([row]);
-				if (col != null) setTimeout(() => { if (col) this.$i.editCell(row, col); }, t);
+				if (col != null) setTimeout(() => { if (col && this.$i) this.$i.editCell(row, col); }, t);
 			}
 			return this;
 		}
@@ -497,17 +499,17 @@ namespace WUX {
 			super.off(events);
 			if (!events) return this;
 			let gopt: DevExpress.ui.dxDataGridOptions = {};
-			if (events.indexOf('_selectionchanged') >= 0) gopt.onSelectionChanged = null;
-			if (events.indexOf('_rowprepared') >= 0) gopt.onRowPrepared = null;
-			if (events.indexOf('_cellprepared') >= 0) gopt.onCellPrepared = null;
-			if (events.indexOf('_contentready') >= 0) gopt.onContentReady = null;
-			if (events.indexOf('_rowupdated') >= 0) gopt.onRowUpdated = null;
-			if (events.indexOf('_editorprepared') >= 0) gopt.onEditorPrepared = null;
-			if (events.indexOf('_editorpreparing') >= 0) gopt.onEditorPreparing = null;
-			if (events.indexOf('_editingstart') >= 0) gopt.onEditingStart = null;
-			if (events.indexOf('_cellclick') >= 0) gopt.onCellClick = null;
-			if (events.indexOf('_keydown') >= 0) gopt.onKeyDown = null;
-			if (events.indexOf('_toolbarpreparing') >= 0) gopt.onToolbarPreparing = null;
+			if (events.indexOf('_selectionchanged') >= 0) gopt.onSelectionChanged = undefined;
+			if (events.indexOf('_rowprepared') >= 0) gopt.onRowPrepared = undefined;
+			if (events.indexOf('_cellprepared') >= 0) gopt.onCellPrepared = undefined;
+			if (events.indexOf('_contentready') >= 0) gopt.onContentReady = undefined;
+			if (events.indexOf('_rowupdated') >= 0) gopt.onRowUpdated = undefined;
+			if (events.indexOf('_editorprepared') >= 0) gopt.onEditorPrepared = undefined;
+			if (events.indexOf('_editorpreparing') >= 0) gopt.onEditorPreparing = undefined;
+			if (events.indexOf('_editingstart') >= 0) gopt.onEditingStart = undefined;
+			if (events.indexOf('_cellclick') >= 0) gopt.onCellClick = undefined;
+			if (events.indexOf('_keydown') >= 0) gopt.onKeyDown = undefined;
+			if (events.indexOf('_toolbarpreparing') >= 0) gopt.onToolbarPreparing = undefined;
 			this.getInstance(gopt);
 			return this;
 		}
@@ -579,7 +581,7 @@ namespace WUX {
 		edit(row: number, col: any, t: number = 200): this {
 			if (!this.$i) return this;
 			setTimeout(() => {
-				this.$i.editCell(row, col);
+				if (this.$i) this.$i.editCell(row, col);
 			}, t);
 			return this;
 		}
@@ -605,7 +607,7 @@ namespace WUX {
 			return '';
 		}
 
-		getInstance(gopt?: DevExpress.ui.dxDataGridOptions): DevExpress.ui.dxDataGrid {
+		getInstance(gopt?: DevExpress.ui.dxDataGridOptions): DevExpress.ui.dxDataGrid | null {
 			if (!this.$r) return null;
 			if(gopt) this.$r.dxDataGrid(gopt);
 			this.$i = this.$r.dxDataGrid('instance');
@@ -646,7 +648,7 @@ namespace WUX {
 			return this.$i.getSelectedRowsData();
 		}
 
-		getFilteredRowsData(): any[] {
+		getFilteredRowsData(): any[] | null | undefined {
 			if (!this.$i) return this.state;
 			let ds = this.$i.getDataSource();
 			if (!ds) return this.state;
@@ -666,7 +668,7 @@ namespace WUX {
 		saveEditData(r?: number): this {
 			if (!this.$i) return this;
 			if (r != null) {
-				this.$i.saveEditData().done([() => { setTimeout(() => { this.$i.repaintRows([r]); }, 0); }]);
+				this.$i.saveEditData().done([() => { setTimeout(() => { if(this.$i) this.$i.repaintRows([r]); }, 0); }]);
 			}
 			else {
 				this.$i.saveEditData();
@@ -687,7 +689,7 @@ namespace WUX {
 			let _self = this;
 
 			// DataGrid Init Options
-			let gopt: DevExpress.ui.dxDataGridOptions;
+			let gopt: DevExpress.ui.dxDataGridOptions | null;
 			if (typeof (this.props) == 'object') {
 				gopt = this.props;
 			}
@@ -702,10 +704,10 @@ namespace WUX {
 				};
 			}
 			if (this._editable) {
-				gopt.editing = { mode: "cell", allowUpdating: true };
+				if(gopt) gopt.editing = { mode: "cell", allowUpdating: true };
 			}
 			if (this.hideHeader) {
-				gopt.showColumnHeaders = false;
+				if(gopt) gopt.showColumnHeaders = false;
 			}
 			this.editmap = {};
 
@@ -927,12 +929,13 @@ namespace WUX {
 			}
 
 			// dxDataGrid config
-			gopt.columns = cols;
+			if (!gopt) gopt = {};
+			gopt.columns = cols as any;
 			if (this.dataSource) {
 				gopt.dataSource = this.dataSource;
 			}
 			else {
-				gopt.dataSource = this.state;
+				gopt.dataSource = this.state as any;
 			}
 			gopt.filterRow = { visible: this.filter };
 			gopt.paging = { enabled: this.paging, pageSize: this.pageSize };
@@ -944,9 +947,9 @@ namespace WUX {
 				gopt.scrolling = { mode: this.scrolling as any };
 			}
 			gopt.onRowClick = (e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => {
-				let lastClick = e.component['lastClick'] as Date;
-				let currClick = e.component['lastClick'] = new Date();
-				if (lastClick && (currClick.getTime() - lastClick.getTime() < 300)) {
+				let lastClick = e.component ? (e.component as any)['lastClick'] as Date : null;
+				let currClick = e.component ? (e.component as any)['lastClick'] = new Date() : null;
+				if (lastClick && (currClick ? currClick.getTime() : 0 - lastClick.getTime() < 300)) {
 					if (!this.handlers['_doubleclick']) return;
 					for (let handler of this.handlers['_doubleclick']) {
 						handler({ element: this.root, data: e.data });
@@ -1004,11 +1007,11 @@ namespace WUX {
 
 			this.beforeInit(gopt);
 
-			this.$r.dxDataGrid(gopt);
-			this.$i = this.$r.dxDataGrid('instance');
+			if (this.$r) this.$r.dxDataGrid(gopt);
+			this.$i = this.$r ? this.$r.dxDataGrid('instance') : null;
 
 			if (this.handlers['_scroll'] && this.handlers['_scroll'].length) {
-				this.$i.getScrollable().on('scroll', this.handlers['_scroll'][0]);
+				if (this.$i) this.$i.getScrollable().on('scroll', this.handlers['_scroll'][0]);
 			}
 
 			if(dxTableDidMount) dxTableDidMount(this);
@@ -1032,10 +1035,10 @@ namespace WUX {
 			gopt.paging = { enabled: this.paging, pageSize: this.pageSize };
 			if (this.paging) gopt.pager = { showPageSizeSelector: false, allowedPageSizes: [this.pageSize], showInfo: true };
 			if (!this.keepSorting) {
-				this.$i.clearSorting();
+				if (this.$i) this.$i.clearSorting();
 			}
 			if (!this.selectionFilter || !this.selectionFilter.length) {
-				this.$i.clearSelection();
+				if (this.$i) this.$i.clearSelection();
 			}
 			this.$r.dxDataGrid(gopt);
 			this.$i = this.$r.dxDataGrid('instance');
@@ -1066,17 +1069,17 @@ namespace WUX {
 	* Wrapper dxTreeView. Required DevExpress.ui.dxTreeView https://js.devexpress.com/
 	*/
 	export class WDXTreeView extends WUX.WComponent<string, any[]> {
-		height: number;
-		width: number;
-		searchEnabled: boolean;
-		selectionMode: 'multiple' | 'single';
-		selectByClick: boolean;
+		height?: number;
+		width?: number;
+		searchEnabled?: boolean;
+		selectionMode?: 'multiple' | 'single';
+		selectByClick?: boolean;
 
-		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id ? id : '*', 'WDXTreeView', '', classStyle, style, attributes);
 		}
 
-		getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView {
+		getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView | null {
 			if (!this.$r) return null;
 			if (opt) this.$r.dxTreeView(opt);
 			return this.$r.dxTreeView('instance');
@@ -1093,7 +1096,7 @@ namespace WUX {
 				let opt: DevExpress.ui.dxTreeViewOptions = {
 					onItemClick: h
 				};
-				this.$r.dxTreeView(opt);
+				if (this.$r) this.$r.dxTreeView(opt);
 			}
 		}
 
@@ -1104,7 +1107,7 @@ namespace WUX {
 				let opt: DevExpress.ui.dxTreeViewOptions = {
 					onSelectionChanged: h
 				};
-				this.$r.dxTreeView(opt);
+				if (this.$r) this.$r.dxTreeView(opt);
 			}
 		}
 
@@ -1115,20 +1118,20 @@ namespace WUX {
 				let opt: DevExpress.ui.dxTreeViewOptions = {
 					onItemRendered: h
 				};
-				this.$r.dxTreeView(opt);
+				if (this.$r) this.$r.dxTreeView(opt);
 			}
 		}
 
 		getSelectedItems(): any[] {
 			if (!this.mounted) return [];
-			let n = this.$r.dxTreeView('instance').getSelectedNodes();
+			let n = this.$r ? this.$r.dxTreeView('instance').getSelectedNodes() : null;
 			if (!n) return [];
 			return n.map(function(node) { return node.itemData; });
 		}
 
 		select(item: any): this {
 			if (!this.mounted) return this;
-			this.$r.dxTreeView('selectItem', item);
+			if (this.$r) this.$r.dxTreeView('selectItem', item);
 			return this;
 		}
 
@@ -1136,10 +1139,10 @@ namespace WUX {
 			super.off(events);
 			if (!events) return this;
 			let opt: DevExpress.ui.dxTreeViewOptions = {};
-			if (events.indexOf('_onItemClick') >= 0) opt.onItemClick = null;
-			if (events.indexOf('_onSelectionChanged') >= 0) opt.onSelectionChanged = null;
-			if (events.indexOf('_onItemRendered') >= 0) opt.onItemRendered = null;
-			this.$r.dxTreeView(opt);
+			if (events.indexOf('_onItemClick') >= 0) opt.onItemClick = undefined;
+			if (events.indexOf('_onSelectionChanged') >= 0) opt.onSelectionChanged = undefined;
+			if (events.indexOf('_onItemRendered') >= 0) opt.onItemRendered = undefined;
+			if (this.$r) this.$r.dxTreeView(opt);
 			return this;
 		}
 
@@ -1157,7 +1160,7 @@ namespace WUX {
 			super.updateProps(nextProps);
 			if (!this.mounted) return;
 			if (this.props) {
-				this.$r.dxTreeView('instance').option('searchMode', this.props);
+				if (this.$r) this.$r.dxTreeView('instance').option('searchMode', this.props);
 			}
 		}
 
@@ -1166,13 +1169,13 @@ namespace WUX {
 
 		expandAll(): this {
 			if (!this.mounted) return this;
-			this.$r.dxTreeView('expandAll');
+			if (this.$r) this.$r.dxTreeView('expandAll');
 			return this;
 		}
 
 		collapseAll(): this {
 			if (!this.mounted) return this;
-			this.$r.dxTreeView('collapseAll');
+			if (this.$r) this.$r.dxTreeView('collapseAll');
 			return this;
 		}
 
@@ -1182,7 +1185,7 @@ namespace WUX {
 				height: this.height,
 				width: this.width,
 				searchEnabled: this.searchEnabled,
-				items: this.state
+				items: this.state ? this.state : undefined
 			}
 			if (this.selectionMode == "multiple") {
 				opt.selectionMode = "multiple";
@@ -1211,14 +1214,14 @@ namespace WUX {
 	}
 
 	export class WDXSelectBox extends WUX.WComponent implements WISelectable {
-		options: Array<string | WEntity>;
+		options: Array<string | WEntity> = [];
 		searchEnabled: boolean = true;
 
-		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id ? id : '*', 'WDXSelectBox', [], classStyle, style, attributes);
 		}
 
-		getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox {
+		getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox | null {
 			if (!this.$r) return null;
 			if (opt) {
 				this.$r.dxSelectBox(opt);
@@ -1279,7 +1282,7 @@ namespace WUX {
 			this.options.push(e);
 			if (!this.mounted) return this;
 			// Update component
-			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			if (this.$r) this.$r.dxSelectBox({dataSource: this.getDataSource()});
 			if (sel) this.updateState(e);
 			return this;
 		}
@@ -1290,7 +1293,7 @@ namespace WUX {
 			this.options.splice(x, 1);
 			if (!this.mounted) return this;
 			// Update component
-			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			if (this.$r) this.$r.dxSelectBox({dataSource: this.getDataSource()});
 			return this;
 		}
 
@@ -1301,11 +1304,11 @@ namespace WUX {
 		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
 			this.options = options;
 			if (!this.mounted) return this;
-			let p = this.$r.dxSelectBox('instance').option('value');
+			let p = this.$r ? this.$r.dxSelectBox('instance').option('value') : null;
 			// Update component
-			this.$r.dxSelectBox({dataSource: this.getDataSource()});
+			if (this.$r) this.$r.dxSelectBox({dataSource: this.getDataSource()});
 			if (prevVal) {
-				this.$r.dxSelectBox('instance').option('value', p);
+				if (this.$r) this.$r.dxSelectBox('instance').option('value', p);
 			}
 			else if (options && options.length) {
 				if (typeof options[0] == 'string') {

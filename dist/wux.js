@@ -35,7 +35,7 @@ var WuxDOM = /** @class */ (function () {
     };
     WuxDOM.register = function (node, c) {
         if (!node)
-            return;
+            return null;
         var id;
         if (typeof node == 'string') {
             id = node.indexOf('#') == 0 ? node.substring(1) : node;
@@ -68,7 +68,7 @@ var WuxDOM = /** @class */ (function () {
                 after(node);
             if (WuxDOM.renderHandlers.length > 0) {
                 var c = component instanceof WUX.WComponent ? component : null;
-                var e = { component: c, element: ctx, target: ctx.firstChild, type: 'render' };
+                var e = { component: c, element: ctx, target: ctx ? ctx.firstChild : null, type: 'render' };
                 for (var _i = 0, _a = WuxDOM.renderHandlers; _i < _a.length; _i++) {
                     var handler = _a[_i];
                     handler(e);
@@ -84,7 +84,7 @@ var WuxDOM = /** @class */ (function () {
             console.log('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + '...');
         if (e == null) {
             console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> invalid component');
-            return;
+            return null;
         }
         var ctx;
         if (typeof node == 'string') {
@@ -97,7 +97,7 @@ var WuxDOM = /** @class */ (function () {
         }
         if (!ctx) {
             console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> context unavailable');
-            return;
+            return null;
         }
         WuxDOM.lastCtx = ctx;
         if (e instanceof WUX.WComponent) {
@@ -133,7 +133,7 @@ var WuxDOM = /** @class */ (function () {
         }
         if (!ctx) {
             console.error('WuxDOM.unmount ' + WUX.str(node) + ' -> node unavailable');
-            return;
+            return null;
         }
         var wcomp = WuxDOM.register(ctx, 'delete');
         if (wcomp)
@@ -161,10 +161,10 @@ var WuxDOM = /** @class */ (function () {
             node = WuxDOM.unmount();
         }
         else if (typeof o == 'string') {
-            var wcomp = WUX.getComponent(o);
-            if (!wcomp) {
-                node = wcomp.getContext();
-                wcomp.unmount();
+            var w = WUX.getComponent(o);
+            if (w) {
+                node = w.getContext();
+                w.unmount();
             }
         }
         else if (o instanceof WUX.WComponent) {
@@ -180,7 +180,7 @@ var WuxDOM = /** @class */ (function () {
             node = document.getElementById('view-root');
         if (!node) {
             console.error('WuxDOM.replace ' + WUX.str(node) + ' -> node unavailable');
-            return;
+            return null;
         }
         return WuxDOM.mount(e, node);
     };
@@ -215,7 +215,8 @@ var WuxDOM = /** @class */ (function () {
         if (a) {
             for (var k in a) {
                 if (a.hasOwnProperty(k)) {
-                    e.setAttribute(k, WUX.WUtil.toString(a[k]));
+                    var va = WUX.WUtil.toString(a[k]);
+                    e.setAttribute(k, va ? va : '');
                 }
             }
         }
@@ -421,7 +422,7 @@ var WUX;
                 if (this.internal)
                     this.internal.tooltip = s;
                 if (this.root)
-                    this.root.setAttribute('title', this._tooltip);
+                    this.root.setAttribute('title', this._tooltip ? this._tooltip : '');
             },
             enumerable: false,
             configurable: true
@@ -636,7 +637,7 @@ var WUX;
                     this.unmount();
                 this.mounted = false;
                 if (!(this.context)) {
-                    var he = document.getElementById(this.id);
+                    var he = this.id ? document.getElementById(this.id) : null;
                     if (he)
                         this.context = he;
                 }
@@ -705,7 +706,8 @@ var WUX;
                         this.internal.enabled = false;
                     }
                     else {
-                        this.root.setAttribute('disabled', '');
+                        if (this.root)
+                            this.root.setAttribute('disabled', '');
                     }
                 }
                 if (this.debug)
@@ -944,7 +946,7 @@ var WUX;
     /* Global functions */
     function getId(e) {
         if (!e)
-            return;
+            return '';
         if (e instanceof Element)
             return e.id;
         if (e instanceof WComponent)
@@ -988,7 +990,7 @@ var WUX;
     WUX.lastSub = lastSub;
     function getComponent(id) {
         if (!id)
-            return;
+            return null;
         return WuxDOM.components[id];
     }
     WUX.getComponent = getComponent;
@@ -1002,10 +1004,10 @@ var WUX;
     WUX.getRootComponent = getRootComponent;
     function setProps(id, p) {
         if (!id)
-            return;
+            return null;
         var c = WuxDOM.components[id];
         if (!c)
-            return;
+            return null;
         c.setProps(p);
         return c;
     }
@@ -1024,10 +1026,10 @@ var WUX;
     WUX.getProps = getProps;
     function setState(id, s) {
         if (!id)
-            return;
+            return null;
         var c = WuxDOM.components[id];
         if (!c)
-            return;
+            return null;
         c.setState(s);
         return c;
     }
@@ -1070,7 +1072,7 @@ var WUX;
             return false;
         var id1 = getId(e1);
         var id2 = getId(e2);
-        return id1 && id2 && id1 == id2;
+        return !!(id1 && id2 && id1 == id2);
     }
     WUX.same = same;
     function match(i, o) {
@@ -1488,7 +1490,7 @@ var WUX;
     WUX.addClass = addClass;
     function removeClass(css, name) {
         if (!css || !name)
-            return css;
+            return '';
         var classes = css.split(' ');
         var r = '';
         for (var _i = 0, classes_2 = classes; _i < classes_2.length; _i++) {
@@ -1742,14 +1744,14 @@ var WUX;
                     var s = WUtil.toString(e);
                     if (ne && !s)
                         continue;
-                    r.push(s);
+                    r.push(s ? s : '');
                 }
             }
             else {
                 var s = WUtil.toString(a);
                 if (ne && !s)
                     return r;
-                r.push(WUtil.toString(a));
+                r.push(s ? s : '');
             }
             return r;
         };
@@ -1757,6 +1759,8 @@ var WUX;
             if (!a)
                 return [];
             var sa = WUtil.toString(a);
+            if (!sa)
+                return [];
             var aos = sa.split(s);
             var r = [];
             for (var _i = 0, aos_1 = aos; _i < aos_1.length; _i++) {
@@ -1793,6 +1797,8 @@ var WUX;
         WUtil.toText = function (a, d) {
             if (d === void 0) { d = ''; }
             var r = WUtil.toString(a, d);
+            if (!r)
+                return r;
             return r.replace('<', '&lt;').replace('>', '&gt;');
         };
         WUtil.toNumber = function (a, d) {
@@ -1872,12 +1878,17 @@ var WUX;
         WUtil.starts = function (a, s) {
             if (!a || s == null)
                 return false;
-            return WUtil.toString(a).indexOf(s) == 0;
+            var v = WUtil.toString(a);
+            if (!v)
+                return false;
+            return v.indexOf(s) == 0;
         };
         WUtil.ends = function (a, s) {
             if (!a || s == null)
                 return false;
             var t = WUtil.toString(a);
+            if (!t)
+                return false;
             var i = t.lastIndexOf(s);
             if (i < 0)
                 return false;
@@ -3025,9 +3036,12 @@ var WUX;
             if (typeof this.props == 'string') {
                 if (!this.props || this.props.indexOf('<') < 0) {
                     this.isText = true;
-                    return this.buildRoot(this.rootTag, this.props);
+                    var r = this.buildRoot(this.rootTag, this.props);
+                    return r ? r : '';
                 }
             }
+            if (!this.props)
+                return '';
             return this.props;
         };
         Wrapp.prototype.componentDidMount = function () {
@@ -3269,6 +3283,7 @@ var WUX;
                 this.add(c);
             }
             else if (c_w_i instanceof WContainer) {
+                c = c_w_i;
                 c_w_i.parent = this;
                 this.add(c_w_i);
             }
@@ -3340,14 +3355,14 @@ var WUX;
                     inner += '<div id="' + this.subId('bg') + '"></div>';
                 }
                 // Build Grid
-                for (var r = 0; r < l; r++) {
-                    var g = this.grid[r];
+                for (var r_2 = 0; r_2 < l; r_2++) {
+                    var g = this.grid[r_2];
                     var cl = g.length;
                     if (!cl)
                         continue;
-                    inner += '<div id="' + this.subId(r + '_0') + '" ' + WUX.buildCss(g[0]) + '>';
+                    inner += '<div id="' + this.subId(r_2 + '_0') + '" ' + WUX.buildCss(g[0]) + '>';
                     for (var c = 1; c < cl; c++) {
-                        inner += '<div id="' + this.subId(r + '_' + c) + '" ' + WUX.buildCss(g[c]) + '></div>';
+                        inner += '<div id="' + this.subId(r_2 + '_' + c) + '" ' + WUX.buildCss(g[c]) + '></div>';
                     }
                     inner += "</div>";
                 }
@@ -3357,7 +3372,8 @@ var WUX;
                 var s = _c[_b];
                 inner += s;
             }
-            return this.buildRoot(this.rootTag, inner);
+            var r = this.buildRoot(this.rootTag, inner);
+            return r ? r : '';
         };
         WContainer.prototype.componentDidMount = function () {
             this._mount(this.context, this.root);
@@ -3778,6 +3794,8 @@ var WUX;
         WPages.prototype.curr = function () {
             var l = this.components.length;
             var i = this.state;
+            if (i == null)
+                return null;
             if (i >= 0 && i < l)
                 return this.components[i];
             return null;
@@ -3968,7 +3986,8 @@ var WUX;
             else {
                 html += WUX.buildIcon(this.icon);
             }
-            this.root.innerHTML = html;
+            if (this.root)
+                this.root.innerHTML = html;
         };
         return WLink;
     }(WUX.WComponent));
@@ -4011,7 +4030,7 @@ var WUX;
             return this.buildRoot(this.rootTag, WUX.buildIcon(this.props, '', ' ') + text, null, this._classStyle);
         };
         WLabel.prototype.componentDidMount = function () {
-            if (this._tooltip)
+            if (this._tooltip && this.root)
                 this.root.setAttribute('title', this._tooltip);
         };
         return WLabel;
@@ -4034,7 +4053,7 @@ var WUX;
             },
             set: function (v) {
                 this._ro = v;
-                if (this.mounted) {
+                if (this.root) {
                     if (v) {
                         this.root.setAttribute('readonly', '');
                     }
@@ -4052,7 +4071,7 @@ var WUX;
             },
             set: function (v) {
                 this._af = v;
-                if (this.mounted) {
+                if (this.root) {
                     if (v) {
                         this.root.setAttribute('autofocus', '');
                     }
@@ -4128,7 +4147,7 @@ var WUX;
         };
         WInput.prototype.componentDidMount = function () {
             var _this = this;
-            var i = document.getElementById(this.id);
+            var i = this.id ? document.getElementById(this.id) : this.root;
             if (!i)
                 return;
             i.addEventListener("keydown", function (e) {
@@ -4163,7 +4182,7 @@ var WUX;
             },
             set: function (v) {
                 this._ro = v;
-                if (this.mounted) {
+                if (this.root) {
                     if (v) {
                         this.root.setAttribute('readonly', '');
                     }
@@ -4181,7 +4200,7 @@ var WUX;
             },
             set: function (v) {
                 this._af = v;
-                if (this.mounted) {
+                if (this.root) {
                     if (v) {
                         this.root.setAttribute('autofocus', '');
                     }
@@ -4244,6 +4263,8 @@ var WUX;
             return WUX.build('textarea', '', this._style, this._attributes, this.id, this._classStyle);
         };
         WTextArea.prototype.componentDidMount = function () {
+            if (!this.root)
+                return;
             if (this._tooltip)
                 this.root.setAttribute('title', this._tooltip);
             if (this.state)
@@ -4296,7 +4317,7 @@ var WUX;
             return this.build(this.rootTag, html, addAttributes);
         };
         WButton.prototype.componentDidMount = function () {
-            if (this._tooltip)
+            if (this._tooltip && this.root)
                 this.root.setAttribute('title', this._tooltip);
         };
         WButton.prototype.componentWillUpdate = function (nextProps, nextState) {
@@ -4309,7 +4330,8 @@ var WUX;
             else {
                 html += WUX.buildIcon(nextProps);
             }
-            this.root.innerHTML = html;
+            if (this.root)
+                this.root.innerHTML = html;
         };
         return WButton;
     }(WUX.WComponent));
@@ -4461,7 +4483,7 @@ var WUX;
             // WComponent init
             _super.call(this, id ? id : '*', 'WRadio', props, classStyle, style, attributes) || this;
             // WRadio init 
-            _this.options = options;
+            _this.options = options ? options : [];
             _this.classDiv = 'form-check form-check-inline';
             return _this;
         }
@@ -4554,7 +4576,8 @@ var WUX;
                 return this;
             var p = this.getState();
             var o = this.buildOptions();
-            this.root.innerHTML = o;
+            if (this.root)
+                this.root.innerHTML = o;
             if (prevVal) {
                 this.setState(p);
             }
@@ -4573,7 +4596,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             var o = this.buildOptions();
-            this.root.innerHTML = o;
+            if (this.root)
+                this.root.innerHTML = o;
             if (sel)
                 this.updateState(e);
             return this;
@@ -4586,7 +4610,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             var o = this.buildOptions();
-            this.root.innerHTML = o;
+            if (this.root)
+                this.root.innerHTML = o;
             return this;
         };
         WRadio.prototype.indexOption = function (e) {
@@ -4707,7 +4732,7 @@ var WUX;
             _super.call(this, id ? id : '*', 'WSelect', null, classStyle, style, attributes) || this;
             // WSelect init
             _this.rootTag = 'select';
-            _this.options = options;
+            _this.options = options ? options : [];
             _this.multiple = multiple;
             return _this;
         }
@@ -4758,7 +4783,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             var o = this.buildOptions();
-            this.root.innerHTML = o;
+            if (this.root)
+                this.root.innerHTML = o;
             if (sel)
                 this.updateState(e);
             return this;
@@ -4771,7 +4797,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             var o = this.buildOptions();
-            this.root.innerHTML = o;
+            if (this.root)
+                this.root.innerHTML = o;
             return this;
         };
         WSelect.prototype.indexOption = function (e) {
@@ -4779,7 +4806,7 @@ var WUX;
         };
         WSelect.prototype.setOptions = function (options, prevVal) {
             this.options = options;
-            if (!this.mounted)
+            if (!this.root)
                 return this;
             var p = this.root["value"];
             var o = this.buildOptions();
@@ -4824,6 +4851,8 @@ var WUX;
         };
         WSelect.prototype.componentDidMount = function () {
             var _this = this;
+            if (!this.root)
+                return;
             if (this._tooltip)
                 this.root.setAttribute('title', this._tooltip);
             if (this.state)
@@ -5060,6 +5089,8 @@ var WUX;
                         var so = this.sortable && this.sortable.indexOf(j) >= 0;
                         if (so) {
                             var aid = this.subId('sort_' + j);
+                            if (!this.soId)
+                                this.soId = [];
                             this.soId.push(aid);
                             r += '<th' + WUX.buildCss(s, x) + '><a style="cursor:pointer;text-decoration:none !important;" id="' + aid + '">' + h + ' &nbsp;<i class="fa fa-unsorted"></i></a></th>';
                         }
@@ -5095,23 +5126,26 @@ var WUX;
                                 var hs = _this.handlers['_sort'];
                                 var ds = !(hs && hs.length) && _this.keys && _this.keys.length > c;
                                 var h = _this.header[c];
-                                var v = _this.sortBy[c];
+                                var v = _this.sortBy ? _this.sortBy[c] : null;
                                 if (!v) {
-                                    _this.sortBy[c] = 1;
+                                    if (_this.sortBy)
+                                        _this.sortBy[c] = 1;
                                     if (h)
                                         a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-asc"></i>';
                                     if (ds)
                                         _this.setState(WUX.WUtil.sort(_this.state, true, _this.keys[c]));
                                 }
                                 else if (v == 1) {
-                                    _this.sortBy[c] = -1;
+                                    if (_this.sortBy)
+                                        _this.sortBy[c] = -1;
                                     if (h)
                                         a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-desc"></i>';
                                     if (ds)
                                         _this.setState(WUX.WUtil.sort(_this.state, false, _this.keys[c]));
                                 }
                                 else if (v == -1) {
-                                    _this.sortBy[c] = 0;
+                                    if (_this.sortBy)
+                                        _this.sortBy[c] = 0;
                                     if (h)
                                         a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
                                 }
@@ -5175,7 +5209,7 @@ var WUX;
         WTable.prototype.updSort = function () {
             if (this.prvSort == -1 || this.reqSort == this.prvSort)
                 return;
-            var v = this.sortBy[this.prvSort];
+            var v = this.sortBy ? this.sortBy[this.prvSort] : null;
             if (!v)
                 return;
             var aid = this.subId('sort_' + this.prvSort);
@@ -5185,7 +5219,8 @@ var WUX;
             var h = this.header[this.prvSort];
             if (h)
                 a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
-            this.sortBy[this.prvSort] = 0;
+            if (this.sortBy)
+                this.sortBy[this.prvSort] = 0;
         };
         WTable.prototype.getType = function (i) {
             if (!this.types)
@@ -5457,8 +5492,8 @@ var WUX;
             return this;
         };
         WForm.prototype.getField = function (fid) {
-            if (!fid)
-                return;
+            if (!fid || !this.rows)
+                return null;
             var sid = fid.indexOf(this.id + '-') == 0 ? fid : this.subId(fid);
             for (var i = 0; i < this.rows.length; i++) {
                 var row = this.rows[i];
@@ -5468,7 +5503,7 @@ var WUX;
                         return f;
                 }
             }
-            return;
+            return null;
         };
         WForm.prototype.getComponent = function (fid, def) {
             var f = this.getField(fid);
@@ -5548,6 +5583,8 @@ var WUX;
         };
         WForm.prototype.addRow = function (classStyle, style, id, attributes, type) {
             if (type === void 0) { type = 'row'; }
+            if (!this.roww)
+                this.roww = [];
             if (this.currRow && !this.currRow.length) {
                 this.roww[this.roww.length - 1] = {
                     classStyle: classStyle,
@@ -5559,6 +5596,8 @@ var WUX;
                 return this;
             }
             this.currRow = [];
+            if (!this.rows)
+                this.rows = [];
             this.rows.push(this.currRow);
             this.roww.push({
                 classStyle: classStyle,
@@ -5604,6 +5643,8 @@ var WUX;
             f.label = label;
             f.component = co;
             f.type = type;
+            if (!this.currRow)
+                this.currRow = [];
             this.currRow.push(f);
             return this;
         };
@@ -5723,7 +5764,7 @@ var WUX;
             var co = new WContainer('', classStyle, style);
             if (e)
                 co.add(e);
-            return this._add('', label, co, 'blank', {});
+            return this._add('', label ? label : '', co, 'blank', {});
         };
         WForm.prototype.addCaption = function (text, icon, classStyle, style, opts) {
             if (!text)
@@ -5736,12 +5777,16 @@ var WUX;
             var vs = WUX.WUtil.toString(value);
             var co = new WInput(id, 'hidden');
             co.setState(vs);
+            if (!this.currRow)
+                this.currRow = [];
             this.currRow.push({ id: id, component: co, value: vs, type: 'hidden' });
             return this;
         };
         WForm.prototype.addInternalField = function (fid, value) {
             if (value === undefined)
                 value = null;
+            if (!this.currRow)
+                this.currRow = [];
             this.currRow.push({ id: this.subId(fid), value: value, type: 'internal' });
             return this;
         };
@@ -5772,13 +5817,15 @@ var WUX;
             var f = this.getField(fid);
             if (!f)
                 return this;
-            if (!text) {
-                delete this.tips[f.id];
-                f.tooltip = '';
-            }
-            else {
-                this.tips[f.id] = text;
-                f.tooltip = text;
+            if (this.tips && f.id) {
+                if (!text) {
+                    delete this.tips[f.id];
+                    f.tooltip = '';
+                }
+                else {
+                    this.tips[f.id] = text;
+                    f.tooltip = text;
+                }
             }
             return this;
         };
@@ -5805,7 +5852,7 @@ var WUX;
             return this;
         };
         WForm.prototype.addToFooter = function (c) {
-            if (!c && !this.footer)
+            if (!c || !this.footer)
                 return this;
             this.footer.push(c);
             return this;
@@ -5823,8 +5870,13 @@ var WUX;
             if (!this._enabled) {
                 this.fieldset.setAttribute('disabled', '');
             }
-            this.root.appendChild(this.fieldset);
+            if (this.root)
+                this.root.appendChild(this.fieldset);
             this.main = new WContainer(this.id + '__c', this.mainClass, this.mainStyle);
+            if (!this.rows)
+                this.rows = [];
+            if (!this.roww)
+                this.roww = [];
             for (var i = 0; i < this.rows.length; i++) {
                 var w = this.roww[i];
                 this.main.addRow(WUX.cls(w.type, w.classStyle, w.style), WUX.style(w.style));
@@ -5880,8 +5932,8 @@ var WUX;
                             lc = f.classStyle;
                         }
                         var l = new WLabel(f.id + '-l', f.label + r, '', lc, ls);
-                        l.tooltip = this.tips[f.id];
-                        f.labelComp = l.for(f.id);
+                        l.tooltip = this.tips && f.id ? this.tips[f.id] : '';
+                        f.labelComp = l.for(f.id ? f.id : '');
                     }
                     if (g) {
                         if (f.type == 'select') {
@@ -5912,10 +5964,12 @@ var WUX;
                 this.main.unmount();
             if (this.foot)
                 this.foot.unmount();
+            if (!this.rows)
+                return;
             for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
                 var r = _a[_i];
-                for (var _b = 0, r_2 = r; _b < r_2.length; _b++) {
-                    var f = r_2[_b];
+                for (var _b = 0, r_3 = r; _b < r_3.length; _b++) {
+                    var f = r_3[_b];
                     var c = f.component;
                     if (c && f.type == 'hidden')
                         c.unmount();
@@ -5923,6 +5977,8 @@ var WUX;
             }
         };
         WForm.prototype.clear = function () {
+            if (!this.rows)
+                return this;
             for (var i = 0; i < this.rows.length; i++) {
                 var row = this.rows[i];
                 for (var j = 0; j < row.length; j++) {
@@ -6041,11 +6097,11 @@ var WUX;
                         c++;
                 }
             }
-            else {
+            else if (this.rows) {
                 for (var _b = 0, _c = this.rows; _b < _c.length; _b++) {
                     var r = _c[_b];
-                    for (var _d = 0, r_3 = r; _d < r_3.length; _d++) {
-                        var f = r_3[_d];
+                    for (var _d = 0, r_4 = r; _d < r_4.length; _d++) {
+                        var f = r_4[_d];
                         var v = f.component ? f.component.getState() : f.value;
                         if (v)
                             c++;
@@ -6070,11 +6126,11 @@ var WUX;
                         return false;
                 }
             }
-            else {
+            else if (this.rows) {
                 for (var _b = 0, _c = this.rows; _b < _c.length; _b++) {
                     var r = _c[_b];
-                    for (var _d = 0, r_4 = r; _d < r_4.length; _d++) {
-                        var f = r_4[_d];
+                    for (var _d = 0, r_5 = r; _d < r_5.length; _d++) {
+                        var f = r_5[_d];
                         var v = f.component ? f.component.getState() : f.value;
                         if (v)
                             return false;
@@ -6145,20 +6201,22 @@ var WUX;
             }
             return this;
         };
-        WForm.prototype.getValues = function (f) {
+        WForm.prototype.getValues = function (ts) {
             var v = {};
+            if (!this.rows)
+                return v;
             for (var _i = 0, _a = this.rows; _i < _a.length; _i++) {
                 var r = _a[_i];
-                for (var _b = 0, r_5 = r; _b < r_5.length; _b++) {
-                    var f_1 = r_5[_b];
-                    var k = this.ripId(f_1.id);
+                for (var _b = 0, r_6 = r; _b < r_6.length; _b++) {
+                    var f = r_6[_b];
+                    var k = this.ripId(f.id);
                     if (!k)
                         continue;
-                    if (f_1) {
-                        v[k] = WUX.WUtil.toString(f_1.component ? f_1.component.getState() : f_1.value);
+                    if (ts) {
+                        v[k] = WUX.WUtil.toString(f.component ? f.component.getState() : f.value);
                     }
                     else {
-                        v[k] = f_1.component ? f_1.component.getState() : f_1.value;
+                        v[k] = f.component ? f.component.getState() : f.value;
                     }
                 }
             }
@@ -6203,7 +6261,7 @@ var WUX;
                 var row = this.rows[i];
                 for (var j = 0; j < row.length; j++) {
                     var f = row[j];
-                    if (sids.indexOf(f.id) >= 0) {
+                    if (f.id && sids.indexOf(f.id) >= 0) {
                         f.required = true;
                     }
                     else {
@@ -6225,12 +6283,14 @@ var WUX;
             var r = '';
             var x = '';
             var a = false;
+            if (!this.rows)
+                this.rows = [];
             for (var i = 0; i < this.rows.length; i++) {
                 var row = this.rows[i];
                 for (var j = 0; j < row.length; j++) {
                     var f = row[j];
                     var id = this.ripId(f.id);
-                    var v = values[id];
+                    var v = id ? values[id] : null;
                     if (f.required) {
                         if (v == null || v == '') {
                             if (labels) {
@@ -6821,18 +6881,19 @@ var WUX;
                     continue;
                 container.mount(tabPane);
             }
-            this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', function (e) {
-                var t = e.target;
-                var b = '';
-                if (t instanceof Element) {
-                    b = t.getAttribute(_this._r);
-                }
-                if (!b)
-                    return;
-                var sep = b.lastIndexOf('-');
-                if (sep >= 0)
-                    _this.setState(parseInt(b.substring(sep + 1)));
-            });
+            if (this.$r)
+                this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', function (e) {
+                    var t = e.target;
+                    var b = '';
+                    if (t instanceof Element) {
+                        b = t.getAttribute(_this._r);
+                    }
+                    if (!b)
+                        return;
+                    var sep = b.lastIndexOf('-');
+                    if (sep >= 0)
+                        _this.setState(parseInt(b.substring(sep + 1)));
+                });
         };
         WTab.prototype.componentWillUnmount = function () {
             for (var _i = 0, _b = this.tabs; _i < _b.length; _i++) {

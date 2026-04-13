@@ -7,8 +7,8 @@ declare namespace WUX {
     function initDX(callback: () => any): void;
     class WDX extends WComponent<DxComponentType, any> {
         opts: any;
-        $i: DevExpress.ui.Widget;
-        constructor(props: DxComponentType, id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
+        $i?: DevExpress.ui.Widget;
+        constructor(props: DxComponentType, id?: string, classStyle?: string, style?: string | WStyle, attributes?: any);
         get options(): any;
         set options(o: any);
         componentDidMount(): void;
@@ -20,7 +20,7 @@ declare namespace WUX {
         exec(m: string, t?: number, c?: (i: any) => void): this;
         option(n: string, v?: any): any;
         _on(n: string, f: Function): this;
-        _off(n: string, f?: Function): this;
+        _off(n: string, f: Function): this;
         _(m: string, ...a: any[]): any;
     }
     /**
@@ -31,38 +31,40 @@ declare namespace WUX {
         keys: any[];
         types: string[];
         widths: number[];
-        widthsPerc: boolean;
+        widthsPerc?: boolean;
         selectionMode: 'single' | 'multiple' | 'none';
         templates: ((cnt: JQuery, opt: {
             data: any;
             text: string;
         }) => any)[];
-        selectedIndex: number;
+        selectedIndex?: number;
         filter: boolean;
-        hideHeader: boolean;
+        hideHeader?: boolean;
         keepSorting: boolean;
-        exportFile: string;
+        exportFile?: string;
         scrolling: string;
         pageSize: number;
         paging: boolean;
         sorting: boolean;
-        selectionFilter: any[];
+        selectionFilter?: any[];
         dataSource: any;
-        storeKey: string;
+        storeKey?: string;
         actions: WUX.WField[];
-        actionsTitle: string;
-        actionsStyle: WUX.WStyle;
-        actionWidth: number;
+        actionsTitle?: string;
+        actionsStyle?: WUX.WStyle;
+        actionWidth?: number;
         groups: string[];
         groupsCols: number[][];
         _editable: boolean;
         editables: boolean[];
-        editmap: {};
-        filterOps: string[];
+        editmap: {
+            [key: string]: any;
+        };
+        filterOps?: string[];
         hiddenCols: string[];
-        $csa: JQuery;
-        $i: DevExpress.ui.dxDataGrid;
-        constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: string | Object, props?: any);
+        $csa?: JQuery;
+        $i?: DevExpress.ui.dxDataGrid | null;
+        constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: any, props?: any);
         get editable(): boolean;
         set editable(b: boolean);
         setCellEditable(row: number, col: number | string, editable: boolean): this;
@@ -234,13 +236,13 @@ declare namespace WUX {
         setColVisible(col: string, vis: boolean): this;
         edit(row: number, col: any, t?: number): this;
         getFilter(key: string): string;
-        getInstance(gopt?: DevExpress.ui.dxDataGridOptions): DevExpress.ui.dxDataGrid;
+        getInstance(gopt?: DevExpress.ui.dxDataGridOptions): DevExpress.ui.dxDataGrid | null;
         pageIndex(p: number): this;
         getSelectedKeys(): any[];
         getSelectedRows(): number[];
         isSelected(data: any): boolean;
         getSelectedRowsData(): any[];
-        getFilteredRowsData(): any[];
+        getFilteredRowsData(): any[] | null | undefined;
         cellValue(rowIndex: number, dataField: string): any;
         cellValue(rowIndex: number, dataField: string, value?: any): any;
         saveEditData(r?: number): this;
@@ -250,13 +252,13 @@ declare namespace WUX {
         protected componentWillUpdate(nextProps: any, nextState: any): void;
     }
     class WDXTreeView extends WUX.WComponent<string, any[]> {
-        height: number;
-        width: number;
-        searchEnabled: boolean;
-        selectionMode: 'multiple' | 'single';
-        selectByClick: boolean;
-        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView;
+        height?: number;
+        width?: number;
+        searchEnabled?: boolean;
+        selectionMode?: 'multiple' | 'single';
+        selectByClick?: boolean;
+        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: any);
+        getInstance(opt?: DevExpress.ui.dxTreeViewOptions): DevExpress.ui.dxTreeView | null;
         /**
             To expand on click:
             e.component.expandItem(e.node.key);
@@ -305,8 +307,8 @@ declare namespace WUX {
     class WDXSelectBox extends WUX.WComponent implements WISelectable {
         options: Array<string | WEntity>;
         searchEnabled: boolean;
-        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-        getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox;
+        constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: any);
+        getInstance(opt?: DevExpress.ui.dxSelectBoxOptions): DevExpress.ui.dxSelectBox | null;
         beforeInit(opt: DevExpress.ui.dxSelectBoxOptions): void;
         getProps(): any;
         findOption(text: string, d?: any): any;

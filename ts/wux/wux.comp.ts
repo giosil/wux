@@ -3,8 +3,8 @@ namespace WUX {
 	export let formWillMount: (c: WForm) => any;
 
 	export class Wrapp extends WComponent<WElement, any> {
-		isText: boolean;
-		constructor(props: WElement, tag?: string, id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		isText?: boolean;
+		constructor(props: WElement, tag?: string, id?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id, 'Wrapp', props, classStyle, style, attributes);
 			if(tag) this.rootTag = tag;
 		}
@@ -14,9 +14,11 @@ namespace WUX {
 			if(typeof this.props == 'string') {
 				if(!this.props || this.props.indexOf('<') < 0) {
 					this.isText = true;
-					return this.buildRoot(this.rootTag, this.props);
+					let r = this.buildRoot(this.rootTag, this.props);
+					return r ? r : '';
 				}
 			}
+			if (!this.props) return '';
 			return this.props;
 		}
 
@@ -42,7 +44,7 @@ namespace WUX {
 		asta: string[];     // Tail 
 		caft: WComponent[]; // Components after the container
 
-		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, inline?: boolean, type?: string) {
+		constructor(id?: string | null, classStyle?: string, style?: string | WStyle, attributes?: any, inline?: boolean, type?: string) {
 			// WComponent init
 			super(id ? id : '*', 'WContainer', type, classStyle, WUX.style(style), attributes);
 			// WContainer init
@@ -126,7 +128,7 @@ namespace WUX {
 			return this;
 		}
 
-		add(e: WElement): this {
+		add(e: WElement | null | undefined): this {
 			if (!e) return this;
 			if (typeof e == 'string') {
 				this.add(new Wrapp(e));
@@ -163,7 +165,7 @@ namespace WUX {
 			}
 		}
 
-		addGroup(w: WWrapper, ...ac: WElement[]): this {
+		addGroup(w: WWrapper, ...ac: (WElement | null | undefined)[]): this {
 			if (w) {
 				let cnt = this.addContainer(w);
 				if (!ac || !ac.length) return this;
@@ -183,7 +185,7 @@ namespace WUX {
 			let w = new WContainer();
 			w.addRow();
 			if(ac) {
-				let n = '1';
+				let n: string | undefined = '1';
 				if(typeof style != 'string') {
 					n = style.n;
 					if(!n) n = '1';
@@ -199,7 +201,7 @@ namespace WUX {
 		addStack(style: string | WStyle, ...ac: WElement[]): this {
 			let w = new WContainer();
 			if(ac) {
-				let n = '12';
+				let n: string | undefined = '12';
 				if(typeof style != 'string') {
 					n = style.n;
 					if(!n) n = '12';
@@ -214,14 +216,15 @@ namespace WUX {
 
 		addContainer(c: WUX.WContainer): WContainer;
 		addContainer(w: WWrapper): WContainer;
-		addContainer(i: string, classStyle?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer;
-		addContainer(c_w_i: WUX.WContainer | WWrapper | string , cls?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer {
+		addContainer(i: string, classStyle?: string | null, style?: string | null, attributes?: string | null, inline?: boolean, type?: string): WContainer;
+		addContainer(c_w_i: WUX.WContainer | WWrapper | string , cls?: string, style?: string, attributes?: string | null, inline?: boolean, type?: string): WContainer {
 			let c: WContainer;
 			if(typeof c_w_i == 'string') {
 				c = new WContainer(c_w_i, cls, style, attributes, inline, type);
 				this.add(c);
 			}
 			else if(c_w_i instanceof WContainer) {
+				c = c_w_i;
 				c_w_i.parent = this;
 				this.add(c_w_i);
 			}
@@ -265,7 +268,7 @@ namespace WUX {
 			return this;
 		}
 
-		addBox(title?: string, classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object): WBox {
+		addBox(title?: string, classStyle?: string, style?: string | WStyle, id?: string, attributes?: any): WBox {
 			let box = new WBox(id, title, classStyle, style, attributes);
 			this.add(box);
 			return box;
@@ -307,14 +310,15 @@ namespace WUX {
 			for(let s of this.asta) {
 				inner += s;
 			}
-			return this.buildRoot(this.rootTag, inner);
+			let r = this.buildRoot(this.rootTag, inner);
+			return r ? r : '';
 		}
 
 		protected componentDidMount(): void {
 			this._mount(this.context, this.root);
 		}
 
-		protected _mount(x: Element, r: Element): void {
+		protected _mount(x?: Element | null, r?: Element | null): void {
 			if (!x) x = this.context;
 			if (!r) r = this.root;
 			// Before the container (See componentWillMount)
@@ -355,7 +359,7 @@ namespace WUX {
 			for(let c of this.cbef) c.unmount(); // Components before the container
 		}
 
-		getElement(r: number, c?: number): HTMLElement {
+		getElement(r: number, c?: number): HTMLElement | null {
 			if(!this.grid || !this.grid.length) {
 				return null;
 			}
@@ -396,21 +400,21 @@ namespace WUX {
 	 *     footer
 	 */
 	export class WBox extends WContainer {
-		_title: string;
-		footer: string;
+		_title?: string;
+		footer?: string;
 		tools: WComponent[] = [];
-		collapsed: boolean = false;
-		_ce: boolean = false;
-		_ch: (e?: WEvent) => any;
+		collapsed?: boolean = false;
+		_ce?: boolean = false;
+		_ch?: ((e?: WEvent) => any) | null;
 	
-		constructor(id?: string, title?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, title?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id, classStyle, style, attributes, false, 'box');
 			if (!this._classStyle) this._classStyle = CSS.BOX_CLASS;
 			if (CSS.BOX_TAG) this.rootTag = CSS.BOX_TAG;
 			this._title = title;
 		}
 
-		get title(): string {
+		get title(): string | undefined {
 			return this._title;
 		}
 		set title(s: string) {
@@ -447,7 +451,7 @@ namespace WUX {
 			return super.end();
 		}
 
-		collapse(h?: (e?: WEvent) => any): this {
+		collapse(h?: ((e?: WEvent) => any) | null): this {
 			if (this.collapsed) return this;
 			// Chck if collapsible
 			if (!this._ce) return this;
@@ -464,7 +468,7 @@ namespace WUX {
 			return this;
 		}
 
-		expand(h?: (e?: WEvent) => any): this {
+		expand(h?: ((e?: WEvent) => any) | null): this {
 			if (!this.collapsed) return this;
 			// Chck if collapsible
 			if (!this._ce) return this;
@@ -575,11 +579,11 @@ namespace WUX {
 
 	export class WPages extends WComponent<any, number> {
 		components: WComponent[];
-		cbef: WUX.WComponent
-		caft: WUX.WComponent
+		cbef?: WUX.WComponent
+		caft?: WUX.WComponent
 		hs: number[]; // history
 		
-		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
+		constructor(id?: string, classStyle?: string, style?: string | WStyle, attributes?: any, props?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WPages', props, classStyle, style, attributes);
 			// WPages init
@@ -602,7 +606,7 @@ namespace WUX {
 			return this;
 		}
 
-		addContainer(cid?: string, cls?: string, style?: string, attributes?: string | object, inline?: boolean, type?: string): WContainer {
+		addContainer(cid?: string, cls?: string, style?: string, attributes?: string | null, inline?: boolean, type?: string): WContainer {
 			let c = new WContainer(cid, cls, style, attributes, inline, type);
 			this.add(c);
 			return c;
@@ -657,7 +661,7 @@ namespace WUX {
 			return true;
 		}
 
-		show(p: number, before?: (c: WComponent) => any, after?: (c: WComponent) => any, t: number = 0): WComponent {
+		show(p: number, before?: (c: WComponent) => any, after?: (c: WComponent) => any, t: number = 0): WComponent | null {
 			let l = this.components.length;
 			if (!l) return null;
 			if (!p) p = 0;
@@ -672,10 +676,11 @@ namespace WUX {
 			return c;
 		}
 
-		curr(): WComponent {
+		curr(): WComponent | null {
 			let l = this.components.length;
 			let i = this.state;
-			if(i >= 0 && i < l) return this.components[i];
+			if (i == null) return null;
+			if (i >= 0 && i < l) return this.components[i];
 			return null;
 		}
 
@@ -755,11 +760,11 @@ namespace WUX {
 	}
 
 	export class WLink extends WComponent<string, string> {
-		protected _href: string;
-		protected _target: string;
-		lock: boolean;
+		_href?: string;
+		_target?: string;
+		lock?: boolean;
 
-		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, href?: string, target?: string) {
+		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: any, href?: string, target?: string) {
 			// WComponent init
 			super(id ? id : '*', 'WLink', icon, classStyle, style, attributes);
 			this.updateState(text);
@@ -769,14 +774,14 @@ namespace WUX {
 			this._target = target;
 		}
 
-		get icon(): string {
+		get icon(): string | null | undefined {
 			return this.props;
 		}
 		set icon(s: string) {
 			this.update(s, this.state, true, false, false);
 		}
 
-		get href(): string {
+		get href(): string | undefined {
 			return this._href;
 		}
 		set href(s: string) {
@@ -791,7 +796,7 @@ namespace WUX {
 			}
 		}
 
-		get target(): string {
+		get target(): string | undefined {
 			return this._target;
 		}
 		set target(s: string) {
@@ -840,28 +845,28 @@ namespace WUX {
 			else {
 				html += WUX.buildIcon(this.icon);
 			}
-			this.root.innerHTML = html;
+			if (this.root) this.root.innerHTML = html;
 		}
 	}
 
 	export class WLabel extends WComponent<string, string> {
-		forId: string;
+		forId?: string | null;
 
-		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WLabel', icon, classStyle, style, attributes);
 			this.rootTag = 'span';
 			this.updateState(text);
 		}
 
-		get icon(): string {
+		get icon(): string | null | undefined {
 			return this.props;
 		}
 		set icon(i: string) {
 			this.update(i, this.state, true, false, false);
 		}
 
-		protected updateState(nextState: string): void {
+		protected updateState(nextState: string | null | undefined): void {
 			if (!nextState) nextState = '';
 			super.updateState(nextState);
 			if (this.root) this.root.innerHTML = WUX.buildIcon(this.props, '', ' ') + nextState;
@@ -872,25 +877,25 @@ namespace WUX {
 			return this;
 		}
 
-		protected render(): WElement {
+		protected render(): WElement | undefined {
 			let text = this.state ? this.state : '';
 			if (this.forId) return this.buildRoot('label', WUX.buildIcon(this.props, '', ' ') + text, 'for="' + this.forId + '"', this._classStyle);
 			return this.buildRoot(this.rootTag, WUX.buildIcon(this.props, '', ' ') + text, null, this._classStyle);
 		}
 
 		protected componentDidMount(): void {
-			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
+			if (this._tooltip && this.root) this.root.setAttribute('title', this._tooltip);
 		}
 	}
 
 	export class WInput extends WComponent<string, string> {
-		size: number;
-		label: string;
-		placeHolder: string;
-		_ro: boolean;
-		_af: boolean;
+		size?: number;
+		label?: string;
+		placeHolder?: string;
+		_ro?: boolean;
+		_af?: boolean;
 
-		constructor(id?: string, type?: string, size?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, type?: string, size?: number, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WInput', type, classStyle, style, attributes);
 			this.rootTag = 'input';
@@ -898,12 +903,12 @@ namespace WUX {
 			this.size = size;
 		}
 
-		get readonly(): boolean {
+		get readonly(): boolean | undefined {
 			return this._ro;
 		}
 		set readonly(v: boolean) {
 			this._ro = v;
-			if(this.mounted) {
+			if(this.root) {
 				if(v) {
 					this.root.setAttribute('readonly', '');
 				}
@@ -913,12 +918,12 @@ namespace WUX {
 			}
 		}
 
-		get autofocus(): boolean {
+		get autofocus(): boolean | undefined {
 			return this._af;
 		}
 		set autofocus(v: boolean) {
 			this._af = v;
-			if(this.mounted) {
+			if(this.root) {
 				if(v) {
 					this.root.setAttribute('autofocus', '');
 				}
@@ -940,17 +945,17 @@ namespace WUX {
 			return true;
 		}
 
-		protected updateState(nextState: string) {
+		protected updateState(nextState: string | null) {
 			// At runtime nextState can be of any type 
 			nextState = WUtil.toString(nextState);
 			if (!nextState) nextState = '';
 			super.updateState(nextState);
-			if (this.root) this.root['value'] = nextState;
+			if (this.root) (this.root as any)['value'] = nextState;
 		}
 
-		getState(): string {
+		getState(): string | null | undefined {
 			if(this.root) {
-				this.state = this.root['value'];
+				this.state =(this.root as any)['value'];
 			}
 			if(this.state) this.state = this.state.trim();
 			return this.state;
@@ -987,7 +992,7 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
-			let i = document.getElementById(this.id);
+			let i = this.id ? document.getElementById(this.id) : this.root as HTMLElement;
 			if (!i) return;
 			i.addEventListener("keydown", (e: KeyboardEvent) => {
 				if (e.key === "Enter") {
@@ -1001,22 +1006,22 @@ namespace WUX {
 	}
 
 	export class WTextArea extends WComponent<number, string> {
-		_ro: boolean;
-		_af: boolean;
+		_ro?: boolean;
+		_af?: boolean;
 
-		constructor(id?: string, rows?: number, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, rows?: number, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WTextArea', rows, classStyle, style, attributes);
 			this.rootTag = 'textarea';
 			if (!rows) this.props = 5;
 		}
 
-		get readonly(): boolean {
+		get readonly(): boolean | undefined {
 			return this._ro;
 		}
 		set readonly(v: boolean) {
 			this._ro = v;
-			if(this.mounted) {
+			if (this.root) {
 				if(v) {
 					this.root.setAttribute('readonly', '');
 				}
@@ -1026,12 +1031,12 @@ namespace WUX {
 			}
 		}
 
-		get autofocus(): boolean {
+		get autofocus(): boolean | undefined {
 			return this._af;
 		}
 		set autofocus(v: boolean) {
 			this._af = v;
-			if(this.mounted) {
+			if (this.root) {
 				if(v) {
 					this.root.setAttribute('autofocus', '');
 				}
@@ -1044,12 +1049,12 @@ namespace WUX {
 		protected updateState(nextState: string) {
 			if (!nextState) nextState = '';
 			super.updateState(nextState);
-			if (this.root) this.root['value'] = nextState;
+			if (this.root) (this.root as any)['value'] = nextState;
 		}
 
-		getState(): string {
+		getState(): string | null | undefined {
 			if(this.root) {
-				this.state = this.root['value'];
+				this.state = (this.root as any)['value'];
 			}
 			return this.state;
 		}
@@ -1092,6 +1097,7 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
+			if (!this.root) return;
 			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
 			if (this.state) this.root.textContent = this.state;
 		}
@@ -1099,9 +1105,9 @@ namespace WUX {
 	
 	export class WButton extends WComponent<string, string> {
 		public readonly type: string;
-		lock: boolean;
+		lock?: boolean;
 
-		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: string | object, type?: string) {
+		constructor(id?: string, text?: string, icon?: string, classStyle?: string, style?: string | WStyle, attributes?: any, type?: string) {
 			// WComponent init
 			super(id ? id : '*', 'WButton', icon, classStyle, style, attributes);
 			this.updateState(text);
@@ -1110,19 +1116,19 @@ namespace WUX {
 			this.type = type ? type : 'button';
 		}
 
-		get icon(): string {
+		get icon(): string | null | undefined {
 			return this.props;
 		}
 		set icon(i: string) {
 			this.update(i, this.state, true, false, false);
 		}
 
-		setText(text?: string, icon?: string) {
+		setText(text?: string | null, icon?: string) {
 			if (icon != null) this.props = icon;
 			this.setState(text);
 		}
 
-		setState(nextState: string, force?: boolean, callback?: () => any): this {
+		setState(nextState: string | null | undefined, force?: boolean, callback?: () => any): this {
 			if (this.lock) return this;
 			return super.setState(nextState, force, callback);
 		}
@@ -1140,7 +1146,7 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
-			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
+			if (this._tooltip && this.root) this.root.setAttribute('title', this._tooltip);
 		}
 
 		protected componentWillUpdate(nextProps: any, nextState: any): void {
@@ -1152,21 +1158,21 @@ namespace WUX {
 			else {
 				html += WUX.buildIcon(nextProps);
 			}
-			this.root.innerHTML = html;
+			if (this.root) this.root.innerHTML = html;
 		}
 	}
 
 	export class WCheck extends WComponent<boolean, any> {
-		divClass: string;
-		divStyle: string;
-		label: string;
+		divClass?: string;
+		divStyle?: string;
+		label?: string;
 		value: any;
 		noval: any;
-		text: string;
-		lever: boolean;
+		text?: string | null;
+		lever?: boolean;
 		leverStyle: string;
 
-		constructor(id?: string, text?: string, value?: any, checked?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, text?: string | null, value?: any, checked?: boolean, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WCheck', checked, classStyle, style, attributes);
 			this.rootTag = 'input';
@@ -1177,8 +1183,8 @@ namespace WUX {
 			this.leverStyle = CSS.LEVER_STYLE;
 		}
 
-		get checked(): boolean {
-			if(this.root) this.props = !!this.root['checked'];
+		get checked(): boolean | null | undefined {
+			if(this.root) this.props = !!(this.root as any)['checked'];
 			this.state = this.props ? this.value : this.noval;
 			return this.props;
 		}
@@ -1199,7 +1205,7 @@ namespace WUX {
 		}
 
 		getState(): any {
-			if(this.root) this.props = !!this.root['checked'];
+			if(this.root) this.props = !!(this.root as any)['checked'];
 			this.state = this.props ? this.value : this.noval;
 			return this.state;
 		}
@@ -1208,7 +1214,7 @@ namespace WUX {
 			super.updateProps(nextProps);
 			if(this.props == null) this.props = false;
 			this.state = this.props ? this.value : this.noval;
-			if (this.root) this.root['checked'] = this.props;
+			if (this.root) (this.root as any)['checked'] = this.props;
 		}
 
 		protected updateState(nextState: any) {
@@ -1221,7 +1227,7 @@ namespace WUX {
 				if (this.state == 'true') this.state = this.value;
 				this.props = this.state && this.state == this.value;
 			}
-			if (this.root) this.root['checked'] = this.props;
+			if (this.root) (this.root as any)['checked'] = this.props;
 		}
 
 		protected render(): WElement {
@@ -1281,7 +1287,7 @@ namespace WUX {
 					this.root.setAttribute('disabled', '');
 				}
 				this.root.addEventListener("change", (e: Event) => {
-					this.props = !!this.root['checked'];
+					this.props = !!(this.root as any)['checked'];
 					this.state = this.props ? this.value : this.noval;
 					this.trigger('statechange', this.state);
 				});
@@ -1291,15 +1297,15 @@ namespace WUX {
 	
 	export class WRadio extends WComponent<string, any> implements WISelectable {
 		options: Array<string | WEntity>;
-		label: string;
+		label?: string;
 		classDiv: string;
-		styleDiv: string;
+		styleDiv?: string;
 
-		constructor(id?: string, options?: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
+		constructor(id?: string, options?: Array<string | WEntity>, classStyle?: string, style?: string | WStyle, attributes?: any, props?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WRadio', props, classStyle, style, attributes);
 			// WRadio init 
-			this.options = options;
+			this.options = options ? options : [];
 			this.classDiv = 'form-check form-check-inline';
 		}
 
@@ -1340,13 +1346,13 @@ namespace WUX {
 			return this;
 		}
 
-		getProps(): string {
+		getProps(): string | null {
 			if (!this.options || !this.options.length) return null;
 			for (let i = 0; i < this.options.length; i++) {
 				let rid = this.id + '-' + i;
 				let item = document.getElementById(rid);
 				if (!item) continue;
-				if (item['checked']) {
+				if ((item as any)['checked']) {
 					let lbl = document.getElementById(rid + '-l');
 					if(lbl) return lbl.innerText;
 				}
@@ -1373,7 +1379,7 @@ namespace WUX {
 			if (!this.mounted) return this;
 			let p = this.getState();
 			let o = this.buildOptions();
-			this.root.innerHTML = o;
+			if (this.root) this.root.innerHTML = o;
 			if (prevVal) {
 				this.setState(p);
 			}
@@ -1390,7 +1396,7 @@ namespace WUX {
 			this.options.push(e);
 			if (!this.mounted) return this;
 			let o = this.buildOptions();
-			this.root.innerHTML = o;
+			if (this.root) this.root.innerHTML = o;
 			if (sel) this.updateState(e);
 			return this;
 		}
@@ -1401,7 +1407,7 @@ namespace WUX {
 			this.options.splice(x, 1);
 			if (!this.mounted) return this;
 			let o = this.buildOptions();
-			this.root.innerHTML = o;
+			if (this.root) this.root.innerHTML = o;
 			return this;
 		}
 
@@ -1458,7 +1464,7 @@ namespace WUX {
 			if(idx >= 0) {
 				let item = document.getElementById(this.id + '-' + idx);
 				// This don't dispatch the event 'change'
-				if (item) item['checked'] = true;
+				if (item) (item as any)['checked'] = true;
 			}
 		}
 
@@ -1507,23 +1513,23 @@ namespace WUX {
 
 	export class WSelect extends WComponent implements WISelectable {
 		options: Array<string | WEntity>;
-		multiple: boolean;
+		multiple?: boolean;
 
-		constructor(id?: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, options?: Array<string | WEntity>, multiple?: boolean, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			// WComponent init
 			super(id ? id : '*', 'WSelect', null, classStyle, style, attributes);
 			// WSelect init
 			this.rootTag = 'select';
-			this.options = options;
+			this.options = options ? options : [];
 			this.multiple = multiple;
 		}
 
 		getProps(): any {
 			if (!this.root) return this.props;
 			this.props = [];
-			let options = this.root["options"] as HTMLOptionElement[];
+			let options = (this.root as any)["options"] as HTMLOptionElement[];
 			if(options && options.length) {
-				let s = WUtil.toNumber(this.root["selectedIndex"], -1);
+				let s = WUtil.toNumber((this.root as any)["selectedIndex"], -1);
 				if(s >= 0 && options.length > s) {
 					this.props.push(options[s].text);
 				}
@@ -1557,7 +1563,7 @@ namespace WUX {
 			this.options.push(e);
 			if (!this.mounted) return this;
 			let o = this.buildOptions();
-			this.root.innerHTML = o;
+			if (this.root) this.root.innerHTML = o;
 			if (sel) this.updateState(e);
 			return this;
 		}
@@ -1568,7 +1574,7 @@ namespace WUX {
 			this.options.splice(x, 1);
 			if (!this.mounted) return this;
 			let o = this.buildOptions();
-			this.root.innerHTML = o;
+			if (this.root) this.root.innerHTML = o;
 			return this;
 		}
 
@@ -1578,12 +1584,12 @@ namespace WUX {
 
 		setOptions(options: Array<string | WEntity>, prevVal?: boolean): this {
 			this.options = options;
-			if (!this.mounted) return this;
-			let p = this.root["value"];
+			if (!this.root) return this;
+			let p = (this.root as any)["value"];
 			let o = this.buildOptions();
 			this.root.innerHTML = o;
 			if (prevVal) {
-				this.root["value"] = p;
+				(this.root as any)["value"] = p;
 			}
 			else if (options && options.length) {
 				if (typeof options[0] == 'string') {
@@ -1600,18 +1606,18 @@ namespace WUX {
 			super.updateState(nextState);
 			if (this.root) {
 				if (this.state == null) {
-					this.root["value"] = '';
+					(this.root as any)["value"] = '';
 				}
 				else if (typeof this.state == 'string' || typeof this.state == 'number') {
-					this.root["value"] = '' + this.state;
+					(this.root as any)["value"] = '' + this.state;
 				}
 				else {
-					this.root["value"] = this.state.id;
+					(this.root as any)["value"] = this.state.id;
 				}
 			}
 		}
 
-		protected render(): WElement {
+		protected render(): WElement | undefined {
 			let o = this.buildOptions();
 			let addAttributes = 'name="' + this.id + '"';
 			if (this.multiple) addAttributes += ' multiple="multiple"';
@@ -1622,10 +1628,11 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
+			if (!this.root) return;
 			if (this._tooltip) this.root.setAttribute('title', this._tooltip);
-			if (this.state) this.root["value"] = this.state;
+			if (this.state) (this.root as any)["value"] = this.state;
 			this.root.addEventListener('change', () => {
-				this.trigger('statechange', this.root["value"]);
+				this.trigger('statechange', (this.root as any)["value"]);
 			});
 		}
 
@@ -1657,29 +1664,29 @@ namespace WUX {
 	export class WTable extends WComponent<any, any[]> {
 		header: string[];
 		keys: any[];
-		types: string[];
+		types?: string[];
 		widths: number[];
-		widthsPerc: boolean;
-		hideHeader: boolean;
-		div: string; 
+		widthsPerc?: boolean;
+		hideHeader?: boolean;
+		div?: string; 
 
-		colStyle: string | WStyle;
-		rowStyle: string | WStyle;
-		headStyle: string | WStyle;
-		footerStyle: string | WStyle;
+		colStyle?: string | WStyle;
+		rowStyle?: string | WStyle;
+		headStyle?: string | WStyle;
+		footerStyle?: string | WStyle;
 		/** First col style */
-		col0Style: string | WStyle;
+		col0Style?: string | WStyle;
 		/** Last col style */
-		colLStyle: string | WStyle;
+		colLStyle?: string | WStyle;
 
-		sortable: number[];
-		soId: string[];
-		sortBy: number[];
+		sortable?: number[];
+		soId?: string[];
+		sortBy?: number[];
 		reqSort: number = -1;
 		prvSort: number = -1;
 
 		selClass: string;
-		selectionMode: 'single' | 'multiple' | 'none';
+		selectionMode?: 'single' | 'multiple' | 'none';
 		selectedRow: number = -1;
 
 		paging: boolean = false;
@@ -1687,7 +1694,7 @@ namespace WUX {
 		page: number = 1;
 		rows: number = 0;
 
-		constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: string | object, props?: any) {
+		constructor(id: string, header: string[], keys?: any[], classStyle?: string, style?: string | WStyle, attributes?: any, props?: any) {
 			super(id ? id : '*', 'WTable', props, classStyle, style, attributes);
 			this.rootTag = 'table';
 			this.header = header;
@@ -1838,7 +1845,7 @@ namespace WUX {
 					let j = -1;
 					for (let h of this.header) {
 						j++;
-						let s: string | WStyle;
+						let s: string | WStyle | undefined;
 						if (j == 0) {
 							s = this.col0Style ? this.col0Style : this.colStyle;
 						}
@@ -1857,6 +1864,7 @@ namespace WUX {
 						let so = this.sortable && this.sortable.indexOf(j) >= 0;
 						if(so) {
 							let aid = this.subId('sort_' + j);
+							if (!this.soId) this.soId = [];
 							this.soId.push(aid);
 							r += '<th' + WUX.buildCss(s, x) + '><a style="cursor:pointer;text-decoration:none !important;" id="' + aid + '">' + h + ' &nbsp;<i class="fa fa-unsorted"></i></a></th>';
 						}
@@ -1890,19 +1898,19 @@ namespace WUX {
 								let hs = this.handlers['_sort'];
 								let ds = !(hs && hs.length) && this.keys && this.keys.length > c;
 								let h = this.header[c];
-								let v = this.sortBy[c];
+								let v = this.sortBy ? this.sortBy[c] : null;
 								if(!v) {
-									this.sortBy[c] = 1;
+									if (this.sortBy) this.sortBy[c] = 1;
 									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-asc"></i>';
 									if(ds) this.setState(WUtil.sort(this.state, true, this.keys[c]));
 								}
 								else if(v == 1) {
-									this.sortBy[c] = -1;
+									if (this.sortBy) this.sortBy[c] = -1;
 									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-desc"></i>';
 									if(ds) this.setState(WUtil.sort(this.state, false, this.keys[c]));
 								}
 								else if(v == -1) {
-									this.sortBy[c] = 0;
+									if (this.sortBy) this.sortBy[c] = 0;
 									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
 								}
 								if(hs) {
@@ -1927,7 +1935,7 @@ namespace WUX {
 					if(i < 0) return;
 					this.select([i]);
 				});
-				b.addEventListener('dblclick', (e: PointerEvent) => {
+				b.addEventListener('dblclick', (e: MouseEvent) => {
 					if(!this.handlers['_doubleclick']) return;
 					let t = e.target as HTMLElement;
 					if(!t) return;
@@ -1950,14 +1958,14 @@ namespace WUX {
 
 		protected updSort(): void {
 			if(this.prvSort == -1 || this.reqSort == this.prvSort) return;
-			let v = this.sortBy[this.prvSort];
+			let v = this.sortBy ? this.sortBy[this.prvSort] : null;
 			if(!v) return;
 			let aid = this.subId('sort_' + this.prvSort);
 			let a = document.getElementById(aid);
 			if(!a) return;
 			let h = this.header[this.prvSort];
 			if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
-			this.sortBy[this.prvSort] = 0;
+			if (this.sortBy) this.sortBy[this.prvSort] = 0;
 		}
 
 		protected getType(i: number): string {
@@ -2030,7 +2038,7 @@ namespace WUX {
 								align = 'text-right';
 							}
 					}
-					let s: string | WStyle;
+					let s: string | WStyle | undefined;
 					if (j == 0) {
 						s = this.col0Style ? this.col0Style : this.colStyle;
 					}
@@ -2074,22 +2082,22 @@ namespace WUX {
 	}
 
 	export class WForm extends WComponent<WField[][], any> {
-		title: string;
-		fieldset: Element;
-		rows: WField[][];
-		roww: WWrapper[];
-		currRow: WField[];
-		main: WContainer;
-		foot: WContainer;
-		footer: WElement[];
-		footerClass: string;
-		footerStyle: string | WStyle;
-		captions: WComponent[];
-		mainClass: string;
-		mainStyle: string | WStyle;
-		groupStyle: string | WStyle;
-		tips: { [fid: string]: string };
-		leg: Element;
+		title?: string;
+		fieldset?: Element;
+		rows?: WField[][];
+		roww?: WWrapper[];
+		currRow?: WField[] | null;
+		main?: WContainer;
+		foot?: WContainer;
+		footer?: WElement[];
+		footerClass?: string;
+		footerStyle?: string | WStyle;
+		captions?: WComponent[];
+		mainClass?: string;
+		mainStyle?: string | WStyle;
+		groupStyle?: string | WStyle;
+		tips?: { [fid: string]: string };
+		leg?: Element | null;
 
 		constructor(id?: string, title?: string, action?: string) {
 			// WComponent init
@@ -2143,7 +2151,7 @@ namespace WUX {
 			return this;
 		}
 
-		legend(inner: string, cls?: string, css?: string | WStyle, attr?: string | object): this {
+		legend(inner: string, cls?: string, css?: string | WStyle, attr?: any): this {
 			if (inner) {
 				this.leg = WUX.create('legend', inner, css, attr, '', cls);
 			}
@@ -2195,7 +2203,7 @@ namespace WUX {
 			return this;
 		}
 
-		first(enabled?: boolean): WField {
+		first(enabled?: boolean): WField | null {
 			if (!this.rows) return null;
 			for (let row of this.rows) {
 				for (let f of row) {
@@ -2224,8 +2232,8 @@ namespace WUX {
 			return this;
 		}
 
-		getField(fid: string): WField {
-			if (!fid) return;
+		getField(fid: string): WField | null {
+			if (!fid || !this.rows) return null;
 			let sid = fid.indexOf(this.id + '-') == 0 ? fid : this.subId(fid);
 			for (let i = 0; i < this.rows.length; i++) {
 				let row = this.rows[i];
@@ -2234,10 +2242,10 @@ namespace WUX {
 					if (f.id == sid) return f;
 				}
 			}
-			return;
+			return null;
 		}
 
-		getComponent(fid: string, def?: WComponent): WComponent {
+		getComponent(fid: string, def?: WComponent): WComponent | undefined {
 			let f = this.getField(fid);
 			if(!f) {
 				console.error('[' + str(this) + '] Field ' + fid + ' not found.');
@@ -2266,8 +2274,8 @@ namespace WUX {
 			if (!f) return this;
 			let c = f.component;
 			if (!c) return this;
-			if (typeof c['setOptions'] == 'function') {
-				c['setOptions'](options, prevVal);
+			if (typeof (c as any)['setOptions'] == 'function') {
+				(c as any)['setOptions'](options, prevVal);
 			}
 			return this;
 		}
@@ -2276,8 +2284,8 @@ namespace WUX {
 			if (!text) text = '';
 			let c = this.getComponent(fid);
 			if(!c) return d;
-			if (typeof c['findOption'] == 'function') {
-				return c['findOption'](text, d);
+			if (typeof (c as any)['findOption'] == 'function') {
+				return (c as any)['findOption'](text, d);
 			}
 			return d;
 		}
@@ -2285,8 +2293,8 @@ namespace WUX {
 		indexOption(fid: string, e: string | WEntity): number {
 			let c = this.getComponent(fid);
 			if(!c) return -3;
-			if (typeof c['indexOption'] == 'function') {
-				return c['indexOption'](e);
+			if (typeof (c as any)['indexOption'] == 'function') {
+				return (c as any)['indexOption'](e);
 			}
 			return -4;
 		}
@@ -2294,8 +2302,8 @@ namespace WUX {
 		addOption(fid: string, e: string | WEntity, sel?: boolean): this {
 			let c = this.getComponent(fid);
 			if(!c) return this;
-			if (typeof c['addOption'] == 'function') {
-				c['addOption'](e, sel);
+			if (typeof (c as any)['addOption'] == 'function') {
+				(c as any)['addOption'](e, sel);
 			}
 			return this;
 		}
@@ -2303,8 +2311,8 @@ namespace WUX {
 		remOption(fid: string, e: string | WEntity): this {
 			let c = this.getComponent(fid);
 			if(!c) return this;
-			if (typeof c['remOption'] == 'function') {
-				c['remOption'](e);
+			if (typeof (c as any)['remOption'] == 'function') {
+				(c as any)['remOption'](e);
 			}
 			return this;
 		}
@@ -2314,7 +2322,8 @@ namespace WUX {
 			return this;
 		}
 
-		addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: string | object, type: string = 'row'): this {
+		addRow(classStyle?: string, style?: string | WStyle, id?: string, attributes?: any, type: string = 'row'): this {
+			if (!this.roww) this.roww = [];
 			if (this.currRow && !this.currRow.length) {
 				this.roww[this.roww.length - 1] = {
 					classStyle: classStyle,
@@ -2326,6 +2335,7 @@ namespace WUX {
 				return this;
 			}
 			this.currRow = [];
+			if (!this.rows) this.rows = [];
 			this.rows.push(this.currRow);
 			this.roww.push({
 				classStyle: classStyle,
@@ -2345,7 +2355,7 @@ namespace WUX {
 				co.onEnter((e: KeyboardEvent) => {
 					// This control cannot be taken out because the handler can be configured after the field is added.
 					if (this.handlers['_enter']) {
-						if (e) e["data"] = this.ripId(id);
+						if (e) (e as any)["data"] = this.ripId(id);
 						for (let h of this.handlers['_enter']) h(e);
 					}
 				});
@@ -2364,6 +2374,7 @@ namespace WUX {
 			f.label = label;
 			f.component = co;
 			f.type = type;
+			if (!this.currRow) this.currRow = [];
 			this.currRow.push(f);
 			return this;
 		}
@@ -2494,7 +2505,7 @@ namespace WUX {
 		addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this {
 			let co = new WContainer('', classStyle, style);
 			if(e) co.add(e);
-			return this._add('', label, co, 'blank', {});
+			return this._add('', label ? label : '', co, 'blank', {});
 		}
 
 		addCaption(text: string, icon?: string, classStyle?: string, style?: string | WStyle, opts?: WField): this {
@@ -2508,12 +2519,14 @@ namespace WUX {
 			let vs = WUtil.toString(value);
 			let co = new WInput(id, 'hidden');
 			co.setState(vs)
+			if (!this.currRow) this.currRow = [];
 			this.currRow.push({ id: id, component: co, value: vs, type: 'hidden' });
 			return this;
 		}
 
 		addInternalField(fid: string, value?: any): this {
 			if (value === undefined) value = null;
+			if (!this.currRow) this.currRow = [];
 			this.currRow.push({ id: this.subId(fid), value: value, type: 'internal' });
 			return this;
 		}
@@ -2543,13 +2556,15 @@ namespace WUX {
 		setTooltip(fid: string, text: string): this {
 			let f = this.getField(fid);
 			if (!f) return this;
-			if (!text) {
-				delete this.tips[f.id];
-				f.tooltip = '';
-			}
-			else {
-				this.tips[f.id] = text;
-				f.tooltip = text;
+			if (this.tips && f.id) {
+				if (!text) {
+					delete this.tips[f.id];
+					f.tooltip = '';
+				}
+				else {
+					this.tips[f.id] = text;
+					f.tooltip = text;
+				}
 			}
 			return this;
 		}
@@ -2575,7 +2590,7 @@ namespace WUX {
 		}
 
 		addToFooter(c: WElement): this {
-			if (!c && !this.footer) return this;
+			if (!c || !this.footer) return this;
 			this.footer.push(c)
 			return this;
 		}
@@ -2593,9 +2608,11 @@ namespace WUX {
 			if (!this._enabled) {
 				this.fieldset.setAttribute('disabled', '');
 			}
-			this.root.appendChild(this.fieldset);
+			if (this.root) this.root.appendChild(this.fieldset);
 
 			this.main = new WContainer(this.id + '__c', this.mainClass, this.mainStyle);
+			if (!this.rows) this.rows = [];
+			if (!this.roww) this.roww = [];
 			for (let i = 0; i < this.rows.length; i++) {
 				let w = this.roww[i];
 				this.main.addRow(WUX.cls(w.type, w.classStyle, w.style), WUX.style(w.style));
@@ -2649,8 +2666,8 @@ namespace WUX {
 							lc = f.classStyle;
 						}
 						let l = new WLabel(f.id + '-l', f.label + r, '', lc, ls);
-						l.tooltip = this.tips[f.id];
-						f.labelComp = l.for(f.id);
+						l.tooltip = this.tips && f.id ? this.tips[f.id] : '';
+						f.labelComp = l.for(f.id ? f.id : '');
 					}
 					
 					if (g) {
@@ -2680,6 +2697,7 @@ namespace WUX {
 		componentWillUnmount(): void {
 			if (this.main) this.main.unmount();
 			if (this.foot) this.foot.unmount();
+			if (!this.rows) return;
 			for (let r of this.rows) {
 				for (let f of r) {
 					let c = f.component;
@@ -2689,6 +2707,7 @@ namespace WUX {
 		}
 
 		clear(): this {
+			if (!this.rows) return this;
 			for (let i = 0; i < this.rows.length; i++) {
 				let row = this.rows[i];
 				for (let j = 0; j < row.length; j++) {
@@ -2710,8 +2729,8 @@ namespace WUX {
 			if (c) {
 				if (v && cbNoOpt) {
 					let i = -3;
-					if (typeof c['indexOption'] == 'function') {
-						i = c['indexOption'](v);
+					if (typeof (c as any)['indexOption'] == 'function') {
+						i = (c as any)['indexOption'](v);
 					}
 					if (i == -1 || i == null) {
 						cbNoOpt(c, v);
@@ -2750,8 +2769,8 @@ namespace WUX {
 			if (c) {
 				if (w && cbNoOpt) {
 					let i = -3;
-					if (typeof c['indexOption'] == 'function') {
-						i = c['indexOption'](w);
+					if (typeof (c as any)['indexOption'] == 'function') {
+						i = (c as any)['indexOption'](w);
 					}
 					if (i == -1 || i == null) {
 						cbNoOpt(c, w);
@@ -2789,7 +2808,7 @@ namespace WUX {
 					if (v) c++;
 				}
 			}
-			else {
+			else if (this.rows) {
 				for (let r of this.rows) {
 					for (let f of r) {
 						let v = f.component ? f.component.getState() : f.value;
@@ -2809,7 +2828,7 @@ namespace WUX {
 					if (v) return false;
 				}
 			}
-			else {
+			else if (this.rows) {
 				for (let r of this.rows) {
 					for (let f of r) {
 						let v = f.component ? f.component.getState() : f.value;
@@ -2820,9 +2839,9 @@ namespace WUX {
 			return true;
 		}
 
-		getFile(fid: string, onload: (f: File, b64: string) => any): File;
-		getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File;
-		getFile(fid: string, x: number | ((f: File, b64: string) => any), onload?: (f: File, b64: string) => any): File {
+		getFile(fid: string, onload: (f: File, b64: string) => any): File | null;
+		getFile(fid: string, x: number, onload: (f: File, b64: string) => any): File | null;
+		getFile(fid: string, x: number | ((f: File, b64: string) => any), onload?: (f: File, b64: string) => any): File | null {
 			let f = this.getField(fid);
 			if (!f || !f.id) return null;
 			let i = document.getElementById(f.id) as HTMLInputElement;
@@ -2876,17 +2895,18 @@ namespace WUX {
 			return this;
 		}
 
-		getValues(f?: boolean): any {
+		getValues(ts?: boolean): any {
 			let v = {};
+			if (!this.rows) return v;
 			for (let r of this.rows) {
 				for (let f of r) {
 					let k = this.ripId(f.id);
 					if (!k) continue;
-					if(f) {
-						v[k] = WUtil.toString(f.component ? f.component.getState() : f.value);
+					if(ts) {
+						(v as any)[k] = WUtil.toString(f.component ? f.component.getState() : f.value);
 					}
 					else {
-						v[k] = f.component ? f.component.getState() : f.value;
+						(v as any)[k] = f.component ? f.component.getState() : f.value;
 					}
 				}
 			}
@@ -2929,7 +2949,7 @@ namespace WUX {
 				let row = this.rows[i];
 				for (let j = 0; j < row.length; j++) {
 					let f = row[j];
-					if (sids.indexOf(f.id) >= 0) {
+					if (f.id && sids.indexOf(f.id) >= 0) {
 						f.required = true;
 					}
 					else {
@@ -2949,14 +2969,15 @@ namespace WUX {
 			let values = this.getState();
 			if (!values) values = {};
 			let r = '';
-			let x = '';
+			let x: string | null | undefined = '';
 			let a = false;
+			if (!this.rows) this.rows = [];
 			for (let i = 0; i < this.rows.length; i++) {
 				let row = this.rows[i];
 				for (let j = 0; j < row.length; j++) {
 					let f = row[j];
 					let id = this.ripId(f.id);
-					let v = values[id];
+					let v = id ? values[id] : null;
 					if (f.required) {
 						if (v == null || v == '') {
 							if (labels) {

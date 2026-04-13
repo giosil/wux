@@ -345,7 +345,7 @@
 		setTimeout(() => { URL.revokeObjectURL(url); }, 1000);
 	}
 
-	export function getAction(ie: string | Event, c?: WUX.WComponent, tag?: string): WAction {
+	export function getAction(ie?: string | Event | null, c?: WUX.WComponent, tag?: string): WAction | null {
 		if(!ie) return null;
 		if(typeof ie == 'string') {
 			let s = WUX.lastSub(ie);

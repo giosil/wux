@@ -6,7 +6,7 @@ class WuxDOM {
 
 	private static renderHandlers: ((e: WUX.WEvent) => any)[] = [];
 	private static unmountHandlers: ((e: WUX.WEvent) => any)[] = [];
-	private static lastCtx: Element;
+	private static lastCtx: Element | null;
 
 	static onRender(handler: (e: WUX.WEvent) => any) {
 		WuxDOM.renderHandlers.push(handler);
@@ -14,12 +14,12 @@ class WuxDOM {
 	static onUnmount(handler: (e: WUX.WEvent) => any) {
 		WuxDOM.unmountHandlers.push(handler);
 	}
-	static getLastContext(): Element {
+	static getLastContext(): Element | null {
 		return WuxDOM.lastCtx;
 	}
 
-	static register(node: WUX.WNode, c?: WUX.WComponent | 'delete'): WUX.WComponent {
-		if (!node) return;
+	static register(node?: WUX.WNode | null, c?: WUX.WComponent | 'delete'): WUX.WComponent | null {
+		if (!node) return null;
 		let id: string;
 		if (typeof node == 'string') {
 			id = node.indexOf('#') == 0 ? node.substring(1) : node;
@@ -36,7 +36,7 @@ class WuxDOM {
 		WuxDOM.components[id] = c;
 		return c;
 	}
-	static render(component: WUX.WElement, node?: WUX.WNode, before?: (n?: WUX.WNode) => any, after?: (n?: WUX.WNode) => any): void {
+	static render(component: WUX.WElement, node?: WUX.WNode | null, before?: (n?: WUX.WNode | null) => any, after?: (n?: WUX.WNode | null) => any): void {
 		if (WUX.debug) console.log('WuxDOM.render ' + WUX.str(component) + ' on ' + WUX.str(node) + '...');
 		WUX.global.init(() => {
 			if (!node) node = WuxDOM.lastCtx ? WuxDOM.lastCtx : document.getElementById('view-root');
@@ -45,21 +45,21 @@ class WuxDOM {
 			WuxDOM.lastCtx = ctx;
 			if (after) after(node);
 			if (WuxDOM.renderHandlers.length > 0) {
-				let c: WUX.WComponent = component instanceof WUX.WComponent ? component : null;
-				let e: WUX.WEvent = { component: c, element: ctx, target: ctx.firstChild, type: 'render' };
+				let c: WUX.WComponent | null = component instanceof WUX.WComponent ? component : null;
+				let e: WUX.WEvent = { component: c, element: ctx, target: ctx ? ctx.firstChild : null, type: 'render' };
 				for (let handler of WuxDOM.renderHandlers) handler(e);
 				WuxDOM.renderHandlers = [];
 			}
 		})
 	}
-	static mount(e: WUX.WElement, node?: WUX.WNode): Element {
+	static mount(e?: WUX.WElement, node?: WUX.WNode | null): Element | null {
 		if (!node) node = WuxDOM.lastCtx ? WuxDOM.lastCtx : document.getElementById('view-root');
 		if (WUX.debug) console.log('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + '...');
 		if (e == null) {
 			console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> invalid component');
-			return;
+			return null;
 		}
-		let ctx: Element;
+		let ctx: Element | null;
 		if (typeof node == 'string') {
 			ctx = document.getElementById(node);
 			if(!ctx) ctx = document.querySelector(node);
@@ -69,7 +69,7 @@ class WuxDOM {
 		}
 		if (!ctx) {
 			console.error('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' -> context unavailable');
-			return;
+			return null;
 		}
 		WuxDOM.lastCtx = ctx;
 		if (e instanceof WUX.WComponent) {
@@ -87,10 +87,10 @@ class WuxDOM {
 		if (WUX.debug) console.log('WuxDOM.mount ' + WUX.str(e) + ' on ' + WUX.str(node) + ' completed.');
 		return ctx;
 	};
-	static unmount(node?: WUX.WNode): Element {
+	static unmount(node?: WUX.WNode | null): Element | null {
 		if (!node) node = WuxDOM.lastCtx ? WuxDOM.lastCtx : document.getElementById('view-root');
 		if (WUX.debug) console.log('WuxDOM.unmount ' + WUX.str(node) + '...');
-		let ctx: Element;
+		let ctx: Element | null | undefined;
 		if (typeof node == 'string') {
 			ctx = document.getElementById(node);
 			if(!ctx) ctx = document.querySelector(node);
@@ -100,7 +100,7 @@ class WuxDOM {
 		}
 		if (!ctx) {
 			console.error('WuxDOM.unmount ' + WUX.str(node) + ' -> node unavailable');
-			return;
+			return null;
 		}
 		let wcomp = WuxDOM.register(ctx, 'delete');
 		if (wcomp) wcomp.unmount();
@@ -113,8 +113,8 @@ class WuxDOM {
 		}
 		return ctx;
 	}
-	static replace(o: WUX.WElement, e?: WUX.WElement): Element {
-		let node: Element;
+	static replace(o?: WUX.WElement, e?: WUX.WElement): Element | null {
+		let node: Element | null | undefined;
 		if (!e) {
 			e = o;
 			o = undefined;
@@ -123,10 +123,10 @@ class WuxDOM {
 			node = WuxDOM.unmount();
 		}
 		else if (typeof o == 'string') {
-			let wcomp = WUX.getComponent(o);
-			if (!wcomp) {
-				node = wcomp.getContext();
-				wcomp.unmount();
+			let w = WUX.getComponent(o);
+			if (w) {
+				node = w.getContext();
+				w.unmount();
 			}
 		}
 		else if (o instanceof WUX.WComponent) {
@@ -140,17 +140,17 @@ class WuxDOM {
 		if (!node) node = document.getElementById('view-root');
 		if (!node) {
 			console.error('WuxDOM.replace ' + WUX.str(node) + ' -> node unavailable');
-			return;
+			return null;
 		}
 		return WuxDOM.mount(e, node);
 	}
-	static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode, a?: object): Element {
+	static create(node: WUX.WNode, tag?: string, id?: string, cs?: string, st?: string, inner?: WUX.WNode, a?: any): Element | null {
 		if (!tag) tag = 'div';
 		if (id) {
 			let c = document.getElementById(id);
 			if(c) return c;
 		}
-		let n: Element;
+		let n: Element | null;
 		if (typeof node == 'string') {
 			n = document.getElementById(node);
 			if (!n) n = document.querySelector(node);
@@ -169,7 +169,8 @@ class WuxDOM {
 		if (a) {
 			for (let k in a) {
 				if (a.hasOwnProperty(k)) {
-					e.setAttribute(k, WUX.WUtil.toString(a[k]));
+					let va = WUX.WUtil.toString(a[k]);
+					e.setAttribute(k, va ? va : '');
 				}
 			}
 		}
@@ -224,8 +225,8 @@ namespace WUX {
 
 	/** Event interface */
 	export interface WEvent {
-		component: WComponent;
-		element: Element
+		component?: WComponent | null;
+		element?: Element | null;
 		target: any;
 		type: string;
 		data?: any;
@@ -323,10 +324,10 @@ namespace WUX {
 	 */
 	export class WComponent<P = any, S = any> {
 		// Base public attributes
-		id: string;
-		name: string;
+		id?: string | null;
+		name?: string;
 		mounted: boolean = false;
-		parent: WComponent;
+		parent?: WComponent | null;
 		debug: boolean = WUX.debug;
 		forceOnChange: boolean = false;
 		data: any;
@@ -334,31 +335,31 @@ namespace WUX {
 		rootTag = 'div';
 
 		// Internal attributes
-		protected context: Element;
-		protected root: Element;
-		protected $r: JQuery;
-		protected internal: WComponent;
-		protected props: P;
-		protected state: S;
+		protected context?: Element | null;
+		protected root?: Element | null;
+		protected $r?: JQuery | null;
+		protected internal?: WComponent;
+		protected props?: P | null;
+		protected state?: S | null;
 		protected subSeq = 0;
 		protected dontTrigger = false;
 
 		// View attributes
 		protected _visible: boolean = true;
 		protected _enabled: boolean = true;
-		protected _style: string;
-		protected _baseStyle: string;
-		protected _classStyle: string;
-		protected _baseClass: string;
-		protected _attributes: string;
-		protected _tooltip: string;
+		protected _style?: string | null;
+		protected _baseStyle?: string | null;
+		protected _classStyle?: string | null;
+		protected _baseClass?: string | null;
+		protected _attributes?: string | null;
+		protected _tooltip?: string | null;
 
 		// Event handlers
 		protected handlers: { [event: string]: ((e?: any) => any)[] } = {};
 
 		constructor(he?: Element);
-		constructor(id?: string, name?: string, props?: P, classStyle?: string, style?: string | WStyle, attributes?: string | object);
-		constructor(id?: string | Element, name?: string, props?: P, classStyle?: string, style?: string | WStyle, attributes?: string | object) {
+		constructor(id?: string, name?: string, props?: P, classStyle?: string, style?: string | WStyle, attributes?: any);
+		constructor(id?: string | Element, name?: string, props?: P, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			this.cuid = Math.floor(Math.random() * 1000000000);
 			if (id instanceof Element) {
 				this.root = id as Element;
@@ -408,7 +409,7 @@ namespace WUX {
 				}
 			}
 		}
-		get style(): string {
+		get style(): string | null | undefined {
 			if (this.internal) return this.internal.style;
 			return this._style;
 		}
@@ -417,7 +418,7 @@ namespace WUX {
 			if (this.internal) this.internal.style = s;
 			if (this.root) this.root.setAttribute('style', this._style);
 		}
-		get classStyle(): string {
+		get classStyle(): string | null | undefined {
 			if (this.internal) return this.internal.classStyle;
 			return this._classStyle;
 		}
@@ -454,22 +455,22 @@ namespace WUX {
 				}
 			}
 		}
-		get attributes(): string {
+		get attributes(): string | null | undefined {
 			if (this.internal) return this.internal.attributes;
 			return this._attributes;
 		}
-		set attributes(s: string) {
+		set attributes(s: string | null | undefined) {
 			this._attributes = s;
 			if (this.internal) this.internal.attributes = s;
 		}
-		get tooltip(): string {
+		get tooltip(): string | null | undefined {
 			if (this.internal) return this.internal.tooltip;
 			return this._tooltip;
 		}
-		set tooltip(s: string) {
+		set tooltip(s: string | null | undefined) {
 			this._tooltip = s;
 			if (this.internal) this.internal.tooltip = s;
-			if (this.root) this.root.setAttribute('title', this._tooltip);
+			if (this.root) this.root.setAttribute('title', this._tooltip ? this._tooltip : '');
 		}
 
 		css(...items: (string | WStyle)[]): this {
@@ -498,10 +499,10 @@ namespace WUX {
 			return this;
 		}
 
-		getContext(): Element {
+		getContext(): Element | null | undefined {
 			return this.context;
 		}
-		getRoot(): Element {
+		getRoot(): Element | null | undefined {
 			if (!this.root && this.internal) return this.internal.getRoot();
 			if (!this.root) {
 				if (this.id) {
@@ -513,16 +514,16 @@ namespace WUX {
 			return this.root;
 		}
 
-		getState(): S {
+		getState(): S | null | undefined {
 			return this.state;
 		}
-		setState(nextState: S, force?: boolean, callback?: () => any): this {
+		setState(nextState: S | null | undefined, force?: boolean, callback?: () => any): this {
 			if (this.debug) console.log('[' + str(this) + '] setState', nextState);
 			this.update(this.props, nextState, false, true, this.forceOnChange || force, callback);
 			return this;
 		}
 
-		getProps(): P {
+		getProps(): P | null | undefined {
 			return this.props;
 		}
 		setProps(nextProps: P, force?: boolean, callback?: () => any): this {
@@ -636,7 +637,7 @@ namespace WUX {
 			return this;
 		}
 
-		mount(context?: Element): this {
+		mount(context?: Element | null): this {
 			if (this.debug) console.log('[' + str(this) + '] mount ctx=' + str(context) + ' root=' + str(this.root), this.state, this.props);
 			if (!this.id) {
 				if (this.root) {
@@ -656,7 +657,7 @@ namespace WUX {
 				if (this.mounted) this.unmount();
 				this.mounted = false;
 				if (!(this.context)) {
-					let he = document.getElementById(this.id);
+					let he = this.id ? document.getElementById(this.id) : null;
 					if (he) this.context = he;
 				}
 				if (this.debug) console.log('[' + str(this) + '] componentWillMount ctx=' + str(context) + ' root=' + str(this.root));
@@ -715,7 +716,7 @@ namespace WUX {
 						this.internal.enabled = false;
 					}
 					else {
-						this.root.setAttribute('disabled', '');
+						if(this.root) this.root.setAttribute('disabled', '');
 					}
 				}
 				if (this.debug) console.log('[' + str(this) + '] componentDidMount ctx=' + str(context) + ' root=' + str(this.root));
@@ -763,36 +764,36 @@ namespace WUX {
 		protected componentWillMount(): void {
 		}
 
-		protected render(): WElement {
+		protected render(): WElement | undefined {
 			return this.buildRoot(this.rootTag);
 		}
 
 		protected componentDidMount(): void {
 		}
 
-		protected componentDidCatch?(error: Error, errorInfo: string): void {
+		protected componentDidCatch(error: any, errorInfo: string): void {
 		}
 
-		protected shouldComponentUpdate(nextProps: P, nextState: S): boolean {
+		protected shouldComponentUpdate(nextProps: P | null | undefined, nextState: S | null | undefined): boolean {
 			if (typeof nextProps == 'object' || typeof nextState == 'object') return true;
 			return this.props != nextProps || this.state != nextState;
 		}
 
-		protected componentWillUpdate(nextProps: P, nextState: S): void {
+		protected componentWillUpdate(nextProps: P | null | undefined, nextState: S | null | undefined): void {
 		}
 
-		protected componentDidUpdate(prevProps: P, prevState: S): void {
+		protected componentDidUpdate(prevProps: P | null | undefined, prevState: S | null | undefined): void {
 		}
 
-		protected updateProps(nextProps: P): void {
+		protected updateProps(nextProps: P | null | undefined): void {
 			this.props = nextProps;
 		}
 
-		protected updateState(nextState: S): void {
+		protected updateState(nextState: S | null | undefined): void {
 			this.state = nextState;
 		}
 
-		protected update(nextProps: P, nextState: S, propsChange: boolean, stateChange: boolean, force: boolean = false, callback?: () => any): boolean {
+		protected update(nextProps: P | null | undefined, nextState: S | null | undefined, propsChange: boolean, stateChange: boolean, force: boolean = false, callback?: () => any): boolean {
 			if (this.debug) console.log('[' + str(this) + '] update', nextProps, nextState, 'propsChange=' + propsChange + ',stateChange=' + stateChange + ',force=' + force);
 			nextProps = nextProps === undefined ? this.props : nextProps;
 			let prevProps = this.props;
@@ -858,7 +859,7 @@ namespace WUX {
 			return true;
 		}
 
-		protected buildRoot(tagName?: string, inner?: string, baseAttribs?: string | object, classStyle?: string, style?: string, attributes?: string | object, id?: string): string {
+		protected buildRoot(tagName?: string | null, inner?: string | null, baseAttribs?: any, classStyle?: string | null, style?: string | null, attributes?: any, id?: string | null): string | undefined {
 			if (this.debug) console.log('[' + str(this) + '] buildRoot', tagName, inner, baseAttribs, classStyle, style, attributes, id);
 			if (!this.shouldBuildRoot()) {
 				if (this.debug) console.log('[' + str(this) + '] shouldBuildRoot() -> false');
@@ -870,7 +871,7 @@ namespace WUX {
 			return this.build(tagName, inner, baseAttribs, classStyle, style, attributes, id);
 		}
 
-		protected build(tagName?: string, inner?: string, baseAttribs?: string | object, classStyle?: string, style?: string, attributes?: string | object, id?: string): string {
+		protected build(tagName?: string | null, inner?: string | null, baseAttribs?: any, classStyle?: string | null, style?: string | null, attributes?: any, id?: string | null): string {
 			if (!tagName) tagName = 'div';
 			if (classStyle === undefined) classStyle = this._classStyle;
 			if (style === undefined) style = this._style;
@@ -898,7 +899,7 @@ namespace WUX {
 
 		subId(wc?: WComponent): string;
 		subId(id?: string, s?: any): string;
-		subId(id?: string | WComponent, s?: any): string {
+		subId(id?: string | WComponent, s?: any): string | null | undefined {
 			if (id instanceof WComponent) {
 				let cid = id.id;
 				if (!cid || !this.id) return cid;
@@ -913,7 +914,7 @@ namespace WUX {
 			}
 		}
 
-		ripId(sid: string): string {
+		ripId(sid: string | null | undefined): string | null | undefined {
 			if (!sid || !this.id) return sid;
 			if (sid.indexOf(this.id) == 0 && sid.length > this.id.length + 1) {
 				return sid.substring(this.id.length + 1);
@@ -933,8 +934,8 @@ namespace WUX {
 
 	/* Global functions */
 
-	export function getId(e: any): string {
-		if (!e) return;
+	export function getId(e: any): string | null | undefined {
+		if (!e) return '';
 		if (e instanceof Element) return (e as Element).id;
 		if (e instanceof WComponent) return (e as WComponent).id;
 		if (typeof e == 'string') {
@@ -967,8 +968,8 @@ namespace WUX {
 		return id.substring(s + 1);
 	}
 
-	export function getComponent(id: string): WUX.WComponent {
-		if (!id) return;
+	export function getComponent(id: string): WUX.WComponent | null {
+		if (!id) return null;
 		return WuxDOM.components[id];
 	}
 
@@ -978,10 +979,10 @@ namespace WUX {
 		return getRootComponent(c.parent);
 	}
 
-	export function setProps(id: string, p: any): WUX.WComponent {
-		if (!id) return;
+	export function setProps(id: string, p: any): WUX.WComponent | null {
+		if (!id) return null;
 		let c = WuxDOM.components[id];
-		if (!c) return;
+		if (!c) return null;
 		c.setProps(p);
 		return c;
 	}
@@ -995,10 +996,10 @@ namespace WUX {
 		return p;
 	}
 
-	export function setState(id: string, s: any): WUX.WComponent {
-		if (!id) return;
+	export function setState(id: string, s: any): WUX.WComponent | null {
+		if (!id) return null;
 		let c = WuxDOM.components[id];
-		if (!c) return;
+		if (!c) return null;
 		c.setState(s);
 		return c;
 	}
@@ -1012,20 +1013,20 @@ namespace WUX {
 		return s;
 	}
 
-	export function newInstance(n: string): WUX.WComponent {
+	export function newInstance(n: string): WUX.WComponent | null {
 		if (!n) return null;
 		let s = n.lastIndexOf('.');
 		if (s > 0) {
 			let ns = n.substring(0, s);
-			if (window[ns]) {
+			if ((window as any)[ns]) {
 				let c = n.substring(s + 1);
-				for (let i in window[ns]) {
-					if (i == c) return new window[ns][i];
+				for (let i in (window as any)[ns]) {
+					if (i == c) return new (window as any)[ns][i];
 				}
 				return null;
 			}
 		}
-		let p = window[n];
+		let p = (window as any)[n];
 		return (p && p.prototype) ? Object.create(p.prototype) : null;
 	}
 
@@ -1034,7 +1035,7 @@ namespace WUX {
 		if (typeof e1 == 'string' || typeof e2 == 'string') return false;
 		let id1 = getId(e1);
 		let id2 = getId(e2);
-		return id1 && id2 && id1 == id2;
+		return !!(id1 && id2 && id1 == id2);
 	}
 
 	export function match(i: any, o: string | WEntity): boolean {
@@ -1050,7 +1051,7 @@ namespace WUX {
 	 *
 	 * @param s content
 	 */
-	export function divide(s: string): [string, string, string] {
+	export function divide(s?: string | null): [string, string, string] {
 		if (!s) return ['', '', ''];
 		if (s == ' ') return ['', '&nbsp;', ''];
 		let b = s.charAt(0) == ' ' ? '&nbsp;' : '';
@@ -1237,7 +1238,7 @@ namespace WUX {
 		n?: string;
 	}
 
-	export function style(ws: string | WStyle): string {
+	export function style(ws: string | WStyle | null | undefined): string {
 		let s = '';
 		if (!ws) return s;
 		if (typeof ws == 'string') {
@@ -1306,7 +1307,7 @@ namespace WUX {
 		return s;
 	}
 
-	export function styleObj(ws: string | WStyle): { [key: string]: string } {
+	export function styleObj(ws: string | WStyle | null): { [key: string]: string } {
 		let s = style(ws);
 		let r: { [key: string]: string } = {};
 		if (!s) return r;
@@ -1331,9 +1332,9 @@ namespace WUX {
 		return e;
 	}
 
-	export function toggleStyle(s: string | WStyle, k: string, b?: boolean, v1?: string): string;
-	export function toggleStyle(s: string | WStyle, k: string, v0?: string, v1?: string): string;
-	export function toggleStyle(s: string | WStyle, k: string, v0?: string | boolean, v1?: string): string {
+	export function toggleStyle(s: string | WStyle | null, k: string, b?: boolean, v1?: string): string;
+	export function toggleStyle(s: string | WStyle | null, k: string, v0?: string, v1?: string): string;
+	export function toggleStyle(s: string | WStyle | null, k: string, v0?: string | boolean, v1?: string): string {
 		if (!k) return css(s);
 		let o = styleObj(s);
 		let v = o[k];
@@ -1371,7 +1372,7 @@ namespace WUX {
 		return r;
 	}
 
-	export function css(...a: (string | WStyle)[]): string {
+	export function css(...a: (string | WStyle | null | undefined)[]): string {
 		if (!a || a.length == 0) return '';
 		let s = '';
 		let x: WStyle = {};
@@ -1398,7 +1399,7 @@ namespace WUX {
 		return s;
 	}
 
-	export function cls(...a: (string | WStyle)[]): string {
+	export function cls(...a: (string | WStyle | null | undefined)[]): string {
 		if (!a || !a.length) return '';
 		let s = '';
 		for (let i = 0; i < a.length; i++) {
@@ -1427,7 +1428,7 @@ namespace WUX {
 		return '';
 	}
 
-	export function buildCss(...a: (string | WStyle)[]): string {
+	export function buildCss(...a: (string | WStyle | null | undefined)[]): string {
 		if (!a || !a.length) return '';
 		if (a.length == 1) {
 			let f = a[0];
@@ -1444,7 +1445,7 @@ namespace WUX {
 		return r;
 	}
 
-	export function addClass(css: string, name: string): string {
+	export function addClass(css: string | null | undefined, name: string): string {
 		if (!css) return name;
 		if (!name) return css;
 		let classes = css.split(' ');
@@ -1454,8 +1455,8 @@ namespace WUX {
 		return css + ' ' + name;
 	}
 
-	export function removeClass(css: string, name: string): string {
-		if (!css || !name) return css;
+	export function removeClass(css: string | null | undefined, name: string): string {
+		if (!css || !name) return '';
 		let classes = css.split(' ');
 		let r = '';
 		for (let c of classes) {
@@ -1465,7 +1466,7 @@ namespace WUX {
 		return r.trim();
 	}
 
-	export function toggleClass(css: string, name: string): string {
+	export function toggleClass(css: string | null | undefined, name: string): string {
 		if (!css) return name;
 		if (!name) return css;
 		let classes = css.split(' ');
@@ -1528,7 +1529,7 @@ namespace WUX {
 		return e;
 	}
 
-	export function slideUp(e: Element, d?: number): Element {
+	export function slideUp(e: Element | null, d?: number): Element | null {
 		if(!e) return e;
 		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
 		if (jq) {
@@ -1540,7 +1541,7 @@ namespace WUX {
 		return e;
 	}
 
-	export function slideDown(e: Element, d?: number): Element {
+	export function slideDown(e: Element | null, d?: number): Element | null {
 		if(!e) return e;
 		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
 		if (jq) {
@@ -1566,7 +1567,7 @@ namespace WUX {
 		return e;
 	}
 
-	export function buildIcon(icon: string, before?: string, after?: string, size?: number, cls?: string, title?: string): string {
+	export function buildIcon(icon?: string | null, before?: string | null, after?: string | null, size?: number | null, cls?: string | null, title?: string | null): string {
 		if (!icon) return '';
 		if (!before) before = '';
 		if (!after) after = '';
@@ -1579,10 +1580,10 @@ namespace WUX {
 		return before + '<i class="fa ' + icon + ' fa-' + size + 'x' + cls + '"' + t + s + '></i>' + after;
 	}
 
-	export function build(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): string {
+	export function build(tagName: string | null, inner?: string | null, css?: string | WStyle | null, attr?: any, id?: string | null, cls?: string | null): string {
 		if (!tagName) tagName = 'div';
-		let clsStyle: string;
-		let style: string;
+		let clsStyle: string | undefined;
+		let style: string | undefined;
 		if (typeof css == 'string') {
 			if (css.indexOf(':') > 0) {
 				style = css;
@@ -1617,7 +1618,7 @@ namespace WUX {
 		return bca[0] + r + bca[2];
 	}
 
-	export function create(tagName: string, inner?: string, css?: string | WStyle, attr?: string | object, id?: string, cls?: string): Element {
+	export function create(tagName: string, inner?: string, css?: string | WStyle, attr?: any, id?: string, cls?: string): Element | null {
 		let t = document.createElement("template");
 		t.innerHTML = build(tagName, inner, css, attr, id, cls);
 		return t.content.firstElementChild;
@@ -1663,13 +1664,13 @@ namespace WUX {
 				for (let e of a) {
 					let s = WUtil.toString(e);
 					if (ne && !s) continue;
-					r.push(s);
+					r.push(s ? s : '');
 				}
 			}
 			else {
 				let s = WUtil.toString(a);
 				if (ne && !s) return r;
-				r.push(WUtil.toString(a));
+				r.push(s ? s : '');
 			}
 			return r;
 		}
@@ -1677,6 +1678,7 @@ namespace WUX {
 		static splitNumbers(a: any, s: string): number[] {
 			if (!a) return [];
 			let sa = WUtil.toString(a);
+			if (!sa) return [];
 			let aos = sa.split(s);
 			let r: number[] = [];
 			for (let e of aos) {
@@ -1685,14 +1687,14 @@ namespace WUX {
 			return r;
 		}
 
-		static toObject<T>(a: any, d?: T): T {
+		static toObject<T>(a: any, d?: T): T | undefined{
 			if (a instanceof WComponent) a = a.getState();
 			if (a == null) return d;
 			if (typeof a == 'object') return a as T;
 			return d;
 		}
 
-		static toString(a: any, d: string = ''): string {
+		static toString(a: any, d: string | null = ''): string | null {
 			if (a instanceof WComponent) a = a.getState();
 			if (a == null) return d;
 			if (typeof a == 'string') return a;
@@ -1702,8 +1704,9 @@ namespace WUX {
 			return '' + a;
 		}
 
-		static toText(a: any, d: string = ''): string {
+		static toText(a: any, d: string = ''): string | null {
 			let r = WUtil.toString(a, d);
+			if (!r) return r;
 			return r.replace('<', '&lt;').replace('>', '&gt;');
 		}
 
@@ -1762,12 +1765,15 @@ namespace WUX {
 
 		static starts(a: any, s: string): boolean {
 			if (!a || s == null) return false;
-			return WUtil.toString(a).indexOf(s) == 0;
+			let v = WUtil.toString(a);
+			if (!v) return false;
+			return v.indexOf(s) == 0;
 		}
 
 		static ends(a: any, s: string): boolean {
 			if (!a || s == null) return false;
 			let t = WUtil.toString(a);
+			if (!t) return false;
 			let i = t.lastIndexOf(s);
 			if (i < 0) return false;
 			return i == t.length - s.length;
@@ -1791,7 +1797,7 @@ namespace WUX {
 			return !!d;
 		}
 
-		static toDate(a: any, d?: Date): Date {
+		static toDate(a: any, d?: Date | null): Date | null | undefined {
 			if (a instanceof WComponent) a = a.getState();
 			if (a == null) return d;
 			if (a instanceof Date) return a;
@@ -1816,7 +1822,7 @@ namespace WUX {
 		}
 
 		static getWeek(a?: any): number {
-			let d: Date;
+			let d: Date | null | undefined;
 			if (a instanceof Date) {
 				// Clonare la data altrimenti verra' modificata
 				d = new Date(a.getTime());
@@ -1964,7 +1970,7 @@ namespace WUX {
 			return WUtil.toInt(WUtil.getValue(a, k), d);
 		}
 
-		static getString(a: any, k: string, d?: string, f?: string): string {
+		static getString(a: any, k: string, d?: string, f?: string): string | null | undefined {
 			let v = WUtil.getValue(a, k);
 			if (v == null) return d;
 			if (!f) return WUtil.toString(v);
@@ -1986,7 +1992,7 @@ namespace WUX {
 			return WUtil.toString(v);
 		}
 
-		static getText(a: any, k: string, d?: string): string {
+		static getText(a: any, k: string, d?: string): string | null {
 			return WUtil.toText(WUtil.getValue(a, k), d);
 		}
 
@@ -1994,7 +2000,7 @@ namespace WUX {
 			return WUtil.toBoolean(WUtil.getValue(a, k), d);
 		}
 
-		static getDate(a: any, k: string, d?: Date): Date {
+		static getDate(a: any, k: string, d?: Date): Date | null | undefined {
 			return WUtil.toDate(WUtil.getValue(a, k), d);
 		}
 
@@ -2010,7 +2016,7 @@ namespace WUX {
 			return WUtil.toArrayString(WUtil.getValue(a, k), ne);
 		}
 
-		static getObject<T>(a: any, k: string, n?: boolean): T {
+		static getObject<T>(a: any, k: string, n?: boolean): T | null | undefined {
 			let r = WUtil.toObject<T>(WUtil.getValue(a, k));
 			if (!r && n) return {} as T;
 			return r;
@@ -2200,7 +2206,7 @@ namespace WUX {
 			return v[0];
 		}
 
-		static eqValues(o1: object, o2: object, ...keys: any[]): boolean {
+		static eqValues(o1: any, o2: any, ...keys: any[]): boolean {
 			if (!o1 && !o2) return true;
 			if (!o1 || !o2) return false;
 			for (let k of keys) {
@@ -2278,7 +2284,7 @@ namespace WUX {
 				o[f] = r;
 			}
 			else {
-				let w = {};
+				let w: { [key: string]: any } = {};
 				w[k] = v;
 				o[f] = w;
 			}

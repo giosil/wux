@@ -56,6 +56,8 @@ var WUX;
             configurable: true
         });
         WDX.prototype.componentDidMount = function () {
+            if (!this.props)
+                return;
             if (!this.$r || !this.$r[this.props])
                 return;
             if (this.opts) {
@@ -79,6 +81,8 @@ var WUX;
             return this.state;
         };
         WDX.prototype.getInstance = function (o, c) {
+            if (!this.props)
+                return null;
             if (!this.$r || !this.$r[this.props])
                 return null;
             if (o && typeof o != 'function')
@@ -111,7 +115,8 @@ var WUX;
                 return this;
             if (t >= 0) {
                 setTimeout(function () {
-                    _this.$i[m]();
+                    if (_this.$i)
+                        _this.$i[m]();
                     if (c)
                         c(_this.$i);
                 }, t);
@@ -245,7 +250,7 @@ var WUX;
                 this.$i.refresh();
             }
             else {
-                this.$i.refresh().done([function () { setTimeout(function () { if (col)
+                this.$i.refresh().done([function () { setTimeout(function () { if (col && _this.$i)
                         _this.$i.editCell(row, col); }, t); }]);
             }
             return this;
@@ -261,7 +266,7 @@ var WUX;
             else {
                 this.$i.repaintRows([row]);
                 if (col != null)
-                    setTimeout(function () { if (col)
+                    setTimeout(function () { if (col && _this.$i)
                         _this.$i.editCell(row, col); }, t);
             }
             return this;
@@ -503,27 +508,27 @@ var WUX;
                 return this;
             var gopt = {};
             if (events.indexOf('_selectionchanged') >= 0)
-                gopt.onSelectionChanged = null;
+                gopt.onSelectionChanged = undefined;
             if (events.indexOf('_rowprepared') >= 0)
-                gopt.onRowPrepared = null;
+                gopt.onRowPrepared = undefined;
             if (events.indexOf('_cellprepared') >= 0)
-                gopt.onCellPrepared = null;
+                gopt.onCellPrepared = undefined;
             if (events.indexOf('_contentready') >= 0)
-                gopt.onContentReady = null;
+                gopt.onContentReady = undefined;
             if (events.indexOf('_rowupdated') >= 0)
-                gopt.onRowUpdated = null;
+                gopt.onRowUpdated = undefined;
             if (events.indexOf('_editorprepared') >= 0)
-                gopt.onEditorPrepared = null;
+                gopt.onEditorPrepared = undefined;
             if (events.indexOf('_editorpreparing') >= 0)
-                gopt.onEditorPreparing = null;
+                gopt.onEditorPreparing = undefined;
             if (events.indexOf('_editingstart') >= 0)
-                gopt.onEditingStart = null;
+                gopt.onEditingStart = undefined;
             if (events.indexOf('_cellclick') >= 0)
-                gopt.onCellClick = null;
+                gopt.onCellClick = undefined;
             if (events.indexOf('_keydown') >= 0)
-                gopt.onKeyDown = null;
+                gopt.onKeyDown = undefined;
             if (events.indexOf('_toolbarpreparing') >= 0)
-                gopt.onToolbarPreparing = null;
+                gopt.onToolbarPreparing = undefined;
             this.getInstance(gopt);
             return this;
         };
@@ -596,7 +601,8 @@ var WUX;
             if (!this.$i)
                 return this;
             setTimeout(function () {
-                _this.$i.editCell(row, col);
+                if (_this.$i)
+                    _this.$i.editCell(row, col);
             }, t);
             return this;
         };
@@ -690,7 +696,8 @@ var WUX;
             if (!this.$i)
                 return this;
             if (r != null) {
-                this.$i.saveEditData().done([function () { setTimeout(function () { _this.$i.repaintRows([r]); }, 0); }]);
+                this.$i.saveEditData().done([function () { setTimeout(function () { if (_this.$i)
+                        _this.$i.repaintRows([r]); }, 0); }]);
             }
             else {
                 this.$i.saveEditData();
@@ -725,10 +732,12 @@ var WUX;
                 };
             }
             if (this._editable) {
-                gopt.editing = { mode: "cell", allowUpdating: true };
+                if (gopt)
+                    gopt.editing = { mode: "cell", allowUpdating: true };
             }
             if (this.hideHeader) {
-                gopt.showColumnHeaders = false;
+                if (gopt)
+                    gopt.showColumnHeaders = false;
             }
             this.editmap = {};
             // Columns
@@ -960,6 +969,8 @@ var WUX;
                 });
             }
             // dxDataGrid config
+            if (!gopt)
+                gopt = {};
             gopt.columns = cols;
             if (this.dataSource) {
                 gopt.dataSource = this.dataSource;
@@ -977,9 +988,9 @@ var WUX;
                 gopt.scrolling = { mode: this.scrolling };
             }
             gopt.onRowClick = function (e) {
-                var lastClick = e.component['lastClick'];
-                var currClick = e.component['lastClick'] = new Date();
-                if (lastClick && (currClick.getTime() - lastClick.getTime() < 300)) {
+                var lastClick = e.component ? e.component['lastClick'] : null;
+                var currClick = e.component ? e.component['lastClick'] = new Date() : null;
+                if (lastClick && (currClick ? currClick.getTime() : 0 - lastClick.getTime() < 300)) {
                     if (!_this.handlers['_doubleclick'])
                         return;
                     for (var _i = 0, _a = _this.handlers['_doubleclick']; _i < _a.length; _i++) {
@@ -1037,10 +1048,12 @@ var WUX;
                 gopt.onToolbarPreparing = this.handlers['_toolbarpreparing'][0];
             }
             this.beforeInit(gopt);
-            this.$r.dxDataGrid(gopt);
-            this.$i = this.$r.dxDataGrid('instance');
+            if (this.$r)
+                this.$r.dxDataGrid(gopt);
+            this.$i = this.$r ? this.$r.dxDataGrid('instance') : null;
             if (this.handlers['_scroll'] && this.handlers['_scroll'].length) {
-                this.$i.getScrollable().on('scroll', this.handlers['_scroll'][0]);
+                if (this.$i)
+                    this.$i.getScrollable().on('scroll', this.handlers['_scroll'][0]);
             }
             if (WUX.dxTableDidMount)
                 WUX.dxTableDidMount(this);
@@ -1067,10 +1080,12 @@ var WUX;
             if (this.paging)
                 gopt.pager = { showPageSizeSelector: false, allowedPageSizes: [this.pageSize], showInfo: true };
             if (!this.keepSorting) {
-                this.$i.clearSorting();
+                if (this.$i)
+                    this.$i.clearSorting();
             }
             if (!this.selectionFilter || !this.selectionFilter.length) {
-                this.$i.clearSelection();
+                if (this.$i)
+                    this.$i.clearSelection();
             }
             this.$r.dxDataGrid(gopt);
             this.$i = this.$r.dxDataGrid('instance');
@@ -1130,7 +1145,8 @@ var WUX;
                 var opt = {
                     onItemClick: h
                 };
-                this.$r.dxTreeView(opt);
+                if (this.$r)
+                    this.$r.dxTreeView(opt);
             }
         };
         WDXTreeView.prototype.onSelectionChanged = function (h) {
@@ -1140,7 +1156,8 @@ var WUX;
                 var opt = {
                     onSelectionChanged: h
                 };
-                this.$r.dxTreeView(opt);
+                if (this.$r)
+                    this.$r.dxTreeView(opt);
             }
         };
         WDXTreeView.prototype.onItemRendered = function (h) {
@@ -1150,13 +1167,14 @@ var WUX;
                 var opt = {
                     onItemRendered: h
                 };
-                this.$r.dxTreeView(opt);
+                if (this.$r)
+                    this.$r.dxTreeView(opt);
             }
         };
         WDXTreeView.prototype.getSelectedItems = function () {
             if (!this.mounted)
                 return [];
-            var n = this.$r.dxTreeView('instance').getSelectedNodes();
+            var n = this.$r ? this.$r.dxTreeView('instance').getSelectedNodes() : null;
             if (!n)
                 return [];
             return n.map(function (node) { return node.itemData; });
@@ -1164,7 +1182,8 @@ var WUX;
         WDXTreeView.prototype.select = function (item) {
             if (!this.mounted)
                 return this;
-            this.$r.dxTreeView('selectItem', item);
+            if (this.$r)
+                this.$r.dxTreeView('selectItem', item);
             return this;
         };
         WDXTreeView.prototype.off = function (events) {
@@ -1173,12 +1192,13 @@ var WUX;
                 return this;
             var opt = {};
             if (events.indexOf('_onItemClick') >= 0)
-                opt.onItemClick = null;
+                opt.onItemClick = undefined;
             if (events.indexOf('_onSelectionChanged') >= 0)
-                opt.onSelectionChanged = null;
+                opt.onSelectionChanged = undefined;
             if (events.indexOf('_onItemRendered') >= 0)
-                opt.onItemRendered = null;
-            this.$r.dxTreeView(opt);
+                opt.onItemRendered = undefined;
+            if (this.$r)
+                this.$r.dxTreeView(opt);
             return this;
         };
         WDXTreeView.prototype.updateState = function (nextState) {
@@ -1195,7 +1215,8 @@ var WUX;
             if (!this.mounted)
                 return;
             if (this.props) {
-                this.$r.dxTreeView('instance').option('searchMode', this.props);
+                if (this.$r)
+                    this.$r.dxTreeView('instance').option('searchMode', this.props);
             }
         };
         WDXTreeView.prototype.beforeInit = function (opt) {
@@ -1203,13 +1224,15 @@ var WUX;
         WDXTreeView.prototype.expandAll = function () {
             if (!this.mounted)
                 return this;
-            this.$r.dxTreeView('expandAll');
+            if (this.$r)
+                this.$r.dxTreeView('expandAll');
             return this;
         };
         WDXTreeView.prototype.collapseAll = function () {
             if (!this.mounted)
                 return this;
-            this.$r.dxTreeView('collapseAll');
+            if (this.$r)
+                this.$r.dxTreeView('collapseAll');
             return this;
         };
         WDXTreeView.prototype.componentDidMount = function () {
@@ -1219,7 +1242,7 @@ var WUX;
                 height: this.height,
                 width: this.width,
                 searchEnabled: this.searchEnabled,
-                items: this.state
+                items: this.state ? this.state : undefined
             };
             if (this.selectionMode == "multiple") {
                 opt.selectionMode = "multiple";
@@ -1250,6 +1273,7 @@ var WUX;
         __extends(WDXSelectBox, _super);
         function WDXSelectBox(id, classStyle, style, attributes) {
             var _this = _super.call(this, id ? id : '*', 'WDXSelectBox', [], classStyle, style, attributes) || this;
+            _this.options = [];
             _this.searchEnabled = true;
             return _this;
         }
@@ -1321,7 +1345,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             // Update component
-            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            if (this.$r)
+                this.$r.dxSelectBox({ dataSource: this.getDataSource() });
             if (sel)
                 this.updateState(e);
             return this;
@@ -1334,7 +1359,8 @@ var WUX;
             if (!this.mounted)
                 return this;
             // Update component
-            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            if (this.$r)
+                this.$r.dxSelectBox({ dataSource: this.getDataSource() });
             return this;
         };
         WDXSelectBox.prototype.indexOption = function (e) {
@@ -1344,11 +1370,13 @@ var WUX;
             this.options = options;
             if (!this.mounted)
                 return this;
-            var p = this.$r.dxSelectBox('instance').option('value');
+            var p = this.$r ? this.$r.dxSelectBox('instance').option('value') : null;
             // Update component
-            this.$r.dxSelectBox({ dataSource: this.getDataSource() });
+            if (this.$r)
+                this.$r.dxSelectBox({ dataSource: this.getDataSource() });
             if (prevVal) {
-                this.$r.dxSelectBox('instance').option('value', p);
+                if (this.$r)
+                    this.$r.dxSelectBox('instance').option('value', p);
             }
             else if (options && options.length) {
                 if (typeof options[0] == 'string') {

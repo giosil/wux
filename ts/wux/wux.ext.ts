@@ -3,7 +3,7 @@ namespace WUX {
 	export let BS_VER = 5;
 	export let BS_DLG_X: string | WWrapper = '';
 	
-	export function JQ(e: any): JQuery {
+	export function JQ(e: any): JQuery | null {
 		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
 		if(!jq) {
 			console.error('[WUX] jQuery is not available');
@@ -34,38 +34,38 @@ namespace WUX {
 	
 	// Bootstrap / JQuery
 	export class WDialog<P = any, S = any> extends WUX.WComponent<P, S> {
-		cntRoot: WUX.WContainer;
-		cntMain: WUX.WContainer;
-		cntContent: WUX.WContainer;
-		cntHeader: WUX.WContainer;
-		cntBody: WUX.WContainer;
-		cntFooter: WUX.WContainer;
-		mainClass: string;
-		contClass: string;
-		contStyle: string;
-		bodyClass: string;
+		cntRoot?: WUX.WContainer;
+		cntMain?: WUX.WContainer;
+		cntContent?: WUX.WContainer;
+		cntHeader?: WUX.WContainer;
+		cntBody?: WUX.WContainer;
+		cntFooter?: WUX.WContainer;
+		mainClass?: string;
+		contClass?: string;
+		contStyle?: string;
+		bodyClass?: string;
 		// GUI
-		_title: string;
-		tagTitle: string;
-		btnClose: WUX.WButton;
-		btnOK: WUX.WButton;
-		btnCancel: WUX.WButton;
-		txtCancel: string;
+		_title?: string;
+		tagTitle?: string;
+		btnClose?: WUX.WButton;
+		btnOK?: WUX.WButton;
+		btnCancel?: WUX.WButton;
+		txtCancel?: string;
 		buttons: WUX.WButton[];
 		// Flag
 		ok: boolean;
 		cancel: boolean;
 		isShown: boolean;
-		fullscreen: boolean;
+		fullscreen?: boolean;
 		// Control
 		// parent handler
-		ph: (e?: JQueryEventObject) => any;
+		ph?: ((e?: JQueryEventObject) => any) | null;
 		// show handler
-		sh: (e?: JQueryEventObject) => any;
+		sh?: ((e?: JQueryEventObject) => any) | null;
 		// hidden handler
-		hh: (e?: JQueryEventObject) => any;
+		hh?: ((e?: JQueryEventObject) => any) | null;
 		// Pages
-		wp: WPages;
+		wp?: WPages;
 		pg: number = 0;
 
 		constructor(id: string, name: string = 'WDialog', btnOk = true, btnClose = true, classStyle?: string, style?: string | WUX.WStyle, attributes?: string | object) {
@@ -158,7 +158,7 @@ namespace WUX {
 			return this.cntFooter;
 		}
 
-		get title(): string {
+		get title(): string | undefined {
 			return this._title;
 		}
 		set title(s: string) {
@@ -245,7 +245,7 @@ namespace WUX {
 			if(this.$r) this.$r.modal('hide');
 		}
 
-		buttonOk(): WUX.WButton {
+		buttonOk(): WUX.WButton | undefined {
 			if (this.btnOK) return this.btnOK;
 			this.btnOK = this.buildBtnOK();
 			this.btnOK.on('click', (e: JQueryEventObject) => {
@@ -256,7 +256,7 @@ namespace WUX {
 			this.buttons.push(this.btnOK);
 		}
 
-		buttonCancel(): WUX.WButton {
+		buttonCancel(): WUX.WButton | undefined {
 			if (this.btnCancel) return this.btnCancel;
 			this.btnCancel = this.buildBtnCancel();
 			this.btnCancel.on('click', (e: JQueryEventObject) => {
@@ -408,10 +408,10 @@ namespace WUX {
 	
 	export class WTab extends WComponent<any, number> {
 		tabs: WContainer[];
-		contStyle: string | WStyle;
-		ulClass: string;
-		tpClass: string;
-		saClass: string;
+		contStyle?: string | WStyle;
+		ulClass?: string;
+		tpClass?: string;
+		saClass?: string;
 		
 		_t: string;
 		_a: string;
@@ -435,7 +435,7 @@ namespace WUX {
 			}
 		}
 
-		addTab(title: string, icon?: string, style?: string | WStyle, attributes?: string | object): WContainer {
+		addTab(title: string, icon?: string, style?: string | WStyle, attributes?: string | null): WContainer {
 			let tab = new WContainer('', 'panel-body', style, attributes);
 			tab.name = WUX.buildIcon(icon, '', ' ') + title;
 			this.tabs.push(tab);
@@ -535,9 +535,9 @@ namespace WUX {
 				if (!tabPane) continue;
 				container.mount(tabPane);
 			}
-			this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', (e?: JQueryEventObject) => {
+			if(this.$r) this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', (e: JQueryEventObject) => {
 				let t = e.target;
-				let b = '';
+				let b: string | null = '';
 				if(t instanceof Element) {
 					b = t.getAttribute(this._r);
 				}
