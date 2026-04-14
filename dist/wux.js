@@ -135,14 +135,14 @@ var WuxDOM = /** @class */ (function () {
             console.error('WuxDOM.unmount ' + WUX.str(node) + ' -> node unavailable');
             return null;
         }
-        var wcomp = WuxDOM.register(ctx, 'delete');
-        if (wcomp)
-            wcomp.unmount();
+        var c = WuxDOM.register(ctx, 'delete');
+        if (c)
+            c.unmount();
         ctx.remove();
         if (WUX.debug)
             console.log('WuxDOM.unmount ' + WUX.str(node) + ' completed.');
         if (WuxDOM.unmountHandlers.length > 0) {
-            var e = { component: wcomp, element: ctx, target: ctx.firstChild, type: 'unmount' };
+            var e = { component: c, element: ctx, target: ctx, type: 'unmount' };
             for (var _i = 0, _a = WuxDOM.unmountHandlers; _i < _a.length; _i++) {
                 var handler = _a[_i];
                 handler(e);
@@ -844,13 +844,11 @@ var WUX;
             return { component: this, element: this.root, target: target, type: type, data: data };
         };
         WComponent.prototype.shouldBuildRoot = function () {
-            if (this.internal)
-                return false;
-            if (this.root)
+            if (this.root || this.internal)
                 return false;
             if (this.context) {
-                var ctxId = this.context.id;
-                if (!ctxId && ctxId == this.id)
+                var ci = this.context.id;
+                if (ci && ci == this.id)
                     return false;
             }
             return true;
@@ -955,7 +953,7 @@ var WUX;
             if (e.indexOf('<') < 0)
                 return e.indexOf('#') == 0 ? e.substring(1) : e;
         }
-        if (typeof e == 'object' && !e.id) {
+        if (typeof e == 'object' && e.id) {
             return '' + e.id;
         }
         return '';
@@ -1819,7 +1817,7 @@ var WUX;
             if (s.indexOf('.') >= 0 && s.indexOf(',') >= 0)
                 s = s.replace('.', '');
             s = s.replace(',', '.');
-            var n = s.indexOf('.') >= d ? parseFloat(s) : parseInt(s);
+            var n = s.indexOf('.') >= 0 ? parseFloat(s) : parseInt(s);
             return isNaN(n) ? d : n;
         };
         WUtil.toInt = function (a, d) {
@@ -1847,7 +1845,7 @@ var WUX;
             if (a == null)
                 return d;
             if (typeof a == 'number')
-                a;
+                return a;
             if (a instanceof Date)
                 return a.getHours() * 100 + a.getMinutes();
             if (Array.isArray(a) && a.length)
@@ -2360,7 +2358,7 @@ var WUX;
             for (var _i = 0; _i < arguments.length; _i++) {
                 v[_i] = arguments[_i];
             }
-            if (!v || !v)
+            if (!v || !v.length)
                 return;
             for (var _a = 0, v_1 = v; _a < v_1.length; _a++) {
                 var e = v_1[_a];

@@ -6,13 +6,13 @@ namespace WUX {
 		isText?: boolean;
 		constructor(props: WElement, tag?: string, id?: string, classStyle?: string, style?: string | WStyle, attributes?: any) {
 			super(id, 'Wrapp', props, classStyle, style, attributes);
-			if(tag) this.rootTag = tag;
+			if (tag) this.rootTag = tag;
 		}
 
 		protected render(): WElement {
 			this.isText = false;
-			if(typeof this.props == 'string') {
-				if(!this.props || this.props.indexOf('<') < 0) {
+			if (typeof this.props == 'string') {
+				if (!this.props || this.props.indexOf('<') < 0) {
 					this.isText = true;
 					let r = this.buildRoot(this.rootTag, this.props);
 					return r ? r : '';
@@ -23,7 +23,7 @@ namespace WUX {
 		}
 
 		protected componentDidMount(): void {
-			if(this.root && !this.isText) {
+			if (this.root && !this.isText) {
 				this.rootTag = this.root.tagName;
 				this.id = this.root.getAttribute('id');
 				this._classStyle = this.root.getAttribute('class');
@@ -62,40 +62,40 @@ namespace WUX {
 		}
 
 		addRow(classStyle?: string, style?: string | WStyle): this {
-			if(classStyle == null) classStyle = CSS.ROW;
+			if (classStyle == null) classStyle = CSS.ROW;
 			let g: string[] = [];
 			let s = WUX.style(style);
-			if(s) classStyle += '^' + s;
+			if (s) classStyle += '^' + s;
 			g.push(classStyle);
 			this.grid.push(g);
 			return this;
 		}
 
 		addCol(classStyle?: string, style?: string | WStyle): this {
-			if(!classStyle) classStyle = CSS.COL + '12';
-			if(!isNaN(parseInt(classStyle))) classStyle = CSS.COL + classStyle;
-			if(!this.grid.length) this.addRow();
+			if (!classStyle) classStyle = CSS.COL + '12';
+			if (!isNaN(parseInt(classStyle))) classStyle = CSS.COL + classStyle;
+			if (!this.grid.length) this.addRow();
 			let g = this.grid[this.grid.length - 1];
 			let s = WUX.style(style);
-			if(s) classStyle += '^' + s;
+			if (s) classStyle += '^' + s;
 			g.push(classStyle);
 			return this;
 		}
 
 		head(...items: string[]): this {
-			if(!items) return this;
+			if (!items) return this;
 			this.ashe.push(...items);
 			return this;
 		}
 
 		tail(...items: string[]): this {
-			if(!items) return this;
+			if (!items) return this;
 			this.asta.push(...items);
 			return this;
 		}
 
 		before(...items: WElement[]): this {
-			if(!items) return this;
+			if (!items) return this;
 			for(let e of items) {
 				if (!e) continue;
 				if (typeof e == 'string') {
@@ -112,7 +112,7 @@ namespace WUX {
 		}
 
 		after(...items: WElement[]): this {
-			if(!items) return this;
+			if (!items) return this;
 			for(let e of items) {
 				if (!e) continue;
 				if (typeof e == 'string') {
@@ -150,7 +150,7 @@ namespace WUX {
 					// After Grid
 					this.cagr.push(e);
 				}
-				else if(!l) {
+				else if (!l) {
 					// Before Grid
 					this.cbgr.push(e);
 				}
@@ -170,13 +170,13 @@ namespace WUX {
 				let cnt = this.addContainer(w);
 				if (!ac || !ac.length) return this;
 				for (let c of ac) {
-					if(c) cnt.add(c);
+					if (c) cnt.add(c);
 				}
 				return this;
 			}
 			if (!ac || !ac.length) return this;
 			for (let c of ac) {
-				if(c) this.add(c);
+				if (c) this.add(c);
 			}
 			return this;
 		}
@@ -184,14 +184,14 @@ namespace WUX {
 		addLine(style: string | WStyle, ...ac: WElement[]): this {
 			let w = new WContainer();
 			w.addRow();
-			if(ac) {
+			if (ac) {
 				let n: string | undefined = '1';
-				if(typeof style != 'string') {
+				if (typeof style != 'string') {
 					n = style.n;
-					if(!n) n = '1';
+					if (!n) n = '1';
 				}
 				for (let c of ac) {
-					if(c) w.addCol(n, style).add(c);
+					if (c) w.addCol(n, style).add(c);
 				}
 			}
 			this.add(w);
@@ -200,14 +200,14 @@ namespace WUX {
 
 		addStack(style: string | WStyle, ...ac: WElement[]): this {
 			let w = new WContainer();
-			if(ac) {
+			if (ac) {
 				let n: string | undefined = '12';
-				if(typeof style != 'string') {
+				if (typeof style != 'string') {
 					n = style.n;
-					if(!n) n = '12';
+					if (!n) n = '12';
 				}
 				for (let c of ac) {
-					if(c) w.addRow().addCol(n, style).add(c);
+					if (c) w.addRow().addCol(n, style).add(c);
 				}
 			}
 			this.add(w);
@@ -219,18 +219,18 @@ namespace WUX {
 		addContainer(i: string, classStyle?: string | null, style?: string | null, attributes?: string | null, inline?: boolean, type?: string): WContainer;
 		addContainer(c_w_i: WUX.WContainer | WWrapper | string , cls?: string, style?: string, attributes?: string | null, inline?: boolean, type?: string): WContainer {
 			let c: WContainer;
-			if(typeof c_w_i == 'string') {
+			if (typeof c_w_i == 'string') {
 				c = new WContainer(c_w_i, cls, style, attributes, inline, type);
 				this.add(c);
 			}
-			else if(c_w_i instanceof WContainer) {
+			else if (c_w_i instanceof WContainer) {
 				c = c_w_i;
 				c_w_i.parent = this;
 				this.add(c_w_i);
 			}
 			else {
 				c = new WContainer();
-				if(c_w_i) {
+				if (c_w_i) {
 					c.classStyle = WUX.cls(c_w_i.classStyle, c_w_i.style)
 					c.style = WUX.style(c_w_i.style);
 					c.attributes = c_w_i.attributes;
@@ -289,16 +289,16 @@ namespace WUX {
 			}
 			// Grid
 			let l = this.grid.length;
-			if(l) {
+			if (l) {
 				// Before the Grid
-				if(this.cbgr.length) {
+				if (this.cbgr.length) {
 					inner += '<div id="' + this.subId('bg') + '"></div>';
 				}
 				// Build Grid
 				for(let r = 0; r < l; r++) {
 					let g = this.grid[r];
 					let cl = g.length;
-					if(!cl) continue;
+					if (!cl) continue;
 					inner += '<div id="' + this.subId(r + '_0') + '" ' + buildCss(g[0]) + '>';
 					for(let c = 1; c < cl; c++) {
 						inner += '<div id="' + this.subId(r + '_' + c) + '" ' + buildCss(g[c]) + '></div>';
@@ -324,7 +324,7 @@ namespace WUX {
 			// Before the container (See componentWillMount)
 			// Before the grid
 			let bg = document.getElementById(this.subId('bg'));
-			if(bg) {
+			if (bg) {
 				for(let c of this.cbgr) {
 					c.mount(bg);
 				}
@@ -338,7 +338,7 @@ namespace WUX {
 			for(let i = 0; i < this.comp.length; i++) {
 				let c = this.comp[i];
 				let e = document.getElementById(this.sr_c[i]);
-				if(!e) continue;
+				if (!e) continue;
 				c.mount(e);
 			}
 			// After Grid
@@ -360,27 +360,27 @@ namespace WUX {
 		}
 
 		getElement(r: number, c?: number): HTMLElement | null {
-			if(!this.grid || !this.grid.length) {
+			if (!this.grid || !this.grid.length) {
 				return null;
 			}
-			if(r < 0) {
+			if (r < 0) {
 				r = this.grid.length + r;
-				if(r < 0) r = 0;
+				if (r < 0) r = 0;
 			}
-			if(this.grid.length <= r) {
+			if (this.grid.length <= r) {
 				return null;
 			}
-			if(c == null) {
+			if (c == null) {
 				return document.getElementById(this.subId(r + '_0'));
 			}
 			let g = this.grid[r];
 			// g = columns + row
-			if(!g || g.length < 2) {
+			if (!g || g.length < 2) {
 				return null;
 			}
-			if(c < 0) {
+			if (c < 0) {
 				c = g.length - 1 + c;
-				if(c < 0) c = 0;
+				if (c < 0) c = 0;
 			}
 			// c in id starts at 1
 			c++;
@@ -420,7 +420,7 @@ namespace WUX {
 		set title(s: string) {
 			this._title = s;
 			let c = document.getElementById(this.subId('caption'));
-			if(c) c.innerText = s;
+			if (c) c.innerText = s;
 		}
 
 		addTool(c: WComponent): this {
@@ -486,7 +486,7 @@ namespace WUX {
 		}
 
 		toggle(h?: (e?: WEvent) => any): this {
-			if(this.collapsed) {
+			if (this.collapsed) {
 				this.expand(h);
 			}
 			else {
@@ -592,7 +592,7 @@ namespace WUX {
 		}
 
 		get pages(): number {
-			if(!this.components) return 0;
+			if (!this.components) return 0;
 			return this.components.length;
 		}
 
@@ -633,7 +633,7 @@ namespace WUX {
 		}
 
 		back(): this {
-			if(this.hs.length > 1) this.hs.pop();
+			if (this.hs.length > 1) this.hs.pop();
 			let s = this.hs.length ? this.hs[this.hs.length - 1] : 0;
 			this.setState(s);
 			return this;
@@ -696,7 +696,7 @@ namespace WUX {
 			if (this._style) r += ' style="' + this._style + '"';
 			if (this._attributes) r += ' ' + this._attributes;
 			r += '>';
-			if(this.cbef) {
+			if (this.cbef) {
 				r += '<div id="' + this.id + '-b""></div>';
 			}
 			for (let i = 0; i < l; i++) {
@@ -707,7 +707,7 @@ namespace WUX {
 					r += '<div id="' + this.id + '-' + i + '" style="display:none;"></div>';
 				}
 			}
-			if(this.caft) {
+			if (this.caft) {
 				r += '<div id="' + this.id + '-a""></div>';
 			}
 			r += '</div>';
@@ -727,15 +727,15 @@ namespace WUX {
 			if (!this.mounted) return;
 			for (let i = 0; i < l; i++) {
 				let e = document.getElementById(this.id + '-' + i);
-				if(!e) continue;
+				if (!e) continue;
 				e.style.display = i == this.state ? 'block' : 'none';
 			}
 		}
 
 		protected componentDidMount(): void {
-			if(this.cbef) {
+			if (this.cbef) {
 				let b = document.getElementById(this.id + '-b');
-				if(b) this.cbef.mount(b);
+				if (b) this.cbef.mount(b);
 			}
 			let l = this.components.length;
 			for (let i = 0; i < l; i++) {
@@ -744,18 +744,18 @@ namespace WUX {
 				if (!e) continue;
 				c.mount(e);
 			}
-			if(this.caft) {
+			if (this.caft) {
 				let a = document.getElementById(this.id + '-a');
-				if(a) this.caft.mount(a);
+				if (a) this.caft.mount(a);
 			}
 		}
 
 		componentWillUnmount(): void {
-			if(this.cbef) this.cbef.unmount();
+			if (this.cbef) this.cbef.unmount();
 			for (let c of this.components) {
-				if(c) c.unmount();
+				if (c) c.unmount();
 			}
-			if(this.caft) this.caft.unmount();
+			if (this.caft) this.caft.unmount();
 		}
 	}
 
@@ -908,8 +908,8 @@ namespace WUX {
 		}
 		set readonly(v: boolean) {
 			this._ro = v;
-			if(this.root) {
-				if(v) {
+			if (this.root) {
+				if (v) {
 					this.root.setAttribute('readonly', '');
 				}
 				else {
@@ -923,8 +923,8 @@ namespace WUX {
 		}
 		set autofocus(v: boolean) {
 			this._af = v;
-			if(this.root) {
-				if(v) {
+			if (this.root) {
+				if (v) {
 					this.root.setAttribute('autofocus', '');
 				}
 				else {
@@ -954,10 +954,10 @@ namespace WUX {
 		}
 
 		getState(): string | null | undefined {
-			if(this.root) {
+			if (this.root) {
 				this.state =(this.root as any)['value'];
 			}
-			if(this.state) this.state = this.state.trim();
+			if (this.state) this.state = this.state.trim();
 			return this.state;
 		}
 
@@ -1022,7 +1022,7 @@ namespace WUX {
 		set readonly(v: boolean) {
 			this._ro = v;
 			if (this.root) {
-				if(v) {
+				if (v) {
 					this.root.setAttribute('readonly', '');
 				}
 				else {
@@ -1037,7 +1037,7 @@ namespace WUX {
 		set autofocus(v: boolean) {
 			this._af = v;
 			if (this.root) {
-				if(v) {
+				if (v) {
 					this.root.setAttribute('autofocus', '');
 				}
 				else {
@@ -1053,7 +1053,7 @@ namespace WUX {
 		}
 
 		getState(): string | null | undefined {
-			if(this.root) {
+			if (this.root) {
 				this.state = (this.root as any)['value'];
 			}
 			return this.state;
@@ -1077,16 +1077,16 @@ namespace WUX {
 			else {
 				this._attributes = 'rows="' + this.props + '"';
 			}
-			if(this._ro) {
-				if(!this._attributes) {
+			if (this._ro) {
+				if (!this._attributes) {
 					this._attributes = 'readonly';
 				}
 				else {
 					this._attributes += ' readonly';
 				}
 			}
-			if(this._af) {
-				if(!this._attributes) {
+			if (this._af) {
+				if (!this._attributes) {
 					this._attributes = 'autofocus';
 				}
 				else {
@@ -1151,7 +1151,7 @@ namespace WUX {
 
 		protected componentWillUpdate(nextProps: any, nextState: any): void {
 			let html = '';
-			if(nextProps == null) nextProps = this.props;
+			if (nextProps == null) nextProps = this.props;
 			if (nextState) {
 				html += WUX.buildIcon(nextProps, '', ' ') + nextState;
 			}
@@ -1184,7 +1184,7 @@ namespace WUX {
 		}
 
 		get checked(): boolean | null | undefined {
-			if(this.root) this.props = !!(this.root as any)['checked'];
+			if (this.root) this.props = !!(this.root as any)['checked'];
 			this.state = this.props ? this.value : this.noval;
 			return this.props;
 		}
@@ -1196,7 +1196,7 @@ namespace WUX {
 			if (!s) s = '';
 			this._tooltip = s;
 			let l = document.getElementById(this.id + '-l');
-			if(l) {
+			if (l) {
 				l.setAttribute('title', this._tooltip);
 			}
 			else if (this.root) {
@@ -1205,14 +1205,14 @@ namespace WUX {
 		}
 
 		getState(): any {
-			if(this.root) this.props = !!(this.root as any)['checked'];
+			if (this.root) this.props = !!(this.root as any)['checked'];
 			this.state = this.props ? this.value : this.noval;
 			return this.state;
 		}
 
 		protected updateProps(nextProps: boolean) {
 			super.updateProps(nextProps);
-			if(this.props == null) this.props = false;
+			if (this.props == null) this.props = false;
 			this.state = this.props ? this.value : this.noval;
 			if (this.root) (this.root as any)['checked'] = this.props;
 		}
@@ -1235,7 +1235,7 @@ namespace WUX {
 			a += this.props ? ' checked="checked"' : '';
 			let inner = this.text ? '&nbsp;' + this.text : '';
 			// Label
-			if(!this.label) {
+			if (!this.label) {
 				this.label = '';
 			}
 			else if (this._tooltip) {
@@ -1251,11 +1251,11 @@ namespace WUX {
 			let r1 = '';
 			if (this.divClass || this.divStyle) {
 				r0 += '<div ';
-				if(this.divClass) r0 += ' class="' + this.divClass + '"';
-				if(this.divStyle) r0 += ' style="' + this.divStyle + '"';
+				if (this.divClass) r0 += ' class="' + this.divClass + '"';
+				if (this.divStyle) r0 += ' style="' + this.divStyle + '"';
 				r0 += '>';
 			}
-			if(this.lever) {
+			if (this.lever) {
 				r0 += '<div class="toggles">';
 				r0 += l;
 			}
@@ -1263,7 +1263,7 @@ namespace WUX {
 				r1 += l;
 			}
 			if (r0) {
-				if(this.lever) {
+				if (this.lever) {
 					let cs = CSS.LEVER_CLASS ? ' class="' + CSS.LEVER_CLASS + '"' : '';
 					let ls = this.leverStyle ? ' style="' + this.leverStyle + '"' : '';
 					r1 += '<span' + cs + ls + '></span></label></div>';
@@ -1282,7 +1282,7 @@ namespace WUX {
 				// The component may be wrapped...
 				this.root = document.getElementById(this.id);
 			}
-			if(this.root) {
+			if (this.root) {
 				if (!this._enabled) {
 					this.root.setAttribute('disabled', '');
 				}
@@ -1354,7 +1354,7 @@ namespace WUX {
 				if (!item) continue;
 				if ((item as any)['checked']) {
 					let lbl = document.getElementById(rid + '-l');
-					if(lbl) return lbl.innerText;
+					if (lbl) return lbl.innerText;
 				}
 			}
 			return WUtil.toString(this.state);
@@ -1364,11 +1364,11 @@ namespace WUX {
 			if (!this.options) return d;
 			if (!text) text = '';
 			for(let o of this.options) {
-				if(typeof o == 'string') {
-					if(o == text) return o;
+				if (typeof o == 'string') {
+					if (o == text) return o;
 				}
 				else {
-					if(o.text == text) return o.id;
+					if (o.text == text) return o.id;
 				}
 			}
 			return d;
@@ -1417,13 +1417,13 @@ namespace WUX {
 
 		protected updateState(nextState: any) {
 			super.updateState(nextState);
-			if(!this.state) {
-				if(this.options && this.options.length) {
+			if (!this.state) {
+				if (this.options && this.options.length) {
 					this.state = this.options[0];
 				}
 			}
-			if(typeof this.state == 'object') {
-				if("id" in this.state) {
+			if (typeof this.state == 'object') {
+				if ("id" in this.state) {
 					this.state = this.state["id"];
 				}
 			}
@@ -1450,7 +1450,7 @@ namespace WUX {
 
 		protected componentDidUpdate(prevProps: any, prevState: any): void {
 			let idx = -1;
-			if(this.state) {
+			if (this.state) {
 				for (let i = 0; i < this.options.length; i++) {
 					if (match(this.state, this.options[i])) {
 						idx = i;
@@ -1461,7 +1461,7 @@ namespace WUX {
 			else {
 				idx = 0;
 			}
-			if(idx >= 0) {
+			if (idx >= 0) {
 				let item = document.getElementById(this.id + '-' + idx);
 				// This don't dispatch the event 'change'
 				if (item) (item as any)['checked'] = true;
@@ -1476,14 +1476,14 @@ namespace WUX {
 				r += '</label> ';
 			}
 			let d = '';
-			if(this._enabled != null && !this._enabled) d = ' disabled';
+			if (this._enabled != null && !this._enabled) d = ' disabled';
 			if (!this.options) this.options = [];
 			let l = this.options.length;
 			if (this.state === undefined && l) this.state = this.options[0];
 			for (let i = 0; i < l; i++) {
 				r += '<div';
-				if(this.classDiv) r += ' class="' + this.classDiv + '"';
-				if(this.styleDiv) r += ' style="' + this.styleDiv + '"';
+				if (this.classDiv) r += ' class="' + this.classDiv + '"';
+				if (this.styleDiv) r += ' style="' + this.styleDiv + '"';
 				r += '>';
 				let opt = this.options[i];
 				let rid = this.id + '-' + i;
@@ -1528,9 +1528,9 @@ namespace WUX {
 			if (!this.root) return this.props;
 			this.props = [];
 			let options = (this.root as any)["options"] as HTMLOptionElement[];
-			if(options && options.length) {
+			if (options && options.length) {
 				let s = WUtil.toNumber((this.root as any)["selectedIndex"], -1);
-				if(s >= 0 && options.length > s) {
+				if (s >= 0 && options.length > s) {
 					this.props.push(options[s].text);
 				}
 			}
@@ -1541,11 +1541,11 @@ namespace WUX {
 			if (!this.options) return d;
 			if (!text) text = '';
 			for(let o of this.options) {
-				if(typeof o == 'string') {
-					if(o == text) return o;
+				if (typeof o == 'string') {
+					if (o == text) return o;
 				}
 				else {
-					if(o.text == text) return o.id;
+					if (o.text == text) return o.id;
 				}
 			}
 			return d;
@@ -1622,7 +1622,7 @@ namespace WUX {
 			let addAttributes = 'name="' + this.id + '"';
 			if (this.multiple) addAttributes += ' multiple="multiple"';
 			let d = '';
-			if(this._enabled != null && !this._enabled) d = ' disabled';
+			if (this._enabled != null && !this._enabled) d = ' disabled';
 			addAttributes += d;
 			return this.buildRoot('select', o, addAttributes);
 		}
@@ -1728,7 +1728,7 @@ namespace WUX {
 			this.selectedRow = -1;
 			if (!this.mounted) return this;
 			let b = document.getElementById(this.id + '-b');
-			if(b && this.selClass) {
+			if (b && this.selClass) {
 				let an = b.childNodes as any;
 				for(let i = 0; i < b.childElementCount; i++) {
 					WUX.removeClassOf(an[i], this.selClass);
@@ -1742,14 +1742,14 @@ namespace WUX {
 		}
 
 		select(idxs: number[]): this {
-			if(!idxs) idxs = [];
+			if (!idxs) idxs = [];
 			this.selectedRow = idxs.length ? idxs[0] : -1;
 			if (!this.mounted) return this;
 			let b = document.getElementById(this.id + '-b');
-			if(b && this.selClass) {
+			if (b && this.selClass) {
 				let an = b.childNodes as any;
 				for(let i = 0; i < b.childElementCount; i++) {
-					if(idxs.indexOf(i) >= 0) {
+					if (idxs.indexOf(i) >= 0) {
 						WUX.addClassOf(an[i], this.selClass);
 					}
 					else {
@@ -1760,7 +1760,7 @@ namespace WUX {
 			if (!this.handlers['_selectionchanged']) return this;
 			let srd = [];
 			for (let idx of idxs) {
-				if(this.state && this.state.length > idx) {
+				if (this.state && this.state.length > idx) {
 					srd.push(this.state[idx]);
 				}
 			}
@@ -1772,15 +1772,15 @@ namespace WUX {
 
 		selectAll(toggle?: boolean): this {
 			if (!this.mounted) return this;
-			if(toggle && this.selectedRow >= 0) {
+			if (toggle && this.selectedRow >= 0) {
 				return this.clearSelection();
 			}
 			this.selectedRow = -1;
-			if(this.state && this.state.length) {
+			if (this.state && this.state.length) {
 				this.selectedRow = 0;
 			}
 			let b = document.getElementById(this.id + '-b');
-			if(b && this.selClass) {
+			if (b && this.selClass) {
 				let an = b.childNodes as any;
 				for(let i = 0; i < b.childElementCount; i++) {
 					WUX.addClassOf(an[i], this.selClass);
@@ -1819,10 +1819,10 @@ namespace WUX {
 			if (this._classStyle) tableClass = this._classStyle.indexOf('table ') >= 0 ? this._classStyle : tableClass + ' ' + this._classStyle;
 			let ts = this.style ? ' style="' + this.style + '"' : '';
 			let r = '';
-			if(this.div) r += '<div id="' + this.id + '-c" class="' + this.div + '">';
+			if (this.div) r += '<div id="' + this.id + '-c" class="' + this.div + '">';
 			let sm = this.selectionMode;
-			if(sm && sm != 'none') {
-				if(tableClass.indexOf('table-hover') < 0) {
+			if (sm && sm != 'none') {
+				if (tableClass.indexOf('table-hover') < 0) {
 					tableClass += ' table-hover';
 				}
 			}
@@ -1859,10 +1859,10 @@ namespace WUX {
 						let x: WStyle = {};
 						if (w) x.w = this.widthsPerc ? w + '%' : w; 
 						let t = this.getType(j);
-						if(t == 'w') x.a = 'center';
+						if (t == 'w') x.a = 'center';
 						
 						let so = this.sortable && this.sortable.indexOf(j) >= 0;
-						if(so) {
+						if (so) {
 							let aid = this.subId('sort_' + j);
 							if (!this.soId) this.soId = [];
 							this.soId.push(aid);
@@ -1877,43 +1877,43 @@ namespace WUX {
 			}
 			r += '<tbody id="' + this.id + '-b"></tbody>';
 			r += '</table>';
-			if(this.div) r += '</div>';
+			if (this.div) r += '</div>';
 			return r;
 		}
 
 		protected componentDidMount(): void {
 			this.buildBody();
-			if(this.soId) {
+			if (this.soId) {
 				for(let aid of this.soId) {
 					let a = document.getElementById(aid);
-					if(a) {
+					if (a) {
 						a.addEventListener('click', (e: PointerEvent) => {
 							let i = WUX.lastSub(WUX.getId(e.currentTarget));
 							let x = i.indexOf('_');
-							if(x <= 0) return;
+							if (x <= 0) return;
 							let c = WUtil.toNumber(i.substring(x + 1), -1);
-							if(c >= 0 && this.header && this.header.length > c) {
+							if (c >= 0 && this.header && this.header.length > c) {
 								this.reqSort = c;
 								// Default sort?
 								let hs = this.handlers['_sort'];
 								let ds = !(hs && hs.length) && this.keys && this.keys.length > c;
 								let h = this.header[c];
 								let v = this.sortBy ? this.sortBy[c] : null;
-								if(!v) {
+								if (!v) {
 									if (this.sortBy) this.sortBy[c] = 1;
-									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-asc"></i>';
-									if(ds) this.setState(WUtil.sort(this.state, true, this.keys[c]));
+									if (h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-asc"></i>';
+									if (ds) this.setState(WUtil.sort(this.state, true, this.keys[c]));
 								}
-								else if(v == 1) {
+								else if (v == 1) {
 									if (this.sortBy) this.sortBy[c] = -1;
-									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-desc"></i>';
-									if(ds) this.setState(WUtil.sort(this.state, false, this.keys[c]));
+									if (h) a.innerHTML = h + ' &nbsp;<i class="fa fa-sort-desc"></i>';
+									if (ds) this.setState(WUtil.sort(this.state, false, this.keys[c]));
 								}
-								else if(v == -1) {
+								else if (v == -1) {
 									if (this.sortBy) this.sortBy[c] = 0;
-									if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
+									if (h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
 								}
-								if(hs) {
+								if (hs) {
 									for (let hr of hs) hr(this.createEvent('_sort', this.sortBy));
 								}
 								this.reqSort = -1;
@@ -1924,25 +1924,25 @@ namespace WUX {
 				}
 			}
 			let b = document.getElementById(this.id + '-b');
-			if(b) {
+			if (b) {
 				b.addEventListener('click', (e: PointerEvent) => {
-					if(!this.selectionMode || this.selectionMode == 'none') return;
+					if (!this.selectionMode || this.selectionMode == 'none') return;
 					let t = e.target as HTMLElement;
-					if(!t) return;
+					if (!t) return;
 					let tr = t.closest('tr');
-					if(!tr) return;
+					if (!tr) return;
 					let i = WUtil.toNumber(WUX.lastSub(tr), -1);
-					if(i < 0) return;
+					if (i < 0) return;
 					this.select([i]);
 				});
 				b.addEventListener('dblclick', (e: MouseEvent) => {
-					if(!this.handlers['_doubleclick']) return;
+					if (!this.handlers['_doubleclick']) return;
 					let t = e.target as HTMLElement;
-					if(!t) return;
+					if (!t) return;
 					let tr = t.closest('tr');
-					if(!tr) return;
+					if (!tr) return;
 					let i = WUtil.toNumber(WUX.lastSub(tr), -1);
-					if(i < 0) return;
+					if (i < 0) return;
 					let d = this.state && this.state.length > i ? this.state[i] : null;
 					for (let h of this.handlers['_doubleclick']) {
 						h({ element: this.root, rowElement: tr, data: d, rowIndex: i });
@@ -1957,26 +1957,26 @@ namespace WUX {
 		}
 
 		protected updSort(): void {
-			if(this.prvSort == -1 || this.reqSort == this.prvSort) return;
+			if (this.prvSort == -1 || this.reqSort == this.prvSort) return;
 			let v = this.sortBy ? this.sortBy[this.prvSort] : null;
-			if(!v) return;
+			if (!v) return;
 			let aid = this.subId('sort_' + this.prvSort);
 			let a = document.getElementById(aid);
-			if(!a) return;
+			if (!a) return;
 			let h = this.header[this.prvSort];
-			if(h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
+			if (h) a.innerHTML = h + ' &nbsp;<i class="fa fa-unsorted"></i>';
 			if (this.sortBy) this.sortBy[this.prvSort] = 0;
 		}
 
 		protected getType(i: number): string {
-			if(!this.types) return '';
-			if(this.types.length <= i) return '';
+			if (!this.types) return '';
+			if (this.types.length <= i) return '';
 			return this.types[i];
 		}
 
 		protected buildBody(): void {
 			let tbody = document.getElementById(this.id + "-b")
-			if(!tbody) return;
+			if (!tbody) return;
 			if (!this.state || !this.state.length) {
 				tbody.innerHTML = '';
 				return;
@@ -1985,8 +1985,8 @@ namespace WUX {
 				tbody.innerHTML = '';
 				return;
 			}
-			if(this.page < 1) this.page = 1;
-			if(this.plen < 1) this.plen = 10;
+			if (this.page < 1) this.page = 1;
+			if (this.plen < 1) this.plen = 10;
 			let s = (this.page - 1) * this.plen;
 			let m = s + this.plen;
 			let sr = this.selectionMode && this.selectionMode != 'none' ? ' style="cursor:pointer;"' : '';
@@ -1994,8 +1994,8 @@ namespace WUX {
 			let l = this.state ? this.state.length : 0;
 			this.rows = 0;
 			for (let i = 0; i < l; i++) {
-				if(this.paging) {
-					if(i < s || i >= m) continue;
+				if (this.paging) {
+					if (i < s || i >= m) continue;
 				}
 				this.rows++;
 				let row = this.state[i];
@@ -2111,8 +2111,8 @@ namespace WUX {
 			}
 			// WForm init
 			this.title = title;
-			if(CSS.FORM) {
-				if(CSS.FORM.indexOf(':') > 0) {
+			if (CSS.FORM) {
+				if (CSS.FORM.indexOf(':') > 0) {
 					this.style = CSS.FORM;
 				}
 				else {
@@ -2170,10 +2170,10 @@ namespace WUX {
 		onFocus(fid: string, h: (e: FocusEvent) => any): this {
 			let f = this.getField(fid);
 			if (!f) return this;
-			if(f.component) {
+			if (f.component) {
 				f.component.on('focus', h);
 			}
-			else if(f.element instanceof HTMLElement) {
+			else if (f.element instanceof HTMLElement) {
 				f.element.addEventListener('focus', h);
 			}
 			return this;
@@ -2182,10 +2182,10 @@ namespace WUX {
 		onBlur(fid: string, h: (e: FocusEvent) => any): this {
 			let f = this.getField(fid);
 			if (!f) return this;
-			if(f.component) {
+			if (f.component) {
 				f.component.on('blur', h);
 			}
-			else if(f.element instanceof HTMLElement) {
+			else if (f.element instanceof HTMLElement) {
 				f.element.addEventListener('blur', h);
 			}
 			return this;
@@ -2247,12 +2247,12 @@ namespace WUX {
 
 		getComponent(fid: string, def?: WComponent): WComponent | undefined {
 			let f = this.getField(fid);
-			if(!f) {
+			if (!f) {
 				console.error('[' + str(this) + '] Field ' + fid + ' not found.');
 				return def;
 			}
 			let c = f.component;
-			if(!c) {
+			if (!c) {
 				console.error('[' + str(this) + '] Field ' + fid + ' has no components.');
 				return def;
 			}
@@ -2264,7 +2264,7 @@ namespace WUX {
 		onField(fid: string, events: string, handler: (e: any) => any): this;
 		onField(fid: string, events: string, handler: (e: any) => any): this {
 			let c = this.getComponent(fid);
-			if(!c) return this;
+			if (!c) return this;
 			c.on(events, handler);
 			return this;
 		}
@@ -2283,7 +2283,7 @@ namespace WUX {
 		findOption(fid: string, text: string, d: any = null): any {
 			if (!text) text = '';
 			let c = this.getComponent(fid);
-			if(!c) return d;
+			if (!c) return d;
 			if (typeof (c as any)['findOption'] == 'function') {
 				return (c as any)['findOption'](text, d);
 			}
@@ -2292,7 +2292,7 @@ namespace WUX {
 
 		indexOption(fid: string, e: string | WEntity): number {
 			let c = this.getComponent(fid);
-			if(!c) return -3;
+			if (!c) return -3;
 			if (typeof (c as any)['indexOption'] == 'function') {
 				return (c as any)['indexOption'](e);
 			}
@@ -2301,7 +2301,7 @@ namespace WUX {
 
 		addOption(fid: string, e: string | WEntity, sel?: boolean): this {
 			let c = this.getComponent(fid);
-			if(!c) return this;
+			if (!c) return this;
 			if (typeof (c as any)['addOption'] == 'function') {
 				(c as any)['addOption'](e, sel);
 			}
@@ -2310,7 +2310,7 @@ namespace WUX {
 
 		remOption(fid: string, e: string | WEntity): this {
 			let c = this.getComponent(fid);
-			if(!c) return this;
+			if (!c) return this;
 			if (typeof (c as any)['remOption'] == 'function') {
 				(c as any)['remOption'](e);
 			}
@@ -2349,7 +2349,7 @@ namespace WUX {
 
 		protected _add(id: string, label: string, co: WComponent, type: string, opts?: WField): this {
 			let f = opts ? opts : {};
-			if(co instanceof WInput) {
+			if (co instanceof WInput) {
 				co.readonly = !!f.readonly;
 				co.autofocus = !!f.autofocus;
 				co.onEnter((e: KeyboardEvent) => {
@@ -2360,16 +2360,16 @@ namespace WUX {
 					}
 				});
 			}
-			else if(co instanceof WTextArea) {
+			else if (co instanceof WTextArea) {
 				co.readonly = !!f.readonly;
 				co.autofocus = !!f.autofocus;
 			}
 			else {
 				co.enabled = !f.readonly;
 			}
-			if(f.attributes) co.attributes = f.attributes;
-			if(f.tooltip) co.tooltip = f.tooltip;
-			if(f.style) co.style = style(f.style);
+			if (f.attributes) co.attributes = f.attributes;
+			if (f.tooltip) co.tooltip = f.tooltip;
+			if (f.style) co.style = style(f.style);
 			f.id = id;
 			f.label = label;
 			f.component = co;
@@ -2382,7 +2382,7 @@ namespace WUX {
 		addTextField(fid: string, label: string, opts?: WField | boolean): this {
 			let id = this.subId(fid);
 			let co = new WInput(id, 'text', 0, CSS.FORM_CTRL);
-			if(typeof opts == 'boolean') {
+			if (typeof opts == 'boolean') {
 				return this._add(id, label, co, 'text', {readonly: opts});
 			}
 			else {
@@ -2465,14 +2465,14 @@ namespace WUX {
 			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
 			co.style = CSS.CKBOX_STYLE;
-			if(typeof lv == 'string') {
+			if (typeof lv == 'string') {
 				co.label = lv;
 			}
-			else if(Array.isArray(lv)) {
+			else if (Array.isArray(lv)) {
 				co.value = lv[0];
 				co.noval = lv[1];
 			}
-			if(opts && Array.isArray(opts.value)) {
+			if (opts && Array.isArray(opts.value)) {
 				co.value = opts.value[0];
 				co.noval = opts.value[1];
 			}
@@ -2488,14 +2488,14 @@ namespace WUX {
 			co.divClass = CSS.FORM_CHECK;
 			co.divStyle = CSS.CKDIV_STYLE;
 			co.classStyle = CSS.FORM_CTRL;
-			if(typeof lv == 'string') {
+			if (typeof lv == 'string') {
 				co.label = lv;
 			}
-			else if(Array.isArray(lv)) {
+			else if (Array.isArray(lv)) {
 				co.value = lv[0];
 				co.noval = lv[1];
 			}
-			if(opts && Array.isArray(opts.value)) {
+			if (opts && Array.isArray(opts.value)) {
 				co.value = opts.value[0];
 				co.noval = opts.value[1];
 			}
@@ -2504,7 +2504,7 @@ namespace WUX {
 
 		addBlankField(label?: string, classStyle?: string, style?: string | WStyle, e?: WElement): this {
 			let co = new WContainer('', classStyle, style);
-			if(e) co.add(e);
+			if (e) co.add(e);
 			return this._add('', label ? label : '', co, 'blank', {});
 		}
 
@@ -2596,7 +2596,7 @@ namespace WUX {
 		}
 
 		override componentWillMount(): void {
-			if(formWillMount) formWillMount(this);
+			if (formWillMount) formWillMount(this);
 		}
 
 		override componentDidMount(): void {
@@ -2800,7 +2800,7 @@ namespace WUX {
 
 		notBlank(...fids: string[]): number {
 			let c = 0;
-			if(fids && fids.length) {
+			if (fids && fids.length) {
 				for(let fid of fids) {
 					let f = this.getField(fid);
 					if (!f) continue;
@@ -2820,7 +2820,7 @@ namespace WUX {
 		}
 
 		isBlank(...fids: string[]): boolean {
-			if(fids && fids.length) {
+			if (fids && fids.length) {
 				for(let fid of fids) {
 					let f = this.getField(fid);
 					if (!f) continue;
@@ -2902,7 +2902,7 @@ namespace WUX {
 				for (let f of r) {
 					let k = this.ripId(f.id);
 					if (!k) continue;
-					if(ts) {
+					if (ts) {
 						(v as any)[k] = WUtil.toString(f.component ? f.component.getState() : f.value);
 					}
 					else {
@@ -2956,7 +2956,7 @@ namespace WUX {
 						f.required = false;
 					}
 					// Update label
-					if(f.labelComp && f.label) {
+					if (f.labelComp && f.label) {
 						let r = f.required ? RES.REQ_MARK : '';
 						f.labelComp.setState(f.label + r);
 					}

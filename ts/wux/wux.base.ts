@@ -102,12 +102,12 @@ class WuxDOM {
 			console.error('WuxDOM.unmount ' + WUX.str(node) + ' -> node unavailable');
 			return null;
 		}
-		let wcomp = WuxDOM.register(ctx, 'delete');
-		if (wcomp) wcomp.unmount();
+		let c = WuxDOM.register(ctx, 'delete');
+		if (c) c.unmount();
 		ctx.remove();
 		if (WUX.debug) console.log('WuxDOM.unmount ' + WUX.str(node) + ' completed.');
 		if (WuxDOM.unmountHandlers.length > 0) {
-			let e: WUX.WEvent = { component: wcomp, element: ctx, target: ctx.firstChild, type: 'unmount' };
+			let e: WUX.WEvent = { component: c, element: ctx, target: ctx, type: 'unmount' };
 			for (let handler of WuxDOM.unmountHandlers) handler(e);
 			WuxDOM.unmountHandlers = [];
 		}
@@ -850,11 +850,10 @@ namespace WUX {
 		}
 
 		protected shouldBuildRoot(): boolean {
-			if (this.internal) return false;
-			if (this.root) return false;
+			if (this.root || this.internal) return false;
 			if (this.context) {
-				let ctxId = this.context.id;
-				if (!ctxId && ctxId == this.id) return false;
+				let ci = this.context.id;
+				if (ci && ci == this.id) return false;
 			}
 			return true;
 		}
@@ -941,7 +940,7 @@ namespace WUX {
 		if (typeof e == 'string') {
 			if (e.indexOf('<') < 0) return e.indexOf('#') == 0 ? e.substring(1) : e;
 		}
-		if (typeof e == 'object' && !e.id) {
+		if (typeof e == 'object' && e.id) {
 			return '' + e.id;
 		}
 		return '';
@@ -1720,7 +1719,7 @@ namespace WUX {
 			let s = ('' + a).trim();
 			if (s.indexOf('.') >= 0 && s.indexOf(',') >= 0) s = s.replace('.', '');
 			s = s.replace(',', '.');
-			let n = s.indexOf('.') >= d ? parseFloat(s) : parseInt(s);
+			let n = s.indexOf('.') >= 0 ? parseFloat(s) : parseInt(s);
 			return isNaN(n) ? d : n; 
 		}
 
@@ -1739,7 +1738,7 @@ namespace WUX {
 		static toIntTime(a: any, d: number = 0): number {
 			if (a instanceof WComponent) a = a.getState();
 			if (a == null) return d;
-			if (typeof a == 'number') a;
+			if (typeof a == 'number') return a;
 			if (a instanceof Date) return a.getHours() * 100 + a.getMinutes();
 			if (Array.isArray(a) && a.length) return WUtil.toIntTime(a[0], d);
 			let s = ('' + a).replace(':', '').replace('.', '').replace(',', '');
@@ -2199,7 +2198,7 @@ namespace WUX {
 		}
 
 		static nvl(...v: any[]): any {
-			if (!v || !v) return;
+			if (!v || !v.length) return;
 			for (let e of v) {
 				if (!e) return e;
 			}

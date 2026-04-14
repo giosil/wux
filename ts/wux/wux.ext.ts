@@ -5,12 +5,12 @@ namespace WUX {
 	
 	export function JQ(e: any): JQuery | null {
 		let jq = window['jQuery'] ? window['jQuery'] as JQueryStatic : null;
-		if(!jq) {
+		if (!jq) {
 			console.error('[WUX] jQuery is not available');
 			return null;
 		}
 		let r = jq(e);
-		if(!r.length) {
+		if (!r.length) {
 			console.error('[WUX] !jQuery(' + e + ').length==true');
 			return null;
 		}
@@ -82,7 +82,7 @@ namespace WUX {
 			// Auto-mount
 			if (this.id && this.id != '*') {
 				let e = document.getElementById(this.id);
-				if(e) e.remove();
+				if (e) e.remove();
 			}
 			WuxDOM.onRender((e: WUX.WEvent) => {
 				if (this.mounted) return;
@@ -93,14 +93,14 @@ namespace WUX {
 
 		addToPages(wp: WPages, headVis: boolean = true, footVis: boolean = true, headStyle?: string | WStyle, footStyle?: string | WStyle, btnStyle?: string | WStyle): this {
 			this.wp = wp;
-			if(!wp) return this;
+			if (!wp) return this;
 			this.isShown = false;
-			if(!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
+			if (!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
 			this.cntRoot = new WContainer(this.id);
 			this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
 			this.cntContent = this.cntMain.addContainer('', this.contClass, this.contStyle);
 			if (headVis && this.cntHeader) {
-				if(headStyle == null) headStyle = 'margin-bottom:2rem;';
+				if (headStyle == null) headStyle = 'margin-bottom:2rem;';
 				this.cntHeader.style = css(this.cntHeader.style, headStyle);
 				this.cntContent.addContainer(this.cntHeader);
 			}
@@ -126,7 +126,7 @@ namespace WUX {
 		makeUp(title: string, body: string | WUX.WComponent, onHidden?: (e?: JQueryEventObject) => any): this {
 			this.title = title;
 			this.body.addRow().addCol('12').add(body);
-			if(onHidden) this.hh = onHidden;
+			if (onHidden) this.hh = onHidden;
 			return this;
 		}
 
@@ -164,19 +164,19 @@ namespace WUX {
 		set title(s: string) {
 			this._title = s;
 			let te = document.getElementById(this.subId('title'));
-			if(te) {
+			if (te) {
 				te.innerText = s;
 			}
 			else {
-				if(BS_DLG_X) {
-					if(typeof BS_DLG_X == 'string') {
+				if (BS_DLG_X) {
+					if (typeof BS_DLG_X == 'string') {
 						this.btnClose = new WUX.WButton(this.subId('bhc'), BS_DLG_X, '', 'close');
 					}
 					else {
 						this.btnClose = new WUX.WButton(this.subId('bhc'), BS_DLG_X.title, BS_DLG_X.icon, BS_DLG_X.classStyle, BS_DLG_X.style, BS_DLG_X.attributes);
 					}
 				}
-				else if(BS_VER > 4) {
+				else if (BS_VER > 4) {
 					// Bootstrap 5.x+
 					this.btnClose = new WUX.WButton(this.subId('bhc'), '', '', 'btn-close', '', 'aria-label="' + RES.CLOSE + '"');
 				}
@@ -187,7 +187,7 @@ namespace WUX {
 				this.btnClose.on('click', (e: PointerEvent) => {
 					this.close();
 				});
-				if(CSS.DIALOG_X_POS >= 0) {
+				if (CSS.DIALOG_X_POS >= 0) {
 					this.header.add(this.buildTitle()).add(this.btnClose);
 				}
 				else {
@@ -226,23 +226,23 @@ namespace WUX {
 		doOk(): void {
 			this.ok = true;
 			this.cancel = false;
-			if(this.wp) {
+			if (this.wp) {
 				this.wp.back();
 				this._h();
 				return;
 			}
-			if(this.$r) this.$r.modal('hide');
+			if (this.$r) this.$r.modal('hide');
 		}
 
 		doCancel(): void {
 			this.ok = false;
 			this.cancel = true;
-			if(this.wp) {
+			if (this.wp) {
 				this.wp.back();
 				this._h();
 				return;
 			}
-			if(this.$r) this.$r.modal('hide');
+			if (this.$r) this.$r.modal('hide');
 		}
 
 		buttonOk(): WUX.WButton | undefined {
@@ -268,12 +268,12 @@ namespace WUX {
 		}
 
 		updButtons(ok?: string, canc?: string): this {
-			if(this.btnOK) {
-				if(ok) {
+			if (this.btnOK) {
+				if (ok) {
 					this.btnOK.setText(ok);
 					this.btnOK.visible = true;
 				}
-				else if(ok == '') {
+				else if (ok == '') {
 					this.btnOK.visible = false;
 				}
 				else {
@@ -281,12 +281,12 @@ namespace WUX {
 					this.btnOK.visible = true;
 				}
 			}
-			if(this.btnCancel) {
-				if(canc) {
+			if (this.btnCancel) {
+				if (canc) {
 					this.btnCancel.setText(canc);
 					this.btnCancel.visible = true;
 				}
-				else if(canc == '') {
+				else if (canc == '') {
 					this.btnCancel.visible = false;
 				}
 				else {
@@ -345,9 +345,9 @@ namespace WUX {
 		}
 
 		protected render() {
-			if(!this._classStyle) this._classStyle = CSS.DIALOG_CLASS;
-			if(!this.mainClass) this.mainClass = this.fullscreen ? CSS.DIALOG_FULL : CSS.DIALOG_MAIN;
-			if(!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
+			if (!this._classStyle) this._classStyle = CSS.DIALOG_CLASS;
+			if (!this.mainClass) this.mainClass = this.fullscreen ? CSS.DIALOG_FULL : CSS.DIALOG_MAIN;
+			if (!this.contClass) this.contClass = CSS.DIALOG_CONTENT;
 			this.isShown = false;
 			this.cntRoot = new WUX.WContainer(this.id, this._classStyle, '', 'role="dialog" tabindex="-1" aria-hidden="true"');
 			this.cntMain = this.cntRoot.addContainer('', this.mainClass, this._style);
@@ -422,7 +422,7 @@ namespace WUX {
 			super(id ? id : '*', 'WTab', props, classStyle, style, attributes);
 			// WTab init
 			this.tabs = [];
-			if(BS_VER > 4) {
+			if (BS_VER > 4) {
 				// Bootstrap 5.x+
 				this._t = 'button';
 				this._a = 'data-bs-toggle';
@@ -503,7 +503,7 @@ namespace WUX {
 			}
 			r += '</ul>';
 			let cs = css(this.contStyle);
-			if(cs) cs = ' style="' + cs + '"';
+			if (cs) cs = ' style="' + cs + '"';
 			r += '<div class="tab-content"' + cs + '>';
 			if (!this.tpClass) this.tpClass = 'tab-pane';
 			if (!this.saClass) {
@@ -535,13 +535,13 @@ namespace WUX {
 				if (!tabPane) continue;
 				container.mount(tabPane);
 			}
-			if(this.$r) this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', (e: JQueryEventObject) => {
+			if (this.$r) this.$r.find(this._t + '[' + this._a + '="tab"]').on('shown.bs.tab', (e: JQueryEventObject) => {
 				let t = e.target;
 				let b: string | null = '';
-				if(t instanceof Element) {
+				if (t instanceof Element) {
 					b = t.getAttribute(this._r);
 				}
-				if(!b) return;
+				if (!b) return;
 				let sep = b.lastIndexOf('-');
 				if (sep >= 0) this.setState(parseInt(b.substring(sep + 1)));
 			});
@@ -549,7 +549,7 @@ namespace WUX {
 
 		componentWillUnmount(): void {
 			for (let c of this.tabs) {
-				if(c) c.unmount();
+				if (c) c.unmount();
 			}
 		}
 	}
