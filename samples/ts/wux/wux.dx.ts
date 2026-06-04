@@ -949,7 +949,8 @@ namespace WUX {
 			gopt.onRowClick = (e: { component?: DevExpress.DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: DevExpress.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => {
 				let lastClick = e.component ? (e.component as any)['lastClick'] as Date : null;
 				let currClick = e.component ? (e.component as any)['lastClick'] = new Date() : null;
-				if (lastClick && (currClick ? currClick.getTime() : 0 - lastClick.getTime() < 300)) {
+				let ct = currClick ? currClick.getTime() : 0;
+				if (lastClick && (ct - lastClick.getTime() < 300)) {
 					if (!this.handlers['_doubleclick']) return;
 					for (let handler of this.handlers['_doubleclick']) {
 						handler({ element: this.root, data: e.data });

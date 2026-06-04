@@ -990,7 +990,8 @@ var WUX;
             gopt.onRowClick = function (e) {
                 var lastClick = e.component ? e.component['lastClick'] : null;
                 var currClick = e.component ? e.component['lastClick'] = new Date() : null;
-                if (lastClick && (currClick ? currClick.getTime() : 0 - lastClick.getTime() < 300)) {
+                var ct = currClick ? currClick.getTime() : 0;
+                if (lastClick && (ct - lastClick.getTime() < 300)) {
                     if (!_this.handlers['_doubleclick'])
                         return;
                     for (var _i = 0, _a = _this.handlers['_doubleclick']; _i < _a.length; _i++) {
