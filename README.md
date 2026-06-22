@@ -49,7 +49,7 @@ namespace APP {
   export class Main extends WUX.WComponent {
     protected render() {
       let ele = document.createElement('div');
-      ele.textContent = 'Hello World!'
+      ele.textContent = 'Hello World!';
       return ele;
     }
   }
